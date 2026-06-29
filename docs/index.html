@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Microsoft Foundry MicroHack · Landing Page</title>
-  <meta name="description" content="A Microsoft Foundry MicroHack landing page with Foundry introduction, challenge journey, QR code, setup, slides, and references." />
+  <title>Microsoft Foundry MicroHack · Employee Support Agent</title>
+  <meta name="description" content="A Microsoft Foundry MicroHack landing page covering setup, QR access, use case, and a prototype-to-publish challenge journey for an Employee Support Agent." />
   <link rel="stylesheet" href="styles.css" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>" />
 </head>
@@ -22,10 +22,10 @@
       </a>
       <ul class="nav__links" role="list">
         <li><a href="#home">Home</a></li>
-        <li><a href="#qr">QR Code</a></li>
         <li><a href="#setup">Setup</a></li>
-        <li><a href="#challenge1">Challenge 1</a></li>
-        <li><a href="#journey">Challenges</a></li>
+        <li><a href="#use-case">Use Case</a></li>
+        <li><a href="#journey">Journey</a></li>
+        <li><a href="#challenge-details">Challenges</a></li>
         <li><a href="#slides">Slides</a></li>
         <li><a href="#references">References</a></li>
       </ul>
@@ -35,158 +35,116 @@
   <header class="hero" id="top">
     <div class="container hero__content" id="home">
       <span class="hero__eyebrow">Microsoft Foundry · Agentic AI · MicroHack</span>
-      <h1 class="hero__title">Build AI Agents with Microsoft Foundry</h1>
+      <h1 class="hero__title">Prototype to Publish an Employee Support Agent</h1>
       <p class="hero__subtitle">
-        Start with an introduction to Microsoft Foundry, then work through a hands-on
-        challenge journey to build an Employee Support Agent that is grounded, tool-enabled,
-        memory-aware, safe, observable, and enterprise-ready.
+        Learn how to design, ground, tool-enable, evaluate, optimize, observe, and publish
+        an enterprise AI agent using Microsoft Foundry.
       </p>
       <div class="hero__actions">
-        <a href="#intro" class="btn btn--primary">Start Here</a>
+        <a href="#setup" class="btn btn--primary">Start Here</a>
         <a href="https://github.com/priyanka405/MS-Foundry-Microhack" class="btn btn--outline" target="_blank" rel="noopener">GitHub Repo</a>
       </div>
-    </div>
-  </header>
-
-  <section class="section" id="intro">
-    <div class="container">
-      <div class="section__header">
-        <span class="section__tag">Introduction</span>
-        <h2 class="section__title">What is Microsoft Foundry?</h2>
-        <p class="section__lead">
-          Microsoft Foundry is a platform for building, evaluating, monitoring, and operating AI agents
-          and agentic workflows across real enterprise scenarios.
-        </p>
-      </div>
-      <div class="two-col two-col--center">
-        <div class="two-col__text">
-          <h2>Why Foundry matters</h2>
-          <p>
-            Foundry brings together models, orchestration, tools, knowledge grounding,
-            evaluations, tracing, and deployment patterns into one developer workflow.
-          </p>
-          <p>
-            Instead of stopping at a demo chatbot, this MicroHack shows how to build a
-            production-oriented agent that can answer questions, search enterprise content,
-            call tools, remember context, and operate with guardrails.
-          </p>
-          <ul>
-            <li>Build agents with instructions, tools, and memory</li>
-            <li>Ground answers using enterprise documents and knowledge bases</li>
-            <li>Evaluate quality before shipping to users</li>
-            <li>Trace behavior and monitor production usage</li>
-            <li>Publish agents with enterprise governance in mind</li>
-          </ul>
-        </div>
-        <div class="card card--feature">
-          <div class="card__icon">🏗️</div>
-          <h3 class="card__title">What you’ll practice</h3>
-          <p class="card__text">This landing page mirrors the workshop flow used in the reference hackathon site:</p>
-          <div class="capability-list capability-list--stacked">
-            <span class="capability-pill"><span class="pill-icon">🤖</span> Agents</span>
-            <span class="capability-pill"><span class="pill-icon">📚</span> Grounding</span>
-            <span class="capability-pill"><span class="pill-icon">🧠</span> Memory</span>
-            <span class="capability-pill"><span class="pill-icon">🛡️</span> Guardrails</span>
-            <span class="capability-pill"><span class="pill-icon">📏</span> Evaluations</span>
-            <span class="capability-pill"><span class="pill-icon">📈</span> Observability</span>
-            <span class="capability-pill"><span class="pill-icon">🚀</span> Publish</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section section--alt" id="qr">
-    <div class="container">
-      <div class="section__header">
-        <span class="section__tag">Quick Access</span>
-        <h2 class="section__title">Scan the QR Code</h2>
-        <p class="section__lead">
-          Use this QR code to open the GitHub landing page quickly during the workshop.
-        </p>
-      </div>
-      <div class="qr-panel">
+      <div class="qr-panel" style="margin-top:40px; text-align:left;">
         <div class="qr-card">
           <img
             src="https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=https%3A%2F%2Fpriyanka405.github.io%2FMS-Foundry-Microhack%2F"
             alt="QR code linking to the MS Foundry MicroHack landing page"
           />
-          <p class="qr-caption">Scan to open the landing page</p>
+          <p class="qr-caption">Scan to open the workshop landing page</p>
         </div>
         <div class="qr-copy">
-          <h3>Workshop flow</h3>
+          <h3>Quick Access</h3>
           <p>
-            This page is structured like the example site you referenced: Home, QR Code,
-            Setup, Challenge 1 onward, Slides, and References.
-          </p>
-          <p>
-            Participants can scan, clone, complete setup, and then move through the challenge
-            sequence in order.
+            Open the workshop page on your phone or laptop and move through the MicroHack from setup
+            to publication.
           </p>
           <a class="btn btn--primary" href="https://priyanka405.github.io/MS-Foundry-Microhack/" target="_blank" rel="noopener">Open Landing Page URL</a>
         </div>
       </div>
     </div>
-  </section>
+  </header>
 
   <section class="section" id="setup">
     <div class="container">
       <div class="section__header">
         <span class="section__tag">Setup</span>
-        <h2 class="section__title">Challenge 0 — Environment Setup</h2>
+        <h2 class="section__title">Prerequisites and Environment Setup</h2>
         <p class="section__lead">
-          Start by deploying the Azure infrastructure required for the lab using the Bicep templates in this repository.
+          Before building the agent, make sure your workshop environment is ready.
         </p>
       </div>
       <div class="card-grid">
         <div class="card">
           <div class="card__icon">1️⃣</div>
-          <h3 class="card__title">Clone the repository</h3>
-          <p class="card__text">Get your own copy of the MicroHack repo so you can edit, run, and publish your work.</p>
+          <h3 class="card__title">Prerequisites</h3>
+          <p class="card__text">Azure subscription, Microsoft Foundry access, Azure CLI, Bicep CLI, and Python 3.11+ or Node.js 20+.</p>
         </div>
         <div class="card">
           <div class="card__icon">2️⃣</div>
-          <h3 class="card__title">Deploy infrastructure</h3>
-          <p class="card__text">Use <code>infra/</code> and Challenge 0 instructions to provision Foundry, Storage, Search, and Monitoring resources.</p>
+          <h3 class="card__title">Clone the repository</h3>
+          <p class="card__text">Use this repo as the landing page and workshop entry point for all challenge activities.</p>
         </div>
         <div class="card">
           <div class="card__icon">3️⃣</div>
-          <h3 class="card__title">Verify prerequisites</h3>
-          <p class="card__text">Make sure you have Azure access, Azure CLI, Bicep CLI, and either Python 3.11+ or Node.js 20+ available.</p>
+          <h3 class="card__title">Prepare your Foundry environment</h3>
+          <p class="card__text">Create or connect to the Microsoft Foundry project where you will build, test, and publish the Employee Support Agent.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section section--alt" id="challenge1">
+  <section class="section section--alt" id="use-case">
     <div class="container">
       <div class="section__header">
-        <span class="section__tag">Challenge</span>
-        <h2 class="section__title">Challenge 1 — Model Choice</h2>
+        <span class="section__tag">Use Case</span>
+        <h2 class="section__title">Use Case — Employee Support Agent</h2>
         <p class="section__lead">
-          After setup, compare model options for support-style Q&amp;A so you can balance quality, cost, and latency.
+          A realistic enterprise scenario that works naturally across the full Microsoft Foundry journey.
         </p>
       </div>
       <div class="two-col">
         <div class="two-col__text">
-          <h2>Why start here?</h2>
-          <p>
-            Model selection shapes the rest of the agent lifecycle. A support agent must answer accurately,
-            quickly, and at a sustainable cost. This challenge helps participants understand those tradeoffs early.
-          </p>
+          <h2>Story</h2>
+          <p>You work in a company. Employees ask questions every day such as:</p>
           <ul>
-            <li>Compare stronger and smaller models on the same task</li>
-            <li>Measure response quality for enterprise support scenarios</li>
-            <li>Discuss latency and cost tradeoffs before building more features</li>
+            <li>How do I request vacation?</li>
+            <li>How do I reset my password?</li>
+            <li>Where is the travel policy?</li>
+            <li>Who approves expenses?</li>
+          </ul>
+          <h2 style="margin-top:24px;">The AI Agent should</h2>
+          <ul>
+            <li>Answer questions</li>
+            <li>Search documents</li>
+            <li>Create IT tickets using a mock API</li>
+            <li>Remember employee preferences</li>
+            <li>Follow company policies</li>
           </ul>
         </div>
         <div class="card">
-          <div class="card__icon">🧪</div>
-          <h3 class="card__title">Expected outcome</h3>
-          <p class="card__text">
-            Participants leave this challenge with a justified model choice for the Employee Support Agent,
-            not just a default selection.
-          </p>
+          <div class="card__icon">💼</div>
+          <h3 class="card__title">Why this scenario fits every challenge</h3>
+          <table class="challenge-table" aria-label="Challenge to scenario mapping">
+            <thead>
+              <tr>
+                <th>Challenge</th>
+                <th>Scenario fit</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Models</td><td>Compare GPT vs smaller models</td></tr>
+              <tr><td>Agent</td><td>Basic employee assistant</td></tr>
+              <tr><td>Grounding</td><td>HR and IT knowledge base documents</td></tr>
+              <tr><td>Tools</td><td>Ticket creation API and MCP concepts</td></tr>
+              <tr><td>Memory</td><td>Remember department and preferences</td></tr>
+              <tr><td>Guardrails</td><td>Prevent access to confidential policies</td></tr>
+              <tr><td>Evaluation</td><td>Measure correctness and groundedness</td></tr>
+              <tr><td>Optimization</td><td>Improve prompts and tools</td></tr>
+              <tr><td>Observability</td><td>Trace responses and inspect behavior</td></tr>
+              <tr><td>Publish</td><td>Enterprise rollout</td></tr>
+            </tbody>
+          </table>
+          <p class="card__text" style="margin-top:16px;">This is also a very easy scenario for creating synthetic policy documents, sample tickets, and evaluation datasets.</p>
         </div>
       </div>
     </div>
@@ -196,59 +154,159 @@
     <div class="container">
       <div class="section__header">
         <span class="section__tag">Challenge Journey</span>
-        <h2 class="section__title">End-to-End MicroHack Flow</h2>
+        <h2 class="section__title">Prototype to Publish Agent Journey</h2>
         <p class="section__lead">
-          The lab takes participants from infrastructure setup to enterprise publication through 11 connected challenges.
+          Move from setup through eight connected challenges to build and publish an enterprise-ready employee support agent.
         </p>
       </div>
       <div class="journey-grid">
-        <div class="journey-item"><div class="journey-num">0</div><div class="journey-title">Setup</div><div class="journey-desc">Deploy infra with Bicep</div></div>
-        <div class="journey-item"><div class="journey-num">1</div><div class="journey-title">Model Choice</div><div class="journey-desc">Compare models</div></div>
-        <div class="journey-item"><div class="journey-num">2</div><div class="journey-title">First Agent</div><div class="journey-desc">Create base agent</div></div>
-        <div class="journey-item"><div class="journey-num">3</div><div class="journey-title">Grounding</div><div class="journey-desc">Connect knowledge</div></div>
-        <div class="journey-item"><div class="journey-num">4</div><div class="journey-title">Tools</div><div class="journey-desc">Add ticket actions</div></div>
-        <div class="journey-item journey-item--alt"><div class="journey-num">5</div><div class="journey-title">Memory</div><div class="journey-desc">Remember users</div></div>
-        <div class="journey-item journey-item--alt"><div class="journey-num">6</div><div class="journey-title">Guardrails</div><div class="journey-desc">Make it safe</div></div>
-        <div class="journey-item journey-item--alt"><div class="journey-num">7</div><div class="journey-title">Evaluation</div><div class="journey-desc">Measure quality</div></div>
-        <div class="journey-item journey-item--alt"><div class="journey-num">8</div><div class="journey-title">Optimization</div><div class="journey-desc">Iterate improvements</div></div>
-        <div class="journey-item journey-item--alt"><div class="journey-num">9</div><div class="journey-title">Observability</div><div class="journey-desc">Trace everything</div></div>
-        <div class="journey-item journey-item--alt"><div class="journey-num">10</div><div class="journey-title">Publish</div><div class="journey-desc">Enterprise rollout</div></div>
+        <div class="journey-item"><div class="journey-num">0</div><div class="journey-title">Setup</div><div class="journey-desc">Prerequisites and environment</div></div>
+        <div class="journey-item"><div class="journey-num">1</div><div class="journey-title">Build Agent + Model Choice</div><div class="journey-desc">Create the first agent and compare models</div></div>
+        <div class="journey-item"><div class="journey-num">2</div><div class="journey-title">Grounding</div><div class="journey-desc">Connect HR and IT knowledge</div></div>
+        <div class="journey-item"><div class="journey-num">3</div><div class="journey-title">Tools + MCP</div><div class="journey-desc">Add actions and tool orchestration</div></div>
+        <div class="journey-item"><div class="journey-num">4</div><div class="journey-title">Memory</div><div class="journey-desc">Remember user context and preferences</div></div>
+        <div class="journey-item journey-item--alt"><div class="journey-num">5</div><div class="journey-title">Guardrails</div><div class="journey-desc">Keep the agent safe and compliant</div></div>
+        <div class="journey-item journey-item--alt"><div class="journey-num">6</div><div class="journey-title">Evaluations</div><div class="journey-desc">Measure quality and correctness</div></div>
+        <div class="journey-item journey-item--alt"><div class="journey-num">7</div><div class="journey-title">Optimization + Observability</div><div class="journey-desc">Improve prompts and trace behavior</div></div>
+        <div class="journey-item journey-item--alt"><div class="journey-num">8</div><div class="journey-title">Publish</div><div class="journey-desc">Prepare for enterprise rollout</div></div>
       </div>
     </div>
   </section>
 
-  <section class="section section--alt" id="slides">
+  <section class="section section--alt" id="challenge-details">
+    <div class="container">
+      <div class="section__header">
+        <span class="section__tag">Challenge Details</span>
+        <h2 class="section__title">Detailed Challenge Structure</h2>
+        <p class="section__lead">
+          Each challenge follows the same workshop pattern: time, objectives, context, build approach, get started steps, and success criteria.
+        </p>
+      </div>
+
+      <div class="card" id="challenge1">
+        <div class="card__icon">🤖</div>
+        <h3 class="card__title">Challenge 1: Build the Agent and Choose the Model</h3>
+        <p class="card__text"><strong>Time:</strong> ~30 minutes</p>
+        <p class="card__text"><strong>Objectives:</strong> Build the first Employee Support Agent, compare a stronger GPT model with a smaller model, and choose the best fit for enterprise support.</p>
+        <p class="card__text"><strong>Context:</strong> Start with a basic assistant that answers common employee questions and establish the model quality, latency, and cost tradeoffs.</p>
+        <p class="card__text"><strong>Portal or SDK?</strong> Use the SDK for repeatable setup and then inspect the created agent in the Foundry portal.</p>
+        <p class="card__text"><strong>Get Started:</strong> Create the agent, test employee support prompts, compare outputs from multiple models, and document your chosen baseline.</p>
+        <p class="card__text"><strong>Success Criteria:</strong> A working baseline agent exists, model comparisons are complete, and a justified model choice is recorded.</p>
+      </div>
+
+      <div class="card" style="margin-top:24px;">
+        <div class="card__icon">📚</div>
+        <h3 class="card__title">Challenge 2: Grounding</h3>
+        <p class="card__text"><strong>Time:</strong> ~30 minutes</p>
+        <p class="card__text"><strong>Objectives:</strong> Attach HR and IT documents so the agent can answer based on company knowledge instead of general model memory.</p>
+        <p class="card__text"><strong>Context:</strong> Employees ask policy and process questions that must be answered accurately from trusted internal sources.</p>
+        <p class="card__text"><strong>Portal or SDK?</strong> Use Foundry knowledge and retrieval features through the SDK or portal workflow.</p>
+        <p class="card__text"><strong>Agents and Tools:</strong> Introduce file search, vector search, and grounded answer generation.</p>
+        <p class="card__text"><strong>Get Started:</strong> Upload synthetic HR and IT documents, create a knowledge source, connect it to the agent, and test retrieval-based questions.</p>
+        <p class="card__text"><strong>Success Criteria:</strong> Answers cite relevant internal policy content and improve over the ungrounded baseline.</p>
+      </div>
+
+      <div class="card" style="margin-top:24px;">
+        <div class="card__icon">🛠️</div>
+        <h3 class="card__title">Challenge 3: Tools and MCP</h3>
+        <p class="card__text"><strong>Time:</strong> ~30 minutes</p>
+        <p class="card__text"><strong>Objectives:</strong> Add actions the agent can perform, such as creating mock IT tickets, and introduce MCP-based tool patterns.</p>
+        <p class="card__text"><strong>Context:</strong> Some employee problems require action, not just answers.</p>
+        <p class="card__text"><strong>Portal or SDK?</strong> Use the SDK to register functions and explore how tool calling works in Foundry.</p>
+        <p class="card__text"><strong>Agents and Tools:</strong> Function tools, mock APIs, and MCP-oriented orchestration concepts.</p>
+        <p class="card__text"><strong>Get Started:</strong> Create a mock ticket tool, define schemas, connect it to the agent, and test action-oriented requests.</p>
+        <p class="card__text"><strong>Success Criteria:</strong> The agent correctly decides when to call a tool and returns useful ticket creation responses.</p>
+      </div>
+
+      <div class="card" style="margin-top:24px;">
+        <div class="card__icon">🧠</div>
+        <h3 class="card__title">Challenge 4: Memory</h3>
+        <p class="card__text"><strong>Time:</strong> ~30 minutes</p>
+        <p class="card__text"><strong>Objectives:</strong> Teach the agent to remember useful employee context such as department, preferences, and recent requests.</p>
+        <p class="card__text"><strong>Context:</strong> Repeated users expect continuity and personalization.</p>
+        <p class="card__text"><strong>Portal or SDK?</strong> Implement memory behavior in code and validate user experience in the portal.</p>
+        <p class="card__text"><strong>Get Started:</strong> Define what to store, when to retrieve it, and how memory changes future answers.</p>
+        <p class="card__text"><strong>Success Criteria:</strong> The agent uses remembered preferences appropriately without losing accuracy or safety.</p>
+      </div>
+
+      <div class="card" style="margin-top:24px;">
+        <div class="card__icon">🛡️</div>
+        <h3 class="card__title">Challenge 5: Guardrails</h3>
+        <p class="card__text"><strong>Time:</strong> ~30 minutes</p>
+        <p class="card__text"><strong>Objectives:</strong> Add controls that prevent unsafe responses, policy leakage, and prompt injection issues.</p>
+        <p class="card__text"><strong>Context:</strong> Employee support agents operate in environments with sensitive data and policy boundaries.</p>
+        <p class="card__text"><strong>Portal or SDK?</strong> Configure safety and policy handling in the agent logic and test failure modes.</p>
+        <p class="card__text"><strong>Get Started:</strong> Create malicious or boundary-pushing prompts, refine instructions, and add response rules.</p>
+        <p class="card__text"><strong>Success Criteria:</strong> The agent blocks unsafe requests and stays aligned with company policy requirements.</p>
+      </div>
+
+      <div class="card" style="margin-top:24px;">
+        <div class="card__icon">📏</div>
+        <h3 class="card__title">Challenge 6: Evaluations</h3>
+        <p class="card__text"><strong>Time:</strong> ~30 minutes</p>
+        <p class="card__text"><strong>Objectives:</strong> Measure correctness, groundedness, and helpfulness using repeatable evaluation scenarios.</p>
+        <p class="card__text"><strong>Context:</strong> Enterprise teams need evidence before promoting an agent to wider use.</p>
+        <p class="card__text"><strong>Portal or SDK?</strong> Use Foundry evaluation workflows and/or scripted evaluation datasets.</p>
+        <p class="card__text"><strong>Get Started:</strong> Build a small evaluation set using synthetic employee support questions and compare results across versions.</p>
+        <p class="card__text"><strong>Success Criteria:</strong> Evaluation metrics are collected and inform what should be improved next.</p>
+      </div>
+
+      <div class="card" style="margin-top:24px;">
+        <div class="card__icon">📈</div>
+        <h3 class="card__title">Challenge 7: Optimization and Observability</h3>
+        <p class="card__text"><strong>Time:</strong> ~30 minutes</p>
+        <p class="card__text"><strong>Objectives:</strong> Improve prompts, tools, and retrieval quality while tracing how the agent behaves.</p>
+        <p class="card__text"><strong>Context:</strong> Better enterprise agents come from iterative improvement backed by trace data.</p>
+        <p class="card__text"><strong>Portal or SDK?</strong> Tune in code, then inspect traces, logs, and tool behavior through observability workflows.</p>
+        <p class="card__text"><strong>Get Started:</strong> Review weak responses, refine prompts or tools, rerun evaluations, and inspect trace outputs.</p>
+        <p class="card__text"><strong>Success Criteria:</strong> Response quality improves and trace data clearly explains the agent’s reasoning path.</p>
+      </div>
+
+      <div class="card" style="margin-top:24px;">
+        <div class="card__icon">🚀</div>
+        <h3 class="card__title">Challenge 8: Publish</h3>
+        <p class="card__text"><strong>Time:</strong> ~30 minutes</p>
+        <p class="card__text"><strong>Objectives:</strong> Prepare the agent for enterprise rollout with the right deployment, governance, and support model.</p>
+        <p class="card__text"><strong>Context:</strong> Publishing is not only deployment; it includes readiness, ownership, and operational trust.</p>
+        <p class="card__text"><strong>Portal or SDK?</strong> Use both: finalize through code and validate publish-ready configuration in the portal.</p>
+        <p class="card__text"><strong>Get Started:</strong> Review readiness criteria, confirm evaluations and guardrails, and define the enterprise publishing approach.</p>
+        <p class="card__text"><strong>Success Criteria:</strong> The agent is documented, tested, governed, and ready for a controlled rollout.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="slides">
     <div class="container">
       <div class="section__header">
         <span class="section__tag">Slides</span>
         <h2 class="section__title">Presentation Materials</h2>
         <p class="section__lead">
-          Add your workshop deck link here so attendees can follow along during the session.
+          Add your workshop deck so attendees can follow the Employee Support Agent journey from prototype to publish.
         </p>
       </div>
       <div class="slides-panel">
         <div class="card">
           <div class="card__icon">🖥️</div>
           <h3 class="card__title">Suggested slide sections</h3>
-          <p class="card__text">Intro to Foundry · Why agents · Scenario overview · Setup · Challenge walkthrough · Demo · Q&amp;A</p>
+          <p class="card__text">Foundry overview · Use case story · Setup · Challenge walkthrough · Demo · Evaluation results · Publish plan · Q&amp;A</p>
         </div>
         <div class="card">
           <div class="card__icon">🔗</div>
           <h3 class="card__title">Add your deck</h3>
-          <p class="card__text">Replace this placeholder with a PowerPoint, PDF, or share link for your session slides.</p>
+          <p class="card__text">Replace this placeholder with a PowerPoint, PDF, or share link for your workshop session slides.</p>
           <p class="card__text card__text--muted">Example: <code>Slides link coming soon</code></p>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section" id="references">
+  <section class="section section--alt" id="references">
     <div class="container">
       <div class="section__header">
         <span class="section__tag">References</span>
         <h2 class="section__title">Continue Learning</h2>
         <p class="section__lead">
-          Use these resources to go deeper on Microsoft Foundry, agents, tracing, and evaluations.
+          Use these resources to go deeper on Microsoft Foundry, agents, grounding, observability, and evaluations.
         </p>
       </div>
       <div class="references-list">
@@ -257,7 +315,6 @@
         <a class="reference-item" href="https://learn.microsoft.com/azure/ai-foundry/observability/how-to/trace-agent-setup" target="_blank" rel="noopener">Trace agents with Foundry</a>
         <a class="reference-item" href="https://learn.microsoft.com/azure/ai-foundry/observability/how-to/evaluate-agent" target="_blank" rel="noopener">Evaluate agent workflows</a>
         <a class="reference-item" href="https://github.com/martaldsantos/foundry-hackathon" target="_blank" rel="noopener">Reference repo: martaldsantos/foundry-hackathon</a>
-        <a class="reference-item" href="https://jeffrey-groneberg.github.io/AI_Workshop_Agentic_Patterns/" target="_blank" rel="noopener">Reference site structure: AI Workshop Agentic Patterns</a>
       </div>
     </div>
   </section>
@@ -265,8 +322,8 @@
   <footer class="footer">
     <div class="container">
       <div class="footer__logo">MS Foundry MicroHack</div>
-      <p>Built for the Employee Support Agent scenario with inspiration from the Foundry hackathon reference repo.</p>
-      <p style="margin-top:8px; font-size:.8rem; opacity:.7;">Enable GitHub Pages from <strong>main → /docs</strong> after merging this branch.</p>
+      <p>Built for the Employee Support Agent scenario using a prototype-to-publish workshop flow.</p>
+      <p style="margin-top:8px; font-size:.8rem; opacity:.7;">Enable GitHub Pages from <strong>main → /docs</strong>.</p>
     </div>
   </footer>
 </body>
