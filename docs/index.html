@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Employee Support Agent · MS Foundry MicroHack</title>
+  <meta name="description" content="A Microsoft Foundry hackathon scenario: build a production-ready Employee Support Agent step by step, from prototype to enterprise rollout." />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>" />
+</head>
+<body>
+
+<!-- ── Navigation ───────────────────────────────────── -->
+<nav class="nav" aria-label="Site navigation">
+  <div class="nav__inner">
+    <a class="nav__brand" href="#">
+      <!-- Microsoft logo squares -->
+      <svg width="20" height="20" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="0"  y="0"  width="9.5" height="9.5" fill="#f25022"/>
+        <rect x="11" y="0"  width="9.5" height="9.5" fill="#7fba00"/>
+        <rect x="0"  y="11" width="9.5" height="9.5" fill="#00a4ef"/>
+        <rect x="11" y="11" width="9.5" height="9.5" fill="#ffb900"/>
+      </svg>
+      MS Foundry MicroHack
+    </a>
+    <ul class="nav__links" role="list">
+      <li><a href="#background">Background</a></li>
+      <li><a href="#usecase">Use Case</a></li>
+      <li><a href="#challenges">Challenges</a></li>
+      <li><a href="#journey">Journey</a></li>
+      <li><a href="#getstarted">Get Started</a></li>
+      <li><a href="https://github.com/priyanka405/MS-Foundry-Microhack" target="_blank" rel="noopener">GitHub ↗</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ── Hero ─────────────────────────────────────────── -->
+<header class="hero" id="top">
+  <div class="container hero__content">
+    <span class="hero__eyebrow">Microsoft Foundry · MicroHack</span>
+    <h1 class="hero__title">Employee Support Agent</h1>
+    <p class="hero__subtitle">
+      From a single chat prompt to a fully grounded, tool-enabled, memory-aware,
+      observable enterprise AI agent — in 11 hands-on challenges.
+    </p>
+    <div class="hero__actions">
+      <a href="#journey" class="btn btn--primary">
+        🚀 Start the Journey
+      </a>
+      <a href="https://github.com/priyanka405/MS-Foundry-Microhack" class="btn btn--outline" target="_blank" rel="noopener">
+        View on GitHub
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ── Background ───────────────────────────────────── -->
+<section class="section" id="background">
+  <div class="container">
+    <div class="section__header">
+      <span class="section__tag">Background</span>
+      <h2 class="section__title">The Problem Worth Solving</h2>
+      <p class="section__lead">
+        Every company has the same productivity tax: employees spend time hunting
+        for answers that already exist somewhere — but are hard to reach.
+      </p>
+    </div>
+    <div class="two-col">
+      <div class="two-col__text">
+        <h2>The Daily Friction</h2>
+        <p>
+          HR portals are buried, IT tickets take days, policy documents are
+          out-of-date PDFs. Support teams are flooded with repetitive questions
+          while employees wait.
+        </p>
+        <p>
+          An AI agent connected to the right knowledge and tools can resolve
+          most of these queries in seconds — and this MicroHack shows you
+          exactly how to build one correctly, using Microsoft Foundry.
+        </p>
+        <ul>
+          <li>Policies and procedures are scattered across systems</li>
+          <li>Repetitive support tasks consume HR and IT bandwidth</li>
+          <li>Employees expect instant, accurate, contextual answers</li>
+          <li>Enterprise requirements add safety and compliance constraints</li>
+        </ul>
+      </div>
+      <div class="question-box">
+        <h3>Employees Are Asking…</h3>
+        <div class="question-item">
+          <div class="question-bubble">How do I request vacation days?</div>
+        </div>
+        <div class="question-item">
+          <div class="question-bubble">How do I reset my password?</div>
+        </div>
+        <div class="question-item">
+          <div class="question-bubble">Where is the travel policy document?</div>
+        </div>
+        <div class="question-item">
+          <div class="question-bubble">Who approves my expense report?</div>
+        </div>
+        <div class="question-item">
+          <div class="question-bubble">Can you open an IT ticket for my broken laptop?</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Use Case ──────────────────────────────────────── -->
+<section class="section section--alt" id="usecase">
+  <div class="container">
+    <div class="section__header">
+      <span class="section__tag">Use Case</span>
+      <h2 class="section__title">What the Agent Does</h2>
+      <p class="section__lead">
+        The Employee Support Agent combines language understanding, knowledge
+        retrieval, tool execution, and safety guardrails into a single,
+        production-grade assistant.
+      </p>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card__icon">💬</div>
+        <h3 class="card__title">Answer Questions</h3>
+        <p class="card__text">
+          Respond to employee queries in natural language — HR policies, IT
+          procedures, benefits information, and more.
+        </p>
+      </div>
+      <div class="card">
+        <div class="card__icon">🔍</div>
+        <h3 class="card__title">Search Documents</h3>
+        <p class="card__text">
+          Query a grounded enterprise knowledge base (HR + IT documents) to
+          provide accurate, cited answers instead of hallucinated responses.
+        </p>
+      </div>
+      <div class="card">
+        <div class="card__icon">🎫</div>
+        <h3 class="card__title">Create IT Tickets</h3>
+        <p class="card__text">
+          Call a mock ticketing API on behalf of the employee — no form
+          hunting, no manual copy-paste, just conversational action.
+        </p>
+      </div>
+      <div class="card">
+        <div class="card__icon">🧠</div>
+        <h3 class="card__title">Remember Preferences</h3>
+        <p class="card__text">
+          Store per-user context (department, role, preferences) across sessions
+          so the agent personalises every interaction.
+        </p>
+      </div>
+      <div class="card">
+        <div class="card__icon">🛡️</div>
+        <h3 class="card__title">Follow Policies</h3>
+        <p class="card__text">
+          Enforce company guardrails — restrict confidential data, prevent
+          prompt injection, and comply with content-safety rules.
+        </p>
+      </div>
+      <div class="card">
+        <div class="card__icon">📊</div>
+        <h3 class="card__title">Observable &amp; Measurable</h3>
+        <p class="card__text">
+          Every request is traced, evaluated for correctness, and monitored
+          in Application Insights so you can operate it with confidence.
+        </p>
+      </div>
+    </div>
+
+    <div style="margin-top: 48px;">
+      <h3 style="text-align:center; font-size:1.1rem; font-weight:700; margin-bottom:20px; color:var(--ms-gray-600);">
+        Agent Capabilities at a Glance
+      </h3>
+      <div class="capability-list" style="justify-content:center;">
+        <span class="capability-pill"><span class="pill-icon">🤖</span> Foundation Model</span>
+        <span class="capability-pill"><span class="pill-icon">📚</span> Foundry IQ / Grounding</span>
+        <span class="capability-pill"><span class="pill-icon">🔧</span> MCP Tools &amp; Toolbox</span>
+        <span class="capability-pill"><span class="pill-icon">💾</span> Session &amp; User Memory</span>
+        <span class="capability-pill"><span class="pill-icon">🔒</span> Content Safety &amp; Guardrails</span>
+        <span class="capability-pill"><span class="pill-icon">📈</span> Evaluation &amp; Scoring</span>
+        <span class="capability-pill"><span class="pill-icon">🔭</span> Traces &amp; Monitoring</span>
+        <span class="capability-pill"><span class="pill-icon">🚀</span> Enterprise Publish</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Challenge Mapping ─────────────────────────────── -->
+<section class="section" id="challenges">
+  <div class="container">
+    <div class="section__header">
+      <span class="section__tag">Challenge Mapping</span>
+      <h2 class="section__title">Why This Scenario Fits Every Challenge</h2>
+      <p class="section__lead">
+        The Employee Support Agent maps naturally to all 11 MicroHack challenges —
+        no context-switching required.
+      </p>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="challenge-table" aria-label="Challenge to scenario mapping">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Challenge</th>
+            <th>Scenario Fit</th>
+            <th>Key Learning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge">0</span></td>
+            <td><strong>Environment Setup</strong></td>
+            <td>Deploy Foundry, Storage, Search &amp; Monitoring via Bicep</td>
+            <td>Infrastructure as Code · Foundry best practices</td>
+          </tr>
+          <tr>
+            <td><span class="badge">1</span></td>
+            <td><strong>Model Choice</strong></td>
+            <td>Compare GPT-4o vs. a small model for support Q&amp;A quality &amp; cost</td>
+            <td>Model selection · Benchmarking · Cost / speed tradeoffs</td>
+          </tr>
+          <tr>
+            <td><span class="badge">2</span></td>
+            <td><strong>First Agent</strong></td>
+            <td>Build a basic employee assistant with system prompt &amp; instructions</td>
+            <td>Agents vs. chat completions · Prompt engineering</td>
+          </tr>
+          <tr>
+            <td><span class="badge">3</span></td>
+            <td><strong>Grounding</strong></td>
+            <td>Connect HR + IT knowledge-base documents via Foundry IQ</td>
+            <td>RAG · Enterprise knowledge · Reducing hallucinations</td>
+          </tr>
+          <tr>
+            <td><span class="badge">4</span></td>
+            <td><strong>Tools</strong></td>
+            <td>Add mock IT-ticketing API as an MCP Tool / Toolbox action</td>
+            <td>Function calling · Tool governance · Assistant → Agent</td>
+          </tr>
+          <tr>
+            <td><span class="badge">5</span></td>
+            <td><strong>Memory</strong></td>
+            <td>Remember employee department, role &amp; preferences across sessions</td>
+            <td>Session memory · User memory · Personalisation</td>
+          </tr>
+          <tr>
+            <td><span class="badge">6</span></td>
+            <td><strong>Guardrails</strong></td>
+            <td>Prevent access to confidential exec policies; block prompt injection</td>
+            <td>Content Safety · Prompt injection · Capability ≠ Trust</td>
+          </tr>
+          <tr>
+            <td><span class="badge">7</span></td>
+            <td><strong>Evaluation</strong></td>
+            <td>Measure correctness &amp; groundedness on a synthetic HR Q&amp;A dataset</td>
+            <td>Evaluation datasets · Rubric generation · Don't trust — measure</td>
+          </tr>
+          <tr>
+            <td><span class="badge">8</span></td>
+            <td><strong>Optimization</strong></td>
+            <td>Improve system prompt &amp; tool descriptions using evaluation results</td>
+            <td>Build → Evaluate → Optimize → Repeat</td>
+          </tr>
+          <tr>
+            <td><span class="badge">9</span></td>
+            <td><strong>Observability</strong></td>
+            <td>Configure traces &amp; Application Insights dashboards for all requests</td>
+            <td>Tracing · Monitoring · If you can't observe it, you can't operate it</td>
+          </tr>
+          <tr>
+            <td><span class="badge">10</span></td>
+            <td><strong>Enterprise Ready</strong></td>
+            <td>Publish agent with governance, security controls &amp; lifecycle management</td>
+            <td>Enterprise rollout · Governance · Security</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ── Learning Journey ──────────────────────────────── -->
+<section class="section section--alt" id="journey">
+  <div class="container">
+    <div class="section__header">
+      <span class="section__tag">Learning Journey</span>
+      <h2 class="section__title">From Zero to Production Agent</h2>
+      <p class="section__lead">
+        Each challenge builds on the last. Complete them in order and you'll have
+        a fully production-ready agent by the end.
+      </p>
+    </div>
+    <div class="journey-grid">
+      <div class="journey-item">
+        <div class="journey-num">0</div>
+        <div class="journey-title">Setup</div>
+        <div class="journey-desc">Deploy infra with Bicep</div>
+      </div>
+      <div class="journey-item">
+        <div class="journey-num">1</div>
+        <div class="journey-title">Models</div>
+        <div class="journey-desc">Choose the right model</div>
+      </div>
+      <div class="journey-item">
+        <div class="journey-num">2</div>
+        <div class="journey-title">Agent</div>
+        <div class="journey-desc">Build your first agent</div>
+      </div>
+      <div class="journey-item">
+        <div class="journey-num">3</div>
+        <div class="journey-title">Grounding</div>
+        <div class="journey-desc">Add knowledge base</div>
+      </div>
+      <div class="journey-item">
+        <div class="journey-num">4</div>
+        <div class="journey-title">Tools</div>
+        <div class="journey-desc">Enable actions via APIs</div>
+      </div>
+      <div class="journey-item journey-item--alt">
+        <div class="journey-num">5</div>
+        <div class="journey-title">Memory</div>
+        <div class="journey-desc">Personalise with context</div>
+      </div>
+      <div class="journey-item journey-item--alt">
+        <div class="journey-num">6</div>
+        <div class="journey-title">Guardrails</div>
+        <div class="journey-desc">Make it safe &amp; trusted</div>
+      </div>
+      <div class="journey-item journey-item--alt">
+        <div class="journey-num">7</div>
+        <div class="journey-title">Evaluation</div>
+        <div class="journey-desc">Measure correctness</div>
+      </div>
+      <div class="journey-item journey-item--alt">
+        <div class="journey-num">8</div>
+        <div class="journey-title">Optimization</div>
+        <div class="journey-desc">Improve &amp; iterate</div>
+      </div>
+      <div class="journey-item journey-item--alt">
+        <div class="journey-num">9</div>
+        <div class="journey-title">Observability</div>
+        <div class="journey-desc">Trace everything</div>
+      </div>
+      <div class="journey-item journey-item--alt">
+        <div class="journey-num">10</div>
+        <div class="journey-title">Publish</div>
+        <div class="journey-desc">Enterprise rollout</div>
+      </div>
+    </div>
+
+    <!-- Challenge cards detail -->
+    <div class="card-grid" style="margin-top:52px;">
+      <div class="card">
+        <div class="card__icon">⚙️</div>
+        <h3 class="card__title">Challenge 0 — Setup</h3>
+        <p class="card__text">Deploy a Foundry Project, Model, Storage, Monitoring, and optional Search using Bicep IaC templates.</p>
+      </div>
+      <div class="card">
+        <div class="card__icon">🏷️</div>
+        <h3 class="card__title">Challenge 1 — Model Choice</h3>
+        <p class="card__text">Benchmark GPT-4o vs. a small model on support Q&amp;A tasks. Compare cost, latency, and answer quality.</p>
+      </div>
+      <div class="card">
+        <div class="card__icon">🤖</div>
+        <h3 class="card__title">Challenge 2 — First Agent</h3>
+        <p class="card__text">Create an agent with system instructions for the employee support scenario. Understand how agents differ from raw completions.</p>
+      </div>
+      <div class="card">
+        <div class="card__icon">📖</div>
+        <h3 class="card__title">Challenge 3 — Grounding</h3>
+        <p class="card__text">Add Foundry IQ with HR and IT knowledge-base documents. Fix hallucinations and make the agent reliable.</p>
+      </div>
+      <div class="card">
+        <div class="card__icon">🔧</div>
+        <h3 class="card__title">Challenge 4 — Tools</h3>
+        <p class="card__text">Give the agent the ability to create IT tickets through an MCP Tool or Foundry Toolbox. Turn assistant into agent.</p>
+      </div>
+      <div class="card">
+        <div class="card__icon">💾</div>
+        <h3 class="card__title">Challenge 5 — Memory</h3>
+        <p class="card__text">Implement session and user memory so the agent remembers an employee's department and preferences across conversations.</p>
+      </div>
+      <div class="card">
+        <div class="card__icon">🔒</div>
+        <h3 class="card__title">Challenge 6 — Guardrails</h3>
+        <p class="card__text">Add Content Safety, restrict confidential policy access, and protect against prompt injection attacks.</p>
+      </div>
+      <div class="card">
+        <div class="card__icon">📊</div>
+        <h3 class="card__title">Challenge 7 — Evaluation</h3>
+        <p class="card__text">Build a synthetic HR Q&amp;A dataset, run evaluations, and score the agent on groundedness and correctness.</p>
+      </div>
+      <div class="card">
+        <div class="card__icon">⚡</div>
+        <h3 class="card__title">Challenge 8 — Optimization</h3>
+        <p class="card__text">Use evaluation results to improve system prompts and tool descriptions. Build → Evaluate → Optimize → Repeat.</p>
+      </div>
+      <div class="card">
+        <div class="card__icon">🔭</div>
+        <h3 class="card__title">Challenge 9 — Observability</h3>
+        <p class="card__text">Configure distributed traces, monitoring dashboards, and Application Insights. If you can't observe it, you can't operate it.</p>
+      </div>
+      <div class="card">
+        <div class="card__icon">🏢</div>
+        <h3 class="card__title">Challenge 10 — Publish</h3>
+        <p class="card__text">Publish the agent to your enterprise. Apply governance, security controls, and lifecycle management for production readiness.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Repo Structure ────────────────────────────────── -->
+<section class="section" id="structure">
+  <div class="container">
+    <div class="section__header">
+      <span class="section__tag">Repository</span>
+      <h2 class="section__title">Repository Structure</h2>
+      <p class="section__lead">
+        The repo follows the standard MicroHack layout — one folder per challenge,
+        shared infrastructure, and separate guides for coaches and students.
+      </p>
+    </div>
+    <div class="two-col">
+      <div>
+        <div class="code-block" role="region" aria-label="Repository directory tree">
+<span class="dir">MS-Foundry-Microhack/</span>
+├── <span class="file">README.md</span>
+├── <span class="dir">docs/</span>               <span class="comment"># GitHub Pages landing page</span>
+│   ├── <span class="file">index.html</span>
+│   └── <span class="file">styles.css</span>
+├── <span class="dir">challenges/</span>
+│   ├── <span class="dir">challenge0-setup/</span>
+│   ├── <span class="dir">challenge1-models/</span>
+│   ├── <span class="dir">challenge2-agent/</span>
+│   ├── <span class="dir">challenge3-grounding/</span>
+│   ├── <span class="dir">challenge4-tools/</span>
+│   ├── <span class="dir">challenge5-memory/</span>
+│   ├── <span class="dir">challenge6-guardrails/</span>
+│   ├── <span class="dir">challenge7-evals/</span>
+│   ├── <span class="dir">challenge8-optimization/</span>
+│   ├── <span class="dir">challenge9-observability/</span>
+│   └── <span class="dir">challenge10-publish/</span>
+├── <span class="dir">infra/</span>               <span class="comment"># Bicep templates</span>
+│   ├── <span class="file">main.bicep</span>
+│   ├── <span class="dir">modules/</span>
+│   └── <span class="dir">parameters/</span>
+├── <span class="dir">starter-code/</span>
+├── <span class="dir">coach-guide/</span>
+├── <span class="dir">student-guide/</span>
+└── <span class="dir">solution-guide/</span>
+        </div>
+      </div>
+      <div class="two-col__text">
+        <h2>What Lives Where</h2>
+        <ul>
+          <li><strong>docs/</strong> — This GitHub Pages landing page. Enable Pages → <em>Deploy from /docs</em>.</li>
+          <li><strong>challenges/</strong> — One folder per challenge with instructions, starter code, and solution hints.</li>
+          <li><strong>infra/</strong> — Bicep modules for deploying all Azure Foundry resources (Challenge 0).</li>
+          <li><strong>starter-code/</strong> — Boilerplate Python/TypeScript to kickstart each challenge.</li>
+          <li><strong>coach-guide/</strong> — Facilitator notes, timing, and hints for each challenge.</li>
+          <li><strong>student-guide/</strong> — Step-by-step walkthroughs for participants.</li>
+          <li><strong>solution-guide/</strong> — Reference implementations for each challenge.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Get Started ───────────────────────────────────── -->
+<section class="section section--alt" id="getstarted">
+  <div class="container">
+    <div class="section__header">
+      <span class="section__tag">Get Started</span>
+      <h2 class="section__title">Ready to Build?</h2>
+      <p class="section__lead">
+        Everything you need to run the MicroHack is in this repository.
+        Follow the steps below to get your environment ready.
+      </p>
+    </div>
+    <div class="two-col">
+      <ol class="steps">
+        <li>
+          <div>
+            <h4>Fork or clone the repository</h4>
+            <p>
+              <code>git clone https://github.com/priyanka405/MS-Foundry-Microhack.git</code><br/>
+              Each participant needs their own copy.
+            </p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <h4>Complete Challenge 0 — Environment Setup</h4>
+            <p>
+              Open <code>challenges/challenge0-setup/</code> and follow the instructions
+              to deploy your Azure Foundry environment using the Bicep templates in <code>infra/</code>.
+            </p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <h4>Work through each challenge in order</h4>
+            <p>
+              Each challenge folder contains a <code>README.md</code> with the challenge brief,
+              learning objectives, and hints. Use <code>starter-code/</code> as your base.
+            </p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <h4>Check your work against the solution guide</h4>
+            <p>
+              Reference implementations are in <code>solution-guide/</code>. Use them
+              after completing each challenge, not before!
+            </p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <h4>Enable GitHub Pages to share your progress</h4>
+            <p>
+              Go to <strong>Settings → Pages → Deploy from branch → /docs</strong>
+              to publish this landing page at your own URL.
+            </p>
+          </div>
+        </li>
+      </ol>
+      <div>
+        <div class="card" style="margin-bottom:24px;">
+          <div class="card__icon">📋</div>
+          <h3 class="card__title">Prerequisites</h3>
+          <p class="card__text">
+            Azure subscription with Foundry access · Azure CLI · Bicep CLI ·
+            Python 3.11+ or Node.js 20+ · VS Code with Copilot
+          </p>
+        </div>
+        <div class="card" style="margin-bottom:24px;">
+          <div class="card__icon">⏱️</div>
+          <h3 class="card__title">Duration</h3>
+          <p class="card__text">
+            Full MicroHack: ~1 day (8 hours) · Individual challenges: 30–60 minutes each
+          </p>
+        </div>
+        <div class="card">
+          <div class="card__icon">🤝</div>
+          <h3 class="card__title">Contributing</h3>
+          <p class="card__text">
+            Found an issue or want to improve a challenge?
+            Open a pull request — contributions are welcome!
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ───────────────────────────────────────── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__logo">MS Foundry MicroHack · Employee Support Agent</div>
+    <p>
+      Built with ❤️ for the Microsoft Foundry community ·
+      <a href="https://github.com/priyanka405/MS-Foundry-Microhack" target="_blank" rel="noopener">GitHub Repository</a>
+    </p>
+    <p style="margin-top:8px; font-size:.8rem; opacity:.6;">
+      Microsoft, Azure, and Foundry are trademarks of Microsoft Corporation.
+      This is a community hackathon resource.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
