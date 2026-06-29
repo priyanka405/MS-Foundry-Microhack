@@ -30,4 +30,4 @@ Use your evaluation results to improve the agent's system prompt and tool config
 Build → Evaluate → Optimize → Repeat
 ```
 
-Optimisation is not a one-time step — it's a continuous loop throughout the agent lifecycle.
+Optimization is not a one-time step — it's a continuous loop throughout the agent lifecycle.

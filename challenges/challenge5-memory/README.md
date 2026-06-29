@@ -6,7 +6,7 @@ Every conversation starts from scratch. The agent keeps asking "what department 
 
 ## Goal
 
-Implement session memory and user memory so the agent personalises responses based on stored context.
+Implement session memory and user memory so the agent personalizes responses based on stored context.
 
 ## Instructions
 
@@ -18,7 +18,7 @@ Implement session memory and user memory so the agent personalises responses bas
 
 - Understand the difference between session and user memory
 - Use Foundry's agent memory capabilities
-- Implement personalisation without hardcoding
+- Implement personalization without hardcoding
 
 ## Key Insight
 
@@ -26,4 +26,4 @@ Implement session memory and user memory so the agent personalises responses bas
 Memory = Personalization
 ```
 
-Memory transforms a generic assistant into a personalised colleague.
+Memory transforms a generic assistant into a personalized colleague.

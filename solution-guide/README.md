@@ -31,4 +31,4 @@ solution-guide/
 3. Note any differences and understand why the reference is structured the way it is
 4. Ask your coach if you have questions
 
-Reference implementations prioritise clarity and best practices over brevity.
+Reference implementations prioritize clarity and best practices over brevity.
