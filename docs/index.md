@@ -1,19 +1,28 @@
-# MS Foundry Microhack
+# MS Foundry MicroHack
 
-## Challenge Journey (End-to-End): Prototype to Publish
+## Prototype to Publish an Employee Support Agent
 
-This microhack takes you through the full agent lifecycle — from first prototype to production rollout.
+This MicroHack walks participants through the full Microsoft Foundry lifecycle for building an enterprise-ready **Employee Support Agent**.
 
-### Prerequisites == Setup
+## Quick Links
 
-Before starting Challenge 1, complete environment setup:
+- [Open landing page](./index.html)
+- [Repository](https://github.com/priyanka405/MS-Foundry-Microhack)
+- [Student guide](../student-guide/README.md)
+- [Challenge 0 — Environment Setup](../challenges/challenge0-setup/README.md)
 
-- Access to Microsoft Foundry portal (`ai.azure.com/nextgen`)
-- Azure subscription and Foundry project
-- Python 3.10+
-- Required SDK dependencies installed
-- Repo cloned locally
-- Environment variables configured (keys/endpoints)
+---
+
+## Prerequisites
+
+Before starting, make sure you have:
+
+- Access to Microsoft Foundry
+- An Azure subscription
+- Azure CLI and Bicep CLI installed
+- Python 3.11+ or Node.js 20+
+- This repository cloned locally
+- Environment values ready for deployment parameters
 
 ---
 
@@ -21,145 +30,121 @@ Before starting Challenge 1, complete environment setup:
 
 ### Story
 
-You work in a company. Employees ask:
+You work in a company where employees ask questions every day such as:
 
 - How do I request vacation?
 - How do I reset my password?
 - Where is the travel policy?
 - Who approves expenses?
 
-The AI Agent should:
+The AI agent should be able to:
 
 - Answer questions
 - Search documents
-- Create IT tickets (mock API)
-- Remember preferences
+- Create IT tickets through a mock API
+- Remember preferences and context
 - Follow company policies
 
-### Why it fits every challenge
+### Why this scenario fits every challenge
 
-| Challenge | Scenario |
+| Challenge | Scenario fit |
 |---|---|
-| Models | Compare GPT vs Small Model |
-| Agent | Basic employee assistant |
-| Grounding | HR + IT KB documents |
-| Tools | Ticket creation API |
-| Memory | Remember department/preferences |
-| Guardrails | Prevent access to confidential policies |
-| Evaluation | Measure correctness |
-| Optimization | Improve prompts/tools |
-| Observability | Trace responses |
-| Publish | Enterprise rollout |
-
-Very easy to create synthetic documents.
+| Model Choice | Compare high-quality vs. efficient models |
+| First Agent | Build a baseline employee assistant |
+| Grounding | Use HR and IT documents as trusted sources |
+| Tools | Create tickets and trigger actions |
+| Memory | Personalize answers based on known context |
+| Guardrails | Protect confidential information |
+| Evaluation | Measure groundedness and correctness |
+| Optimization | Improve prompts, retrieval, and tools |
+| Observability | Inspect traces, latency, and failures |
+| Publish | Prepare for enterprise rollout |
 
 ---
 
-## QR Code
+## Challenge Journey
 
-> Add your QR code image here before the challenge sections.
+0. **Environment Setup**  
+   Deploy the Azure infrastructure needed for the workshop.
 
-![Microhack QR](./assets/qr.png)
+1. **Model Choice Matters**  
+   Compare models for quality, speed, and cost.
+
+2. **Build Your First Agent**  
+   Create the baseline Employee Support Agent.
+
+3. **Ground the Agent**  
+   Connect the agent to enterprise knowledge.
+
+4. **Give the Agent Tools**  
+   Add the mock ticketing API as an action tool.
+
+5. **Add Memory**  
+   Personalize the experience with session and user memory.
+
+6. **Make It Safe**  
+   Add guardrails, content safety, and prompt injection protection.
+
+7. **Evaluate the Agent**  
+   Measure correctness, relevance, and groundedness.
+
+8. **Optimize the Agent**  
+   Improve prompts, tools, and retrieval based on evidence.
+
+9. **Observe Everything**  
+   Configure tracing, dashboards, and alerts.
+
+10. **Enterprise Ready**  
+   Publish with governance, operations, and access controls.
 
 ---
 
-## Challenges
+## Challenge Hub
 
-1. Challenge 1: Build the Agent and Model Choice (same challenge)
-2. Challenge 2: Grounding
-3. Challenge 3: Tools (MCP)
-4. Challenge 4: Memory
-5. Challenge 5: Guardrails
-6. Challenge 6: Evaluations
-7. Challenge 7: Optimization and Observability
-8. Challenge 8: Publish
+### Challenge 0 — Environment Setup
+- **Goal:** Deploy the full Azure Foundry environment using Bicep.
+- **Open:** [Challenge README](../challenges/challenge0-setup/README.md)
+- **Related:** [Infra guide](../infra/README.md)
 
----
+### Challenge 1 — Model Choice Matters
+- **Goal:** Compare candidate models and choose the best fit.
+- **Open:** [Challenge README](../challenges/challenge1-models/README.md)
 
-## Challenge 1: Build Agents
+### Challenge 2 — Build Your First Agent
+- **Goal:** Create the baseline Employee Support Agent with system instructions.
+- **Open:** [Challenge README](../challenges/challenge2-agent/README.md)
 
-**Time:** ~30 minutes
+### Challenge 3 — Ground the Agent
+- **Goal:** Connect the agent to HR and IT knowledge.
+- **Open:** [Challenge README](../challenges/challenge3-grounding/README.md)
+- **Starter assets:** `starter-code/documents/`
 
-### Objectives
+### Challenge 4 — Give the Agent Tools
+- **Goal:** Register the mock ticketing API as a tool.
+- **Open:** [Challenge README](../challenges/challenge4-tools/README.md)
+- **Starter assets:** `starter-code/mock-api/`
 
-By the end of this challenge, you will have:
+### Challenge 5 — Add Memory
+- **Goal:** Store useful employee context across conversations.
+- **Open:** [Challenge README](../challenges/challenge5-memory/README.md)
 
-- ✅ An Anomaly Detection Agent that monitors sensor data and flags abnormal readings
-- ✅ A Fault Diagnosis Agent that analyzes flagged anomalies and recommends maintenance actions
-- ✅ Both agents tested against real sensor data from the factory floor
+### Challenge 6 — Make It Safe
+- **Goal:** Prevent policy leakage and unsafe responses.
+- **Open:** [Challenge README](../challenges/challenge6-guardrails/README.md)
 
-### Context
+### Challenge 7 — Evaluate the Agent
+- **Goal:** Create a dataset and measure agent quality.
+- **Open:** [Challenge README](../challenges/challenge7-evals/README.md)
+- **Starter assets:** `starter-code/eval-dataset/`
 
-TireForge Industries has 5 machines on the production floor. Each machine emits sensor data including temperature, pressure, vibration, and RPM. Your agents need to:
+### Challenge 8 — Optimize the Agent
+- **Goal:** Improve the agent based on evaluation findings.
+- **Open:** [Challenge README](../challenges/challenge8-optimization/README.md)
 
-- **Anomaly Detection:** Compare current readings against known thresholds and flag machines that are out of spec
-- **Fault Diagnosis:** Given an anomaly, reason about what might be wrong and recommend an action
+### Challenge 9 — Observe Everything
+- **Goal:** Enable tracing, monitoring, and alerting.
+- **Open:** [Challenge README](../challenges/challenge9-observability/README.md)
 
-Check out `sensor_data.json` to see the current state of all machines.
-
-### Portal or SDK?
-
-Microsoft Foundry gives you two ways to build agents. The Foundry portal (`ai.azure.com/nextgen`) provides a visual, no-code interface where you can create agents, attach tools, and test them interactively in a playground — great for exploration and rapid prototyping. The Azure AI Agents SDK gives you full programmatic control: you define agent behavior, tools, and orchestration logic in Python, which makes it easy to version, test, and integrate into automated pipelines.
-
-In this challenge we use the SDK. The code in `agents.py` creates both agents, registers their tools, and runs them against every machine in `sensor_data.json` — all from the terminal. After the script runs, both agents will also be visible in the portal under Agents, so you can inspect them, tweak their instructions, and test them interactively without touching any code.
-
-### Agents and Tools
-
-#### What is an agent?
-
-An agent in Microsoft Foundry is a persistent, stateful AI assistant backed by a large language model. Unlike a plain API call — where you send a prompt and get a single response — an agent maintains a conversation thread, can invoke tools autonomously, and retains context across multiple turns. You configure it with:
-
-- A name and model (e.g. `gpt-5.4`)
-- A system prompt — instructions that define its role, personality, and constraints
-- One or more tools it can call when it needs information or actions beyond its training data
-
-Agents are managed resources in your Foundry project. They persist between runs, appear in the portal under Agents, and can be versioned, shared, and reused.
-
-#### What are tools?
-
-Tools extend an agent's capabilities beyond pure language generation. When the model decides it needs information it doesn't have in its context window, it emits a tool call — a structured JSON request specifying the tool name and arguments. The SDK intercepts this, runs the corresponding Python function, and feeds the result back to the model. This reasoning loop continues until the agent produces a final response.
-
-From the model's perspective, tools are described by a JSON schema (name, description, parameters). The model reads these descriptions and decides autonomously when and how to call them — you never hard-code the decision logic.
-
-#### What tools can you add?
-
-| Tool type | What it does | Best for |
-|---|---|---|
-| Function | Calls a local Python function you define | Any custom logic: database lookups, APIs, calculations |
-| Code Interpreter | Lets the agent write and execute Python in a sandbox | Data analysis, chart generation, file processing |
-| File Search | Semantic search over a Microsoft Foundry knowledge base | Policy docs, manuals, historical records |
-| Bing Search | Live web search | Real-time information, news |
-| Azure AI Search | Queries an Azure Search index | Grounded retrieval over your own data at scale |
-
-### Vector databases and Microsoft Foundry knowledge bases
-
-When your agent needs to answer questions grounded in a large body of documents — policy manuals, product specs, historical records — you need a vector database. Unlike keyword search, a vector database converts text into numerical embeddings and finds semantically similar passages at query time. This lets the agent ask a natural-language question and retrieve the right content even when the exact words don’t appear in the query.
-
-Microsoft Foundry includes a built-in knowledge base backed by a vector store. You upload documents (PDFs, Word files, plain text) and the service automatically chunks, embeds, and indexes them. When you attach this knowledge base to an agent as a File Search tool, the agent queries it at inference time — pulling relevant passages into its context before generating a response, so its answers are grounded in your actual documents rather than model training data alone.
-
-For TireForge Industries, useful knowledge bases would include:
-
-- Machine maintenance manuals — repair procedures, lubrication schedules, torque specs, and replacement part numbers for each machine
-- Historical incident reports — past failures, their root causes, and the corrective actions that resolved them
-- Supplier specification sheets — acceptable operating tolerances, warranty conditions, and recommended sensor thresholds per machine model
-
-With this in place, the Fault Diagnosis Agent could query “what are the known failure modes of the CP-003 curing press when vibration exceeds 9.0 mm/s?” and retrieve relevant maintenance history — grounding its recommendation in documented precedent rather than general LLM knowledge.
-
-In this challenge the agents use function tools. The Anomaly Detection Agent uses `check_thresholds` to look up the acceptable operating ranges for each machine and compare them against live sensor readings. Without this tool, the agent would have to reason from memory alone — with it, every threshold check is grounded in actual machine spec data.
-
-### Get Started
-
-Open `agents.py` and review the implementation of both agents.
-
-```bash
-cd factory/challenge-1-build
-python agents.py
-```
-
-As the script runs, watch the terminal closely — you'll see each agent being created, then each machine from `sensor_data.json` being sent through the Anomaly Detection Agent first, and its output handed off to the Fault Diagnosis Agent. You'll see the raw agent responses printed for every machine, giving you a live view of how the two agents collaborate. Once it completes, head to the Microsoft Foundry portal, open your project, and navigate to Agents in the left sidebar — hit Refresh if the agents don't appear immediately, as it can take a few seconds for newly created agents to show up in the portal.
-
-### Success Criteria
-
-- [ ] Anomaly Detection Agent correctly identifies the 2 warning + 1 critical machine
-- [ ] Fault Diagnosis Agent provides reasonable maintenance recommendations
-- [ ] Both agents respond coherently when given a machine's sensor readings
+### Challenge 10 — Enterprise Ready
+- **Goal:** Publish the agent with governance and operational readiness.
+- **Open:** [Challenge README](../challenges/challenge10-publish/README.md)

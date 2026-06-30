@@ -2,13 +2,17 @@
 
 > **🌐 Landing page:** [priyanka405.github.io/MS-Foundry-Microhack](https://priyanka405.github.io/MS-Foundry-Microhack/)
 
-This repository contains the GitHub Pages landing page for the Microsoft Foundry MicroHack focused on building an **Employee Support Agent** from prototype to publish.
+Build an **Employee Support Agent** with Microsoft Foundry through an end-to-end MicroHack that starts with infrastructure setup and finishes with enterprise-ready publishing.
 
-## Repo contents
+## What’s in this repo
 
-- `docs/` — GitHub Pages landing page
-- `README.md` — repository overview
-- `.gitignore` — standard ignore rules
+- `docs/` — GitHub Pages landing page and workshop hub
+- `challenges/` — hands-on challenge instructions for each stage of the MicroHack
+- `starter-code/` — synthetic documents, mock API, and evaluation dataset assets
+- `infra/` — Azure Bicep templates for environment deployment
+- `student-guide/` — participant overview and challenge sequence
+- `coach-guide/` — facilitator-only notes and hints
+- `solution-guide/` — reference implementations and solution mapping
 
 ## GitHub Pages
 
@@ -19,12 +23,22 @@ Publish from:
 
 ## MicroHack flow
 
-1. Setup / prerequisites
-2. Challenge 1 — Build the agent + model choice
-3. Challenge 2 — Grounding
-4. Challenge 3 — Tools + MCP
-5. Challenge 4 — Memory
-6. Challenge 5 — Guardrails
-7. Challenge 6 — Evaluations
-8. Challenge 7 — Optimization + Observability
-9. Challenge 8 — Publish
+0. Environment Setup
+1. Model Choice Matters
+2. Build Your First Agent
+3. Ground the Agent
+4. Give the Agent Tools
+5. Add Memory
+6. Make It Safe
+7. Evaluate the Agent
+8. Optimize the Agent
+9. Observe Everything
+10. Enterprise Ready
+
+## Start here
+
+1. Open the landing page in `docs/` or via GitHub Pages.
+2. Complete `challenges/challenge0-setup/README.md`.
+3. Continue through the numbered challenge folders in order.
+4. Use `starter-code/` assets when referenced by each challenge.
+5. Review `student-guide/README.md` for the full participant path.
