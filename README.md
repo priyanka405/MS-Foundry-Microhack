@@ -1,151 +1,280 @@
-# Contract Intake &amp; Drafting Agent · Microsoft Foundry MicroHack
+# Contract Lifecycle Management with Microsoft Foundry
 
-> Build a production-ready **Contract Intake &amp; Drafting Agent** on **Microsoft Foundry** — from a bare model to a governed, evaluated, deployed agent — in one focused day.
+> A production-style **Microsoft Foundry MicroHack** that walks you through building an enterprise-grade **Contract Lifecycle Management (CLM) Assistant** &mdash; from an empty Foundry project to a shipped, evaluated, observable solution.
 
-[![Foundry](https://img.shields.io/badge/Microsoft-Foundry-0078d4)](https://ai.azure.com) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](#license) [![Docs: mkdocs-material](https://img.shields.io/badge/Docs-mkdocs--material-2b6cb0)](docs/index.md)
+[![Foundry](https://img.shields.io/badge/Microsoft-Foundry-0078D4?logo=microsoft&logoColor=white)](https://ai.azure.com)
+[![Language](https://img.shields.io/badge/Language-Python%203.11+-3776AB?logo=python&logoColor=white)](https://www.python.org)
+[![Docs](https://img.shields.io/badge/Docs-GitHub%20Pages-181717?logo=github&logoColor=white)](./index.html)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
 
 ---
 
-## 🎯 What you will build
+## Hero
 
-A **Contract Intake &amp; Drafting Agent** that helps a Legal or Procurement team:
+Build the **Contract Intake &amp; Drafting Agent** &mdash; the AI copilot Legal and Procurement wish they already had. Nine hands-on challenges take you from *"I have an Azure subscription"* all the way to *"the assistant is live in Teams, traced in App Insights, and gated by CI"*.
 
-- Take an intake request (*"I need an NDA with Contoso for a joint discovery workshop"*).
-- Retrieve the right template (NDA / MSA / SOW).
-- Populate it with **approved clauses** from a company clause library.
-- Enforce **legal, procurement, and compliance policies** as guardrails.
-- Route the draft for approval, and hand back a clean draft with citations.
+Every challenge is fully documented for both the **Foundry portal (low-code)** and the **Foundry SDK in Python (pro-code)**, so architects, engineers, and product folks can all follow along.
 
-Along the way you'll practice everything Microsoft Foundry gives you: models, instructions, tools, knowledge grounding, guardrails, tracing, evaluation, optimization, and deployment.
+## Table of contents
 
-## 🧭 Challenges (0 → 8)
+- [Hackathon overview](#hackathon-overview)
+- [Business scenario](#business-scenario)
+- [Learning objectives](#learning-objectives)
+- [Business value](#business-value)
+- [Solution architecture](#solution-architecture)
+- [Challenge roadmap](#challenge-roadmap)
+- [Prerequisites](#prerequisites)
+- [Estimated duration](#estimated-duration)
+- [Skills you will learn](#skills-you-will-learn)
+- [Success outcomes](#success-outcomes)
+- [Repository structure](#repository-structure)
+- [Getting started](#getting-started)
+- [Resources](#resources)
+- [Contributors](#contributors)
 
-| # | Challenge | Focus | Foundry surface |
-| --- | --- | --- | --- |
-| **0** | [Setup](docs/challenges/challenge-0-setup/README.md) | Foundry project, model, storage, identity. | Portal + CLI |
-| **1** | [Build the Agent](docs/challenges/challenge-1-build-agent/README.md) | Model + instructions + persona. First turn. | Agent Service |
-| **2** | [Knowledge Grounding](docs/challenges/challenge-2-knowledge-grounding/README.md) | Templates, policies, clauses → RAG. | Azure AI Search + File Search |
-| **3** | [Tools &amp; Actions](docs/challenges/challenge-3-tools-actions/README.md) | Clause lookup, doc-gen, approval routing. | Logic Apps · Power Automate · Functions |
-| **4** | [Guardrails](docs/challenges/challenge-4-guardrails/README.md) | Template enforcement, sensitive-data, compliance. | Content Safety · Prompt Shields |
-| **5** | [Observability](docs/challenges/challenge-5-observability/README.md) | Tracing, metrics, cost. | OpenTelemetry + App Insights |
-| **6** | [Evaluation](docs/challenges/challenge-6-evaluation/README.md) | Groundedness, task adherence, safety gate. | Foundry Evaluators |
-| **7** | [Optimization](docs/challenges/challenge-7-optimization/README.md) | Model choice, prompt, retrieval, cost. | Prompt flow + tuning |
-| **8** | [Publish](docs/challenges/challenge-8-publish/README.md) | Web App / Teams / API endpoint. | Foundry Deploy |
+## Hackathon overview
 
-## 🗂️ Repository structure
+Organizations process hundreds of contracts every month. Legal and Procurement need help with:
 
-```
-├── README.md                     ← this file
-├── index.md                      ← MkDocs entry page
-├── mkdocs.yml                    ← MkDocs site config
-├── requirements.txt              ← Python deps (SDK + evaluators + otel)
-├── .env.example                  ← Environment variable template
-├── .gitignore
-│
-├── docs/
-│   ├── index.md                  ← Docs landing page
-│   ├── architecture.md           ← Reference architecture
-│   ├── facilitator-guide.md     ← For coaches
-│   ├── student-guide.md          ← For attendees
-│   ├── wrapup.md                 ← Recap + next steps
-│   └── challenges/
-│       ├── challenge-0-setup/README.md
-│       ├── challenge-1-build-agent/README.md
-│       ├── challenge-2-knowledge-grounding/README.md
-│       ├── challenge-3-tools-actions/README.md
-│       ├── challenge-4-guardrails/README.md
-│       ├── challenge-5-observability/README.md
-│       ├── challenge-6-evaluation/README.md
-│       ├── challenge-7-optimization/README.md
-│       └── challenge-8-publish/README.md
-│
-├── app/                          ← Pro-code / SDK path
-│   ├── contract_agent.py
-│   ├── tools.py
-│   ├── grounding.py
-│   ├── evaluation.py
-│   ├── monitoring.py
-│   ├── config.py
-│   └── sample_run.py
-│
-└── data/                         ← Grounding + eval assets
-    ├── contract_templates/
-    │   ├── nda_template.md
-    │   ├── msa_template.md
-    │   └── sow_template.md
-    ├── policies/
-    │   ├── legal_policy.md
-    │   ├── procurement_guidelines.md
-    │   └── compliance_policy.md
-    ├── approved_clauses/
-    │   ├── payment_terms.md
-    │   ├── liability_clause.md
-    │   └── termination_clause.md
-    └── test_cases/
-        └── evaluation_dataset.jsonl
-```
+- Contract creation and drafting
+- Contract review and clause analysis
+- Compliance verification
+- Approval routing
+- Contract tracking, renewals, and expirations
+- Risk identification
 
-## ✅ Prerequisites
+You will build a single **Contract Lifecycle Management Assistant** on Microsoft Foundry that owns all of the above &mdash; grounded on your organization's own templates, clause library, and policies, wired to real business systems via Logic Apps and Azure Functions, protected by Prompt Shields and Content Safety, evaluated on a fixed dataset, and deployed to a Web App, Teams, or a plain API endpoint.
 
-- **Microsoft Foundry** access — a project on [ai.azure.com](https://ai.azure.com).
-- An **Azure subscription** (or a Foundry sandbox).
-- **Python 3.10+** and **`az` CLI** (for the pro-code path).
-- **VS Code** (optional but recommended). GitHub Copilot optional.
-- Basic familiarity with agents (model + instructions + tools).
+## Business scenario
 
-## 🚀 Quick start
+**Contoso Global** is a multinational with 40,000 employees, 12,000 active contracts, and 400+ new agreements per month. Their current CLM process is scattered across SharePoint, email, and three legacy DMS systems. Symptoms:
 
-```bash
-git clone https://github.com/<your-org>/foundry-contract-lifecycle-management-hackathon.git
-cd foundry-contract-lifecycle-management-hackathon
+- Legal spends **~35%** of its time answering "what does clause X in contract Y say?".
+- Procurement misses **~11%** of auto-renewals every year, costing millions.
+- Average new-contract turnaround is **17 business days**.
+- No consistent way to compare an incoming counterparty draft against the enterprise standard.
 
-# Pro-code path
-python -m venv .venv &amp;&amp; source .venv/bin/activate   # macOS/Linux
-# .venv\Scripts\Activate.ps1                          # Windows
-pip install -r requirements.txt
-cp .env.example .env    # then fill in the values
+Your job: ship a **Contract Lifecycle Management Assistant** that turns this into a same-day, self-service, auditable workflow &mdash; while never crossing the line into legal advice or unilateral approval.
 
-python -m app.sample_run
-```
+## Learning objectives
 
-Or serve the docs site locally:
+By the end of this hackathon you will be able to:
 
-```bash
-pip install mkdocs-material
-mkdocs serve
-# open http://127.0.0.1:8000
-```
+1. Stand up an Azure AI Foundry project with a deployed model, indexed corpus, and enabled tracing.
+2. Build a grounded agent with a strong persona and refusal behavior.
+3. Ground the agent on enterprise content using Azure AI Search and File Search &mdash; with citations.
+4. Extend the agent with five tools: Azure AI Search, File Search, Logic Apps, Azure Functions, and Code Interpreter.
+5. Protect the agent with Prompt Shields, PII detection, and app-layer blocklists.
+6. Trace every prompt, retrieval, tool call, and response into Application Insights.
+7. Evaluate on a fixed dataset and enforce a deployment gate.
+8. Optimize model, prompt, retrieval, and cost with a repeatable evaluation loop.
+9. Publish the assistant as a Web App, a Teams app, or an API endpoint.
 
-Then work the challenges **0 → 8** in order.
+## Business value
 
-## 🎓 Two paths, one hack
-
-Every challenge offers two paths so both audiences leave with something they can build on:
-
-| Path | Who it's for | Where you work |
+| KPI | Baseline (typical) | With this solution (target) |
 | --- | --- | --- |
-| **Low-code / Portal** | Business users, PMs, first-time Foundry users. | The Foundry portal at [ai.azure.com](https://ai.azure.com). |
-| **Pro-code / SDK** | Developers who want to script agents. | Python SDK in [`app/`](app/) using `azure-ai-projects` + `azure-identity`. |
+| Time to first draft (NDA / MSA / SOW) | 3&ndash;5 days | Under 10 minutes |
+| Legal time on "what does clause X say?" | ~35% | Under 10% |
+| Missed auto-renewals per year | ~11% | Under 2% |
+| Contract turnaround (draft &rarr; signature) | 17 business days | Under 5 business days |
+| Audit trail for AI-assisted actions | Ad hoc | 100% traced in App Insights |
 
-## 📚 Positioning — Foundry is more than a chatbot builder
+## Solution architecture
 
-Foundry gives you a full **agent platform**:
+```mermaid
+flowchart LR
+    subgraph Users
+        L[Legal]
+        P[Procurement]
+        S[Sales]
+    end
 
-- **Agents** = model + instructions + tools + knowledge, all versioned.
-- **Grounding** on your data via Azure AI Search / File Search.
-- **Tools &amp; actions** — Logic Apps, Power Automate, Azure Functions, OpenAPI, MCP.
-- **Guardrails** — Content Safety, Prompt Shields, jailbreak defense, PII protection.
-- **Tracing &amp; monitoring** — OpenTelemetry → Application Insights.
-- **Evaluation** — groundedness, task adherence, safety scorers with a real gate.
-- **Optimization** — model choice, prompt / retrieval tuning, cost dashboards.
-- **Deploy** — Web App, Teams App, API endpoint — Managed Identity by default.
+    subgraph Channel[Channel]
+        UI[Web / Teams UI]
+    end
 
-## 💬 Getting help
+    subgraph Foundry[Microsoft Foundry]
+        A[Contract Intake and Drafting Agent]
+        KG[Knowledge Grounding]
+        T[Function Tools]
+        GR[Guardrails and Safety]
+        EV[Evaluators]
+        OB[Tracing]
+    end
 
-- Each challenge ends with a **Success Criteria** checklist and a **Tips &amp; Troubleshooting** table.
-- Coaches: see [`docs/facilitator-guide.md`](docs/facilitator-guide.md).
-- Attendees: see [`docs/student-guide.md`](docs/student-guide.md).
+    subgraph Ground[Grounding]
+        AIS[Azure AI Search - idx-clm-contracts]
+        BLOB[Blob - clm-corpus]
+    end
 
-## License
+    subgraph Actions[Business Actions]
+        LA[Logic Apps - Approval]
+        FN[Azure Functions - Clause / Status / Risk]
+        CI[Code Interpreter - Summaries and Reports]
+    end
 
-MIT — see the top of this file.
+    subgraph Ops[Ops]
+        AI[Application Insights]
+        GH[GitHub Actions - CI Gate]
+    end
+
+    L & P & S --> UI --> A
+    A --> KG --> AIS & BLOB
+    A --> T --> LA & FN & CI
+    A --> GR
+    A --> OB --> AI
+    EV --> GH
+```
+
+Every challenge builds one slice of this picture. By the end, the whole diagram is real.
+
+## Challenge roadmap
+
+| # | Challenge | Focus | Path |
+| --- | --- | --- | --- |
+| 0 | [Setup](./challenges/challenge-0-setup.md) | Foundry project, model, Search, tracing, corpus | Low-code + Pro-code |
+| 1 | [Build Agent &mdash; Contract Intake &amp; Drafting](./challenges/challenge-1-build-agent.md) | Persona, instructions, refusal behavior | Low-code + Pro-code |
+| 2 | [Knowledge Grounding](./challenges/challenge-2-knowledge-grounding.md) | Azure AI Search + File Search with citations | Low-code + Pro-code |
+| 3 | [Tools &amp; Actions](./challenges/challenge-3-tools-actions.md) | Search, File Search, Logic Apps, Functions, Code Interpreter | Low-code + Pro-code |
+| 4 | [Guardrails](./challenges/challenge-4-guardrails.md) | Prompt Shields, PII, template enforcement | Low-code + Pro-code |
+| 5 | [Observability](./challenges/challenge-5-observability.md) | Tracing, monitoring, tool telemetry | Low-code + Pro-code |
+| 6 | [Evaluation](./challenges/challenge-6-evaluation.md) | Groundedness, safety, tool accuracy | Low-code + Pro-code |
+| 7 | [Optimization](./challenges/challenge-7-optimization.md) | Model, prompt, retrieval, cost, latency | Low-code + Pro-code |
+| 8 | [Publish](./challenges/challenge-8-publish.md) | Web App, Teams, API endpoint | Low-code + Pro-code |
+
+Every challenge follows the same anatomy: **Context &rarr; Objective &rarr; Learning Outcome &rarr; Prerequisites &rarr; Architecture Diagram &rarr; Low-Code Path &rarr; Pro-Code Path &rarr; Portal Walkthrough &rarr; SDK Walkthrough &rarr; Testing &rarr; Validation &rarr; Success Criteria &rarr; Completion Checklist &rarr; Next Challenge**.
+
+## Prerequisites
+
+Before you start Challenge 0, make sure you have:
+
+- An **Azure subscription** with permission to create resource groups and role assignments (Owner, or Contributor + User Access Administrator).
+- Access to **Microsoft Foundry** at [`ai.azure.com`](https://ai.azure.com).
+- Quota to deploy **gpt-4o** or **gpt-4o-mini** in your target region (&ge; 30k TPM recommended).
+- **Python 3.11+**, **Git**, and **VS Code** with the Python + Azure extensions.
+- **Azure CLI** (`az login` works).
+- (For pro-code path) `pip install -r requirements.txt`.
+- (For Challenge 3 &amp; 5) A Microsoft 365 tenant with Power Automate and Office 365 approvals enabled &mdash; or the ability to stub the equivalent HTTP endpoints.
+
+## Estimated duration
+
+| Segment | Time |
+| --- | --- |
+| Challenge 0 &mdash; Setup | ~45 min |
+| Challenge 1 &mdash; Build Agent | ~45 min |
+| Challenge 2 &mdash; Knowledge Grounding | ~60 min |
+| Challenge 3 &mdash; Tools &amp; Actions | ~75 min |
+| Challenge 4 &mdash; Guardrails | ~45 min |
+| Challenge 5 &mdash; Observability | ~45 min |
+| Challenge 6 &mdash; Evaluation | ~45 min |
+| Challenge 7 &mdash; Optimization | ~45 min |
+| Challenge 8 &mdash; Publish | ~60 min |
+| **Total** | **~8 hours** |
+
+An "Explorer" (low-code only) team can finish Challenges 0&ndash;5 in about 4 hours.
+
+## Skills you will learn
+
+- **Foundry project management** &mdash; creating projects, model deployments, connections, and role assignments.
+- **Agent design** &mdash; instructions, personas, refusal behavior, tool routing.
+- **Retrieval-Augmented Generation** &mdash; vector + semantic hybrid, chunking, top-k tuning, citations.
+- **Function calling** &mdash; wiring Azure Functions, Logic Apps, and Code Interpreter as tools.
+- **Guardrails** &mdash; Prompt Shields, Content Safety, PII detection, app-layer blocklists.
+- **Observability** &mdash; OpenTelemetry, Application Insights, KQL, cost tracking.
+- **Evaluation** &mdash; groundedness, task adherence, safety, tool call accuracy, gate design.
+- **Optimization** &mdash; model + prompt + retrieval + cost sweeps with reproducible runs.
+- **Deployment** &mdash; Web App with Easy Auth, Teams manifest, API endpoint with Managed Identity.
+
+## Success outcomes
+
+You have "shipped" this MicroHack when:
+
+- Your CLM agent answers the 15-question evaluation set with citations and hits the deployment gate.
+- The full end-to-end scenario (intake &rarr; draft &rarr; retrieve clause &rarr; route approval &rarr; update status) works from a single Foundry thread.
+- Every prompt, retrieval, tool call, and response is visible in Application Insights.
+- A Web App, Teams app, or authenticated API endpoint serves the assistant to a pilot user.
+- GitHub Actions blocks a deploy if any gate metric regresses.
+
+## Repository structure
+
+```
+MS-Foundry-Microhack/
+├── README.md                         <- this file
+├── index.html                        <- GitHub Pages landing (mirrors README, dark mode + Mermaid)
+├── assets/
+│   ├── css/style.css                 <- Fluent-inspired styling with light/dark theme
+│   ├── js/main.js                    <- Nav, theme toggle, Mermaid init, copy buttons
+│   └── README.md                     <- Where to drop screenshots and architecture PNGs
+├── challenges/
+│   ├── challenge-0-setup.md
+│   ├── challenge-1-build-agent.md
+│   ├── challenge-2-knowledge-grounding.md
+│   ├── challenge-3-tools-actions.md
+│   ├── challenge-4-guardrails.md
+│   ├── challenge-5-observability.md
+│   ├── challenge-6-evaluation.md
+│   ├── challenge-7-optimization.md
+│   └── challenge-8-publish.md
+├── app/                              <- Pro-code (Python) reference implementation
+│   ├── config.py
+│   ├── contract_agent.py
+│   ├── grounding.py
+│   ├── tools.py
+│   ├── monitoring.py
+│   ├── evaluation.py
+│   └── sample_run.py
+├── data/                             <- Sample corpus for Challenges 2 and 6
+│   ├── contract_templates/
+│   ├── approved_clauses/
+│   ├── policies/
+│   └── test_cases/evaluation_dataset.jsonl
+├── docs/                             <- Facilitator + student guides (optional)
+├── requirements.txt
+├── .env.example
+└── .gitignore
+```
+
+## Getting started
+
+```powershell
+# 1. Clone
+git clone https://github.com/priyanka405/MS-Foundry-Microhack.git
+cd MS-Foundry-Microhack
+
+# 2. Python env
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+
+# 3. Configure
+Copy-Item .env.example .env
+# then fill AZURE_AI_PROJECT_CONNECTION_STRING, AZURE_OPENAI_DEPLOYMENT, ...
+
+# 4. Smoke test
+python -m app.sample_run --smoke
+
+# 5. Open the landing page locally
+Start-Process index.html
+```
+
+Then jump into [Challenge 0 &mdash; Setup](./challenges/challenge-0-setup.md).
+
+## Resources
+
+- **Microsoft Foundry**: <https://ai.azure.com>
+- **Foundry docs**: <https://learn.microsoft.com/azure/ai-foundry/>
+- **Azure AI Agents SDK (Python)**: <https://learn.microsoft.com/python/api/overview/azure/ai-agents-readme>
+- **Azure AI Search**: <https://learn.microsoft.com/azure/search/>
+- **Azure AI Evaluation SDK**: <https://learn.microsoft.com/azure/ai-foundry/how-to/develop/evaluate-sdk>
+- **Content Safety + Prompt Shields**: <https://learn.microsoft.com/azure/ai-services/content-safety/>
+- **Reference hackathon (style inspiration)**: <https://martaldsantos.github.io/foundry-hackathon/>
+
+## Contributors
+
+- **Priyanka Karnati** &mdash; scenario design, review.
+- **Community contributors** &mdash; welcome via PR. See the [Contributing guide](./CONTRIBUTING.md) if present, otherwise open an issue first to discuss the change.
+
+---
+
+Made with care for the Microsoft Foundry community. This repository is provided under the MIT license.

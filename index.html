@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Contract Lifecycle Management &middot; Microsoft Foundry MicroHack</title>
+  <meta name="description" content="A 9-challenge Microsoft Foundry MicroHack that walks you from empty Azure subscription to a shipped, evaluated Contract Lifecycle Management assistant." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%230078D4'/%3E%3Cpath d='M28 26h32l14 14v34a6 6 0 0 1-6 6H28a6 6 0 0 1-6-6V32a6 6 0 0 1 6-6z' fill='white'/%3E%3Cpath d='M60 26v14h14' fill='none' stroke='%230078D4' stroke-width='4'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600;700&family=Cascadia+Code&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <script>
+    // Apply persisted theme before paint (prevents FOUC)
+    (function () {
+      try {
+        const t = localStorage.getItem("clm-theme");
+        if (t === "dark" || t === "light") document.documentElement.setAttribute("data-theme", t);
+        else if (window.matchMedia("(prefers-color-scheme: dark)").matches)
+          document.documentElement.setAttribute("data-theme", "dark");
+      } catch (_) {}
+    })();
+  </script>
+</head>
+<body>
+
+<!-- ================= NAV ================= -->
+<header class="site-nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-text">
+        <strong>CLM MicroHack</strong>
+        <small>Microsoft Foundry</small>
+      </span>
+    </a>
+    <nav aria-label="Primary">
+      <ul class="nav-links">
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#scenario">Scenario</a></li>
+        <li><a href="#architecture">Architecture</a></li>
+        <li><a href="#challenges">Challenges</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#resources">Resources</a></li>
+        <li><a href="https://github.com/priyanka405/MS-Foundry-Microhack" target="_blank" rel="noopener" class="cta-mini">GitHub &#8599;</a></li>
+      </ul>
+    </nav>
+    <div class="nav-tools">
+      <button class="theme-toggle" type="button" aria-label="Toggle color theme" title="Toggle theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<section id="top" class="hero">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="wrap hero-inner">
+    <div class="hero-copy">
+      <span class="eyebrow">Microsoft Foundry &middot; MicroHack</span>
+      <h1>Contract Lifecycle Management with Microsoft Foundry</h1>
+      <p class="lede">
+        A production-style, 9-challenge MicroHack that walks you from an empty Foundry project
+        to a shipped, evaluated, observable Contract Lifecycle Management assistant &mdash; on both the
+        <strong>low-code</strong> portal and the <strong>pro-code</strong> SDK.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="challenges/challenge-0-setup.md">Start Hackathon &rarr;</a>
+        <a class="btn btn-ghost" href="#challenges">See the roadmap</a>
+      </div>
+      <ul class="hero-meta">
+        <li><strong>9</strong> challenges</li>
+        <li><strong>~8 hours</strong> full track</li>
+        <li><strong>Low-code + Pro-code</strong> paths</li>
+      </ul>
+    </div>
+    <aside class="hero-card" aria-label="At a glance">
+      <h3>At a glance</h3>
+      <dl>
+        <dt>Persona</dt><dd>Legal &middot; Procurement &middot; Sales</dd>
+        <dt>Outcome</dt><dd>Grounded, tool-using, evaluated contract assistant</dd>
+        <dt>Stack</dt><dd>Foundry Agents, Azure AI Search, Logic Apps, Azure Functions, App Insights</dd>
+        <dt>Gate</dt><dd>Groundedness &ge; 4.0 &middot; Task adherence &ge; 4.25 &middot; Zero safety defects</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<!-- ================= OVERVIEW ================= -->
+<section id="overview" class="section">
+  <div class="wrap">
+    <header class="section-head">
+      <span class="section-eyebrow">Hackathon overview</span>
+      <h2>Turn contract chaos into an AI-native workflow</h2>
+      <p class="section-lede">
+        Legal and Procurement burn 35% of their week on "what does clause X say?" and lose millions per year
+        on missed auto-renewals. This MicroHack builds the assistant that ends that.
+      </p>
+    </header>
+    <div class="grid grid-4">
+      <article class="tile">
+        <span class="tile-icon" data-icon="doc"></span>
+        <h3>Create</h3>
+        <p>Draft NDAs, MSAs, and SOWs from approved templates and clauses &mdash; with citations.</p>
+      </article>
+      <article class="tile">
+        <span class="tile-icon" data-icon="search"></span>
+        <h3>Search &amp; compare</h3>
+        <p>Retrieval over the enterprise corpus, side-by-side clause comparisons, and File Search on uploaded PDFs.</p>
+      </article>
+      <article class="tile">
+        <span class="tile-icon" data-icon="flow"></span>
+        <h3>Automate</h3>
+        <p>Route approvals via Logic Apps, generate documents, and track lifecycle state through renewal.</p>
+      </article>
+      <article class="tile">
+        <span class="tile-icon" data-icon="shield"></span>
+        <h3>Prove quality</h3>
+        <p>Prompt Shields + Content Safety + a Foundry-evaluated gate before any deploy.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SCENARIO ================= -->
+<section id="scenario" class="section section-alt">
+  <div class="wrap">
+    <header class="section-head">
+      <span class="section-eyebrow">Business scenario</span>
+      <h2>Contoso Global &middot; 12,000 active contracts</h2>
+      <p class="section-lede">
+        A multinational with 40,000 employees and 400+ new agreements per month. Contracts live across
+        SharePoint, email, and 3 legacy DMS systems. Here is where the money is:
+      </p>
+    </header>
+    <div class="grid grid-4 metrics">
+      <div class="metric"><span class="metric-num">10&nbsp;min</span><span class="metric-lbl">Time to first draft (was 3&ndash;5 days)</span></div>
+      <div class="metric"><span class="metric-num">&lt; 10%</span><span class="metric-lbl">Legal time on "what does clause X say?" (was ~35%)</span></div>
+      <div class="metric"><span class="metric-num">&lt; 2%</span><span class="metric-lbl">Missed auto-renewals per year (was ~11%)</span></div>
+      <div class="metric"><span class="metric-num">100%</span><span class="metric-lbl">AI actions traced in Application Insights</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ARCHITECTURE ================= -->
+<section id="architecture" class="section">
+  <div class="wrap">
+    <header class="section-head">
+      <span class="section-eyebrow">Solution architecture</span>
+      <h2>Every challenge builds one slice of this picture</h2>
+      <p class="section-lede">Rendered live with Mermaid. The exact same block lives in the README so the two never drift.</p>
+    </header>
+
+    <div class="architecture">
+      <div class="mermaid">
+        flowchart LR
+          subgraph Users
+            L[Legal]
+            P[Procurement]
+            S[Sales]
+          end
+
+          subgraph Channel[Channel]
+            UI[Web / Teams UI]
+          end
+
+          subgraph Foundry[Microsoft Foundry]
+            A[Contract Intake and Drafting Agent]
+            KG[Knowledge Grounding]
+            T[Function Tools]
+            GR[Guardrails and Safety]
+            EV[Evaluators]
+            OB[Tracing]
+          end
+
+          subgraph Ground[Grounding]
+            AIS[Azure AI Search - idx-clm-contracts]
+            BLOB[Blob - clm-corpus]
+          end
+
+          subgraph Actions[Business Actions]
+            LA[Logic Apps - Approval]
+            FN[Azure Functions - Clause / Status / Risk]
+            CI[Code Interpreter - Summaries and Reports]
+          end
+
+          subgraph Ops[Ops]
+            AI[Application Insights]
+            GH[GitHub Actions - CI Gate]
+          end
+
+          L --> UI
+          P --> UI
+          S --> UI
+          UI --> A
+          A --> KG
+          KG --> AIS
+          KG --> BLOB
+          A --> T
+          T --> LA
+          T --> FN
+          T --> CI
+          A --> GR
+          A --> OB
+          OB --> AI
+          EV --> GH
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LEARNING OBJECTIVES ================= -->
+<section id="objectives" class="section section-alt">
+  <div class="wrap">
+    <header class="section-head">
+      <span class="section-eyebrow">Learning objectives</span>
+      <h2>By the end, you can&hellip;</h2>
+    </header>
+    <ol class="objectives">
+      <li>Stand up a Foundry project with a model, indexed corpus, and enabled tracing.</li>
+      <li>Build a grounded agent with a strong persona and refusal behavior.</li>
+      <li>Ground the agent with Azure AI Search + File Search &mdash; with citations.</li>
+      <li>Extend the agent with 5 tools (Search, File Search, Logic Apps, Functions, Code Interpreter).</li>
+      <li>Protect the agent with Prompt Shields, PII detection, and app-layer blocklists.</li>
+      <li>Trace every prompt, retrieval, tool call, and response into App Insights.</li>
+      <li>Evaluate on a fixed dataset and enforce a deployment gate.</li>
+      <li>Optimize model, prompt, retrieval, and cost with a repeatable loop.</li>
+      <li>Publish as a Web App, a Teams app, or an authenticated API endpoint.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= CHALLENGES ================= -->
+<section id="challenges" class="section">
+  <div class="wrap">
+    <header class="section-head">
+      <span class="section-eyebrow">Challenge timeline</span>
+      <h2>Nine progressive challenges</h2>
+      <p class="section-lede">Do them in order &mdash; each one wires up the piece the next one needs.</p>
+    </header>
+
+    <ol class="timeline" role="list">
+      <li class="timeline-node"><div class="timeline-dot" data-num="0"></div>
+        <article class="challenge-card">
+          <div class="challenge-head"><span class="chip chip-blue">Setup</span>
+            <h3><a href="challenges/challenge-0-setup.md">Challenge 0 &middot; Setup</a></h3></div>
+          <p>Create the Foundry project, deploy the model, connect Azure AI Search, enable tracing, and upload the corpus.</p>
+          <ul class="chip-row"><li class="chip">Foundry portal</li><li class="chip">Azure CLI</li><li class="chip">Blob upload</li></ul>
+        </article></li>
+
+      <li class="timeline-node"><div class="timeline-dot" data-num="1"></div>
+        <article class="challenge-card">
+          <div class="challenge-head"><span class="chip chip-blue">Build</span>
+            <h3><a href="challenges/challenge-1-build-agent.md">Challenge 1 &middot; Build the Contract Intake &amp; Drafting Agent</a></h3></div>
+          <p>Write the persona and instructions, prove the first round-trip, and lock in the refusal behavior.</p>
+          <ul class="chip-row"><li class="chip">Agent Builder</li><li class="chip">Python SDK</li><li class="chip">gpt-4o</li></ul>
+        </article></li>
+
+      <li class="timeline-node"><div class="timeline-dot" data-num="2"></div>
+        <article class="challenge-card">
+          <div class="challenge-head"><span class="chip chip-purple">Ground</span>
+            <h3><a href="challenges/challenge-2-knowledge-grounding.md">Challenge 2 &middot; Knowledge Grounding</a></h3></div>
+          <p>Index NDAs, MSAs, policies, and the clause library into Azure AI Search. Add citations to every answer.</p>
+          <ul class="chip-row"><li class="chip">Azure AI Search</li><li class="chip">Blob</li><li class="chip">File Search</li></ul>
+        </article></li>
+
+      <li class="timeline-node"><div class="timeline-dot" data-num="3"></div>
+        <article class="challenge-card">
+          <div class="challenge-head"><span class="chip chip-teal">Tools</span>
+            <h3><a href="challenges/challenge-3-tools-actions.md">Challenge 3 &middot; Tools &amp; Actions</a></h3></div>
+          <p>Five tools: AI Search, File Search, Logic Apps (approval), Azure Functions (status/risk), Code Interpreter (reports).</p>
+          <ul class="chip-row"><li class="chip">Function calling</li><li class="chip">Logic Apps</li><li class="chip">Functions</li></ul>
+        </article></li>
+
+      <li class="timeline-node"><div class="timeline-dot" data-num="4"></div>
+        <article class="challenge-card">
+          <div class="challenge-head"><span class="chip chip-orange">Protect</span>
+            <h3><a href="challenges/challenge-4-guardrails.md">Challenge 4 &middot; Guardrails</a></h3></div>
+          <p>Prompt Shields, PII detection, approved-template enforcement, restricted clause modification.</p>
+          <ul class="chip-row"><li class="chip">Content Safety</li><li class="chip">Prompt Shields</li><li class="chip">Blocklists</li></ul>
+        </article></li>
+
+      <li class="timeline-node"><div class="timeline-dot" data-num="5"></div>
+        <article class="challenge-card">
+          <div class="challenge-head"><span class="chip chip-pink">Observe</span>
+            <h3><a href="challenges/challenge-5-observability.md">Challenge 5 &middot; Observability</a></h3></div>
+          <p>Trace every prompt &rarr; LLM &rarr; retrieval &rarr; tool &rarr; response into Application Insights. Write the KQL.</p>
+          <ul class="chip-row"><li class="chip">OpenTelemetry</li><li class="chip">App Insights</li><li class="chip">KQL</li></ul>
+        </article></li>
+
+      <li class="timeline-node"><div class="timeline-dot" data-num="6"></div>
+        <article class="challenge-card">
+          <div class="challenge-head"><span class="chip chip-green">Evaluate</span>
+            <h3><a href="challenges/challenge-6-evaluation.md">Challenge 6 &middot; Evaluation</a></h3></div>
+          <p>Score groundedness, relevance, task adherence, safety, tool accuracy on a 15-row dataset. Turn the gate green.</p>
+          <ul class="chip-row"><li class="chip">Evaluators</li><li class="chip">Scorecards</li><li class="chip">CI gate</li></ul>
+        </article></li>
+
+      <li class="timeline-node"><div class="timeline-dot" data-num="7"></div>
+        <article class="challenge-card">
+          <div class="challenge-head"><span class="chip chip-teal">Optimize</span>
+            <h3><a href="challenges/challenge-7-optimization.md">Challenge 7 &middot; Optimization</a></h3></div>
+          <p>Sweep model, prompt, retrieval, and tools. Show the before/after and the cost delta.</p>
+          <ul class="chip-row"><li class="chip">Model swap</li><li class="chip">Retrieval tuning</li><li class="chip">Cost</li></ul>
+        </article></li>
+
+      <li class="timeline-node"><div class="timeline-dot" data-num="8"></div>
+        <article class="challenge-card">
+          <div class="challenge-head"><span class="chip chip-navy">Ship</span>
+            <h3><a href="challenges/challenge-8-publish.md">Challenge 8 &middot; Publish</a></h3></div>
+          <p>Ship as a Web App with Easy Auth, a Teams app, or an authenticated API endpoint.</p>
+          <ul class="chip-row"><li class="chip">Web App</li><li class="chip">Teams</li><li class="chip">API</li></ul>
+        </article></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= SERVICES ================= -->
+<section id="services" class="section section-alt">
+  <div class="wrap">
+    <header class="section-head">
+      <span class="section-eyebrow">Foundry services used</span>
+      <h2>Every service earns its place</h2>
+    </header>
+    <div class="grid grid-3">
+      <article class="svc-card"><h4>Microsoft Foundry</h4><p>Agent Service, model deployment, evaluators, tracing.</p></article>
+      <article class="svc-card"><h4>Azure OpenAI</h4><p><code>gpt-4o</code> and <code>gpt-4o-mini</code> for chat and function calling.</p></article>
+      <article class="svc-card"><h4>Azure AI Search</h4><p>Vector + semantic hybrid over your contract corpus with citations.</p></article>
+      <article class="svc-card"><h4>Azure Blob Storage</h4><p>Source-of-truth corpus feeding the Search index.</p></article>
+      <article class="svc-card"><h4>Azure Functions</h4><p>Backing services for clause lookup, status, and risk scoring.</p></article>
+      <article class="svc-card"><h4>Logic Apps</h4><p>Office 365 approval routing for Legal and Procurement.</p></article>
+      <article class="svc-card"><h4>Code Interpreter</h4><p>On-the-fly summaries, obligation extraction, renewal reports.</p></article>
+      <article class="svc-card"><h4>Content Safety + Prompt Shields</h4><p>Guardrails on inputs and outputs at the project level.</p></article>
+      <article class="svc-card"><h4>Application Insights</h4><p>Cost, latency, and grounding telemetry with reusable KQL.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PATHS ================= -->
+<section id="paths" class="section">
+  <div class="wrap">
+    <header class="section-head">
+      <span class="section-eyebrow">Two paths, one outcome</span>
+      <h2>Low-code &amp; pro-code &mdash; both fully documented</h2>
+    </header>
+    <div class="grid grid-2">
+      <div class="panel">
+        <h3>Low-code &middot; Foundry portal</h3>
+        <ul class="check-list">
+          <li>Point-and-click Agent Builder for persona and tools.</li>
+          <li>Portal-driven Azure AI Search connection.</li>
+          <li>Content Safety and Prompt Shields toggles.</li>
+          <li>In-portal Evaluations for the deployment gate.</li>
+          <li>One-click publish to a Foundry-hosted chat UI.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>Pro-code &middot; Foundry SDK (Python)</h3>
+        <ul class="check-list">
+          <li><code>azure-ai-projects</code> + <code>azure-ai-agents</code> for programmatic control.</li>
+          <li><code>azure-search-documents</code> for the index and hybrid search.</li>
+          <li><code>azure-ai-evaluation</code> for scriptable gates in CI.</li>
+          <li><code>azure-monitor-opentelemetry</code> + <code>@traced</code> spans.</li>
+          <li>Reference implementation in <code>app/</code>; run <code>python -m app.sample_run --smoke</code>.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= RESOURCES ================= -->
+<section id="resources" class="section section-alt">
+  <div class="wrap">
+    <header class="section-head">
+      <span class="section-eyebrow">Resources</span>
+      <h2>Docs, SDKs, and reference reads</h2>
+    </header>
+    <div class="grid grid-3">
+      <a class="link-card" href="https://ai.azure.com" target="_blank" rel="noopener"><h4>Microsoft Foundry &#8599;</h4><p>The product surface for building, evaluating, and shipping agents.</p></a>
+      <a class="link-card" href="https://learn.microsoft.com/azure/ai-foundry/" target="_blank" rel="noopener"><h4>Foundry docs &#8599;</h4><p>Concepts, quickstarts, and REST/SDK references.</p></a>
+      <a class="link-card" href="https://learn.microsoft.com/python/api/overview/azure/ai-agents-readme" target="_blank" rel="noopener"><h4>Agents SDK (Python) &#8599;</h4><p>Reference for <code>azure-ai-agents</code> and <code>azure-ai-projects</code>.</p></a>
+      <a class="link-card" href="https://learn.microsoft.com/azure/search/" target="_blank" rel="noopener"><h4>Azure AI Search &#8599;</h4><p>Vector + semantic hybrid retrieval used in Challenge 2.</p></a>
+      <a class="link-card" href="https://learn.microsoft.com/azure/ai-foundry/how-to/develop/evaluate-sdk" target="_blank" rel="noopener"><h4>Evaluation SDK &#8599;</h4><p>The evaluators used in Challenge 6.</p></a>
+      <a class="link-card" href="https://learn.microsoft.com/azure/ai-services/content-safety/" target="_blank" rel="noopener"><h4>Content Safety + Prompt Shields &#8599;</h4><p>Guardrails enabled in Challenge 4.</p></a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="site-foot">
+  <div class="wrap foot-inner">
+    <div>
+      <strong>Contract Lifecycle Management with Microsoft Foundry</strong>
+      <span>&middot; A Foundry MicroHack</span>
+    </div>
+    <nav aria-label="Footer">
+      <a href="README.md">README</a>
+      <a href="challenges/challenge-0-setup.md">Challenges</a>
+      <a href="https://github.com/priyanka405/MS-Foundry-Microhack" target="_blank" rel="noopener">GitHub</a>
+      <a href="#top">Back to top &uarr;</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script src="assets/js/main.js" defer></script>
+</body>
+</html>
