@@ -1,0 +1,109 @@
+site_name: Contract Intake &amp; Drafting Agent · Microsoft Foundry MicroHack
+site_description: A one-day Microsoft Foundry MicroHack that walks you through building a Contract Intake &amp; Drafting Agent — from bare model to governed, evaluated, deployed agent.
+site_author: Microsoft Foundry MicroHack
+site_url: https://<your-org>.github.io/foundry-contract-lifecycle-management-hackathon/
+
+repo_name: foundry-contract-lifecycle-management-hackathon
+repo_url: https://github.com/<your-org>/foundry-contract-lifecycle-management-hackathon
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  language: en
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: deep purple
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: deep purple
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.instant
+    - navigation.top
+    - navigation.footer
+    - navigation.indexes
+    - toc.follow
+    - toc.integrate
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - search.suggest
+    - search.highlight
+    - search.share
+  icon:
+    repo: fontawesome/brands/github
+    logo: material/file-document-edit
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+      toc_depth: 3
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+plugins:
+  - search
+
+nav:
+  - Home: index.md
+  - Overview:
+      - Landing page: docs/index.md
+      - Architecture: docs/architecture.md
+  - Student guide: docs/student-guide.md
+  - Facilitator guide: docs/facilitator-guide.md
+  - Challenges:
+      - "0 · Setup": docs/challenges/challenge-0-setup/README.md
+      - "1 · Build the Agent": docs/challenges/challenge-1-build-agent/README.md
+      - "2 · Knowledge Grounding": docs/challenges/challenge-2-knowledge-grounding/README.md
+      - "3 · Tools &amp; Actions": docs/challenges/challenge-3-tools-actions/README.md
+      - "4 · Guardrails": docs/challenges/challenge-4-guardrails/README.md
+      - "5 · Observability": docs/challenges/challenge-5-observability/README.md
+      - "6 · Evaluation": docs/challenges/challenge-6-evaluation/README.md
+      - "7 · Optimization": docs/challenges/challenge-7-optimization/README.md
+      - "8 · Publish": docs/challenges/challenge-8-publish/README.md
+  - Wrap-up: docs/wrapup.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/microsoft
+      link: https://ai.azure.com
+      name: Microsoft Foundry
+    - icon: fontawesome/brands/github
+      link: https://github.com/<your-org>/foundry-contract-lifecycle-management-hackathon
+
+copyright: Copyright &amp;copy; Microsoft Foundry MicroHack — MIT Licensed
