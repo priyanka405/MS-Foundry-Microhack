@@ -1,215 +1,196 @@
-# Challenge 3 — Add Tools and Actions
+# Challenge 3 — Tools and Actions
 
-⏱ **~50 minutes**  ·  🧠 Key Foundry feature: **Tools catalog · Logic Apps · Power Automate · Azure Functions**
+> **Goal:** Move from *chatbot* to *agent*. Add business tools so the CLM Agent can route approvals, generate documents, and track contract status — end to end.
+
+**Foundry feature:** Tools catalog (Logic Apps, Power Automate, Azure Functions, OpenAPI, MCP)
+**Estimated time:** 50–60 min
+**Prerequisite:** Challenges 1–2 complete.
+
+---
 
 ## 🎯 Objective
 
-Give the Executive Assistant Agent the ability to **act** on the real world:
+Extend the CLM Agent with **five business tools**:
 
-1. **Create tasks** — via a Power Automate flow that writes to Microsoft Planner or a to-do list.
-2. **Send drafts for approval** — via a Logic App that emails a draft and returns the executive's decision.
-3. **Book time / propose meeting slots** — via a Logic App that hits Microsoft Graph (mocked or real).
-4. **Custom business logic** — an Azure Function that scores follow-up urgency.
-5. *(Bonus)* an **MCP tool** for an external system you care about (e.g. CRM, ticketing).
+| # | Tool | Purpose | Backing service |
+| --- | --- | --- | --- |
+| 1 | `contract_search` | Structured metadata search over the repository. | (already there — Azure AI Search) |
+| 2 | `clause_search` | Locate specific clauses across contracts. | Azure AI Search (filtered) |
+| 3 | `route_approval` | Send an approval request to Legal / Procurement. | Logic App `la-clm-approval` |
+| 4 | `generate_document` | Fill a template (NDA / SOW / amendment) and store it. | Power Automate flow |
+| 5 | `contract_status` | Read / update the lifecycle state of a contract. | Azure Function |
 
-## 🧭 Context
+## 📋 Tasks
 
-Tools are the leap from **chatbot** to **agent**. A chatbot answers. An agent *does things* — it calls APIs, files a ticket, kicks off a workflow, returns a chart. In Foundry, tools are declared once on the agent; the model decides which to call, when, and with what arguments. The Agent Service handles auth, retries, and tracing.
+1. Build the **Logic App** for approval routing.
+2. Build the **Power Automate** flow for document generation.
+3. Build the **Azure Function** for contract status.
+4. Register all tools on the agent with clear names and descriptions.
+5. Append the **TOOL ROUTING** block to the agent instructions.
+6. Run the end-to-end scenario from Challenge scenario below.
+7. (Bonus) Register an MCP tool for CRM enrichment.
 
-Rule of thumb:
+---
 
-> **Prose belongs to the grounded model. Verbs belong to tools.**
-> Draft = model. *Create the task* = tool.
+## 🛠️ Step-by-step
 
-## ✅ Prerequisites
+### 1. Logic App — approval routing (`la-clm-approval`)
 
-- [Challenge 2](challenge-2-grounding.md) complete — the agent is grounded.
-- The ability to create a **Logic App** and a **Power Automate flow** in your tenant (or a mock endpoint you control).
-- An Azure Function App (Consumption plan is fine).
+Create a new **Logic App (Consumption)** in the same resource group.
 
-## 🏗️ Steps
+**Trigger:** *When an HTTP request is received.*
 
-### 1. Create a Logic App: `Send draft for approval`
+Request-body JSON schema:
 
-1. In the Azure portal → **Create → Logic App (Consumption)** → name `la-ea-approval` in the same resource group as your Foundry project.
-2. Trigger: **When an HTTP request is received**.
-3. Action: **Office 365 Outlook → Send approval email** to the executive (or your own inbox for testing).
-   - **Subject:** `Approve draft: @{triggerBody()?['subject']}`
-   - **Body:** `@{triggerBody()?['body']}`
-   - **User options:** `Approve, Reject`
-4. Action: **Response**, returning `{ "decision": "@{body('Send_approval_email')?['SelectedOption']}" }`.
-5. Save → copy the **HTTP POST URL**.
+```json
+{
+  "type": "object",
+  "properties": {
+    "subject":     { "type": "string" },
+    "requester":   { "type": "string" },
+    "counterparty":{ "type": "string" },
+    "doc_uri":     { "type": "string" },
+    "redline":     { "type": "string" },
+    "risk_band":   { "type": "string", "enum": ["Low","Medium","High"] }
+  },
+  "required": ["subject","requester","doc_uri"]
+}
+```
 
-### 2. Create a Power Automate flow: `Create tasks`
+**Actions:**
+1. **Office 365 Outlook → Send approval email** to `legal-approvers@contoso.com` with `Subject`, `Requester`, and a link to `doc_uri`.
+2. **Response** — return `{status, approver, decision, approval_id, decided_at}`.
 
-1. In [make.powerautomate.com](https://make.powerautomate.com) → **+ Create → Instant cloud flow**.
-2. Trigger: **When an HTTP request is received** with schema:
-   ```json
-   {
-     "type": "object",
-     "properties": {
-       "tasks": {
-         "type": "array",
-         "items": {
-           "type": "object",
-           "properties": {
-             "owner":  { "type": "string" },
-             "action": { "type": "string" },
-             "due":    { "type": "string" }
-           }
-         }
-       }
-     }
-   }
-   ```
-3. Action: **Planner → Create a task** (or **To Do → Add task**) — inside an **Apply to each** loop over `triggerBody()?['tasks']`.
-4. Save → copy the **HTTP URL**.
+Save; copy the **HTTP POST URL**.
 
-### 3. Create an Azure Function: `urgency_score`
+### 2. Power Automate — `generate_document`
 
-Create a Function App `func-ea` and add a Python HTTP-triggered function:
+Create a **Power Automate cloud flow** triggered by *"When an HTTP request is received"*.
+
+Input schema:
+
+```json
+{
+  "template":     { "type": "string", "enum": ["NDA","SOW","MSA","Amendment"] },
+  "party":        { "type": "string" },
+  "effective_date":{ "type": "string" },
+  "clauses":      { "type": "array", "items": { "type": "string" } }
+}
+```
+
+Actions:
+1. **SharePoint / OneDrive** → open the corresponding `.docx` template.
+2. **Populate a Microsoft Word template** — bind `{{party}}`, `{{effective_date}}`, `{{clauses}}`.
+3. **Create file** in the `/Generated` folder.
+4. **Response** with `{doc_uri, template, generated_at}`.
+
+### 3. Azure Function — `contract_status`
+
+Create a Python HTTP-triggered function:
 
 ```python
-# infra/functions/urgency_score/__init__.py
 import azure.functions as func
-import json
-from datetime import datetime
+import json, datetime
 
-def main(req: func.HttpRequest) -> func.HttpResponse:
+VALID = ["Draft","In Review","Approved","Signed","Active","Expired","Terminated"]
+
+app = func.FunctionApp()
+
+@app.function_name("contract_status")
+@app.route(route="contract_status", methods=["POST"])
+def contract_status(req: func.HttpRequest) -> func.HttpResponse:
     body = req.get_json()
-    due = body.get("due")        # ISO date
-    seniority = body.get("owner_seniority", "IC")  # IC / manager / vp / cxo
-    is_customer_facing = bool(body.get("customer_facing", False))
+    contract_id = body["contract_id"]
+    new_state   = body.get("new_state")
 
-    days_left = 30
-    if due:
-        try:
-            days_left = (datetime.fromisoformat(due) - datetime.utcnow()).days
-        except Exception:
-            pass
-
-    score = 0
-    score += max(0, 40 - days_left * 2)                     # closer = hotter
-    score += {"IC": 0, "manager": 10, "vp": 25, "cxo": 35}.get(seniority, 0)
-    score += 20 if is_customer_facing else 0
-    score = min(100, max(0, int(score)))
-    band = "critical" if score >= 70 else "high" if score >= 45 else "normal"
-
+    # In a real system, read/write from Dataverse / SQL / SharePoint list.
+    if new_state and new_state not in VALID:
+        return func.HttpResponse(
+            json.dumps({"error": f"invalid state '{new_state}'"}),
+            status_code=400, mimetype="application/json"
+        )
     return func.HttpResponse(
-        json.dumps({"urgency_score": score, "band": band}),
-        mimetype="application/json")
-```
-
-Expose an OpenAPI spec at `/api/openapi.json` (Functions can auto-generate one, or hand-write it).
-
-### 4. Register the tools on the agent (portal)
-
-Open **Build → Agents → executive-assistant → Tools → + Add tool** and add each of the following:
-
-| Tool name | Type | Endpoint / notes |
-| --- | --- | --- |
-| `send_for_approval` | Logic App | Paste the `la-ea-approval` URL. |
-| `create_tasks` | Power Automate | Paste the flow URL from step 2. |
-| `score_urgency` | Azure Function via OpenAPI | Paste `func-ea` OpenAPI URL. |
-| `propose_meeting_slots` | Logic App or Function | Optional — mock returning 3 slots. |
-| *(bonus)* `mcp-crm` | MCP server | `serverLabel: crm`, `serverUrl: <your MCP endpoint>`, `allowed_tools: ["find_account", "log_note"]`, `require_approval: always`. |
-
-Give each tool a **clear description** — the model routes on those strings:
-
-- `create_tasks` — *"Create planner/to-do tasks. Input: a list of {owner, action, due} objects. Output: created task ids."*
-- `send_for_approval` — *"Send an email draft to the executive for approval. Input: {subject, body}. Output: {decision}."*
-- `score_urgency` — *"Score follow-up urgency (0–100). Input: {due, owner_seniority, customer_facing}. Output: {urgency_score, band}."*
-
-### 5. Extend the agent's instructions with a tool-routing block
-
-```text
-TOOL ROUTING
-- After drafting action items, call `score_urgency` for each item and add
-  a "band" column to the output table.
-- Never send anything to a human other than the executive without first
-  calling `send_for_approval` and receiving an approval decision.
-- Call `create_tasks` ONLY after the executive has explicitly approved the
-  action-item list.
-- Use `propose_meeting_slots` when the user asks to book time.
-- MCP tools require explicit user confirmation before every call.
-```
-
-### 6. Run the full scenario in the Playground
-
-```text
-The Q3 review meeting is done. Decisions:
-- Cut marketing ask by 15%
-- Approve €400k for pricing tooling
-- Push retail launch decision to Oct 15
-
-Give me action items with owners + due dates, score the urgency of each,
-then draft a follow-up email. If I approve, create the tasks in Planner.
-```
-
-Expected sequence:
-1. Model produces action items.
-2. Model calls `score_urgency` **N** times → adds band column.
-3. Model drafts the email.
-4. Model calls `send_for_approval` → you click **Approve** in Outlook → decision returns.
-5. Model calls `create_tasks` → task IDs come back.
-
-Every step appears in the trace tree under the run.
-
-### 7. (Optional) Pro-code — declare tools programmatically
-
-```python
-# scripts/add_tools.py
-import os
-from azure.ai.projects import AIProjectClient
-from azure.identity import DefaultAzureCredential
-from azure.ai.agents.models import (
-    OpenApiTool, OpenApiAnonymousAuthDetails, McpTool,
-)
-
-client = AIProjectClient(endpoint=os.environ["PROJECT_ENDPOINT"],
-                        credential=DefaultAzureCredential())
-
-with open("infra/openapi/urgency.json") as f:
-    urgency_tool = OpenApiTool(
-        name="score_urgency",
-        description="Score follow-up urgency 0–100.",
-        spec=f.read(),
-        auth=OpenApiAnonymousAuthDetails(),
+        json.dumps({
+            "contract_id": contract_id,
+            "state":       new_state or "Active",
+            "updated_at":  datetime.datetime.utcnow().isoformat() + "Z"
+        }),
+        mimetype="application/json"
     )
-
-mcp_tool = McpTool(
-    server_label="crm",
-    server_url="https://mcp.example.com/crm",
-    allowed_tools=["find_account", "log_note"],
-    require_approval="always",
-)
-
-client.agents.update_agent(
-    agent_id=os.environ["AGENT_ID"],
-    tools=urgency_tool.definitions + mcp_tool.definitions,
-)
 ```
 
-## 🧪 Success criteria
+Deploy it and note the HTTP endpoint.
 
-- [ ] Agent lists **at least 3 tools**: `send_for_approval`, `create_tasks`, and `score_urgency`.
-- [ ] Playground run for the Q3 scenario triggers **≥ 3 tool calls**.
-- [ ] Approval email actually arrives; the returned decision changes what the agent does next.
-- [ ] Tasks are created (Planner or To-Do) — you can see them in the source system.
-- [ ] Tool descriptions are unambiguous — a stranger could tell what each tool does from the description alone.
+### 4. Register the tools on the agent
 
-## 🔎 Troubleshooting
+In the Foundry portal (**Agents → clm-agent → Tools**), add each backend as a tool with a **clear name and description** — the model routes on those strings.
 
-| Symptom | Fix |
+| Tool | Description you should paste |
 | --- | --- |
-| Agent doesn't call a tool | The description is too vague. Rewrite it in imperative English (*"Call this to..."*). |
-| Approval email never arrives | Logic App is missing an Office 365 connection — reconnect and re-save. |
-| MCP tool returns 403 | The MCP server requires auth you didn't configure. Skip for the hackathon or provide a bearer token. |
+| `contract_search` | *"Search the enterprise contract repository by counterparty, contract type, or free text. Returns a list of contracts with metadata and citations. Use this whenever the user asks about specific contracts or a counterparty."* |
+| `clause_search` | *"Locate specific clauses (termination, liability, indemnity, GDPR, payment, IP) across one or many contracts. Returns exact clause text with source anchors."* |
+| `route_approval` | *"Send an approval request to Legal or Procurement for a proposed contract change. Requires user confirmation before firing. Returns an approval id and status."* |
+| `generate_document` | *"Generate a contract document from a template (NDA / SOW / MSA / Amendment) using structured fields. Returns the location of the new document."* |
+| `contract_status` | *"Read or update the lifecycle state of a contract. Valid states: Draft, In Review, Approved, Signed, Active, Expired, Terminated. Only call with new_state after explicit user confirmation."* |
 
-## ➡️ Next steps
+### 5. Append this TOOL ROUTING block to instructions
 
-You now have an agent that **reads** (Challenge 2) and **acts** (Challenge 3). But *"can do"* is not *"should do"*. **[Challenge 4 — Evaluate and Improve](challenge-4-evaluation.md)** measures quality, safety, and groundedness — and sets a real bar you can ship against.
+```text
+# TOOL ROUTING
+- Contract or counterparty questions → contract_search first, then clause_search.
+- "What does <clause> say / where is <clause>?" → clause_search.
+- "Route this for approval / send to legal for review" → propose the call to
+  route_approval, then ONLY fire after the user confirms.
+- "Draft / generate / create <contract type>" → generate_document, then hand
+  back the doc URI to the user.
+- "Mark this as signed / activate this / update status" → confirm with the
+  user first, then contract_status.
+- After every tool call, tell the user in one sentence what you just did and
+  what happens next.
+- Never chain approval + status update in one silent step — always confirm.
+```
 
-## 💡 Key takeaway
+### 6. Run the end-to-end scenario
 
-> Tools are what make an agent an agent. Route them by *purpose*, not by *availability*.
+**In one Playground thread**, run this sequence and confirm the agent calls the right tools:
+
+1. **User:** *"Do we have any active contracts with Contoso?"*
+   → expects `contract_search(counterparty="Contoso")`.
+2. **User:** *"Show the termination clause in the Contoso MSA."*
+   → expects `clause_search(contract_id="msa-contoso-*", section="termination")`.
+3. **User:** *"Draft an amendment reducing the liability cap to 6 months of fees."*
+   → expects `generate_document(template="Amendment", party="Contoso", clauses=[...])`. The agent should return a `doc_uri`.
+4. **User:** *"Route this amendment for legal approval."*
+   → expects the agent to **confirm first**, then `route_approval(subject=..., doc_uri=..., risk_band=...)`.
+5. **User:** *"Mark the contract status as 'In Review'."*
+   → expects the agent to **confirm first**, then `contract_status(contract_id=..., new_state="In Review")`.
+
+The whole scenario should feel like one continuous conversation — grounded, tool-using, and never irreversible without human OK.
+
+## 🎁 Bonus — MCP tool for CRM enrichment
+
+If your organization has an MCP server exposing CRM data (Dataverse / Salesforce), register it as an MCP tool with `require_approval=always`. The agent can then enrich a contract question with counterparty account data ("What's Contoso's total annual spend across all their SOWs?").
+
+## ✅ Success criteria
+
+- [ ] Logic App `la-clm-approval` responds to HTTP POST with an approval id.
+- [ ] Power Automate flow `generate_document` returns a generated document URI.
+- [ ] Azure Function `contract_status` validates state and returns a timestamped payload.
+- [ ] All five tools are registered on the agent with clear descriptions.
+- [ ] The TOOL ROUTING block is in the instructions.
+- [ ] The end-to-end scenario produces the expected 5-tool sequence.
+- [ ] The agent **confirms** before firing `route_approval` and `contract_status`.
+
+## 🩹 Troubleshooting
+
+| Symptom | Likely cause | Fix |
+| --- | --- | --- |
+| Agent picks the wrong tool. | Ambiguous descriptions. | Rewrite descriptions to start with the *user intent* they map to. |
+| Agent fires `route_approval` without confirmation. | Missing rule in TOOL ROUTING. | Re-add: *"ONLY fire after the user confirms."* |
+| Logic App call returns 401. | Missing SAS in the URL. | Use the full **HTTP POST URL** including `?sv=...&sig=...`. |
+| `generate_document` fails with template error. | Word template placeholders are text, not content controls. | Use *Insert → Content control* for `{{party}}` etc. |
+| Function returns 500. | JSON body not parsed. | Log `req.get_body()` and check content-type is `application/json`. |
+
+## 🌉 Next challenge
+
+The agent can now search, reason, and act. But is it **good enough to ship**? In **[Challenge 4 — Evaluation and Optimization](challenge-4-evaluation.md)** you'll measure accuracy, groundedness, and safety — and set a real deployment gate.

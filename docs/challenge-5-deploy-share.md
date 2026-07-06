@@ -1,163 +1,169 @@
-# Challenge 5 — Deploy and Share the Agent
+# Challenge 5 — Deploy and Share
 
-⏱ **~40 minutes**  ·  🧠 Key Foundry feature: **Foundry Deploy · Web App · Microsoft Teams · API endpoint**
+> **Goal:** Deploy the CLM Agent as a **Web App**, a **Microsoft Teams App**, and an **API endpoint** — with governance, identity, and observability baked in.
+
+**Foundry feature:** Foundry Deploy, Web App, Bot Service, API endpoints, Managed Identity
+**Estimated time:** 40–50 min
+**Prerequisite:** Challenges 1–4 complete, evaluation gate passed.
+
+---
 
 ## 🎯 Objective
 
-Publish the Executive Assistant Agent so real users can actually use it. Choose **one primary channel** and validate the other two work:
+Ship the agent to real users through three channels:
 
-1. **Web App** — the fastest path to a demo URL.
-2. **Microsoft Teams App** — where executives actually live.
-3. **API endpoint** — for integration into other apps (Copilot Studio, custom UI, back-office).
+1. **Web App** — a branded web experience for Legal & Procurement (Easy Auth).
+2. **Microsoft Teams App** — where sales, procurement, and legal already work.
+3. **API endpoint** — for downstream systems (contract portal, CRM plugins, batch jobs).
 
-Then apply the **governance / security / lifecycle checklist** so it survives its first Monday.
+You'll also complete the **governance checklist** and (optionally) publish `index.html` to GitHub Pages so your team can find the hackathon assets.
 
-## 🧭 Context
+---
 
-Foundry treats deployment as a first-class concern: the agent lives in a project, and each **deployment channel** is a thin adapter. That means the same **grounding, tools, guardrails, evaluations, and RBAC** ride along everywhere the agent is exposed.
+## 🚀 Deployment tracks
 
-| Channel | Best for | Auth | Deployment surface |
-| --- | --- | --- | --- |
-| **Web App** | Fast demos, business showcases | Easy Auth (Entra ID) | Azure App Service |
-| **Teams App** | Real EA/executive workflow | Entra ID SSO | Bot Service + Teams manifest |
-| **API endpoint** | Integration into other apps | Managed Identity + API Management | Foundry's built-in agent endpoint |
+Do all three; each takes ~5–15 minutes.
 
-## ✅ Prerequisites
+### Track A · Web App (10 min)
 
-- [Challenge 4](challenge-4-evaluation.md) complete — the agent version has passed the 85% task-adherence gate.
-- Rights to create an Azure App Service, a Bot Service, and (optionally) an API Management instance.
+1. **Foundry portal → your agent → Deploy → Web App.**
+2. Name: `webapp-clm-agent`.
+3. **Authentication:** enable **Easy Auth** with your tenant's Entra ID. Restrict access to the `Contracts-Users` group.
+4. **Branding:** upload logo + set the agent name to *"CLM Assistant"*.
+5. Deploy. Wait for the URL, then open it and run one end-to-end scenario ("Show me the Contoso MSA termination clause").
 
-## 🏗️ Steps
+### Track B · Teams App (10 min)
 
-### 1. Web App (5 min)
+1. **Foundry portal → Deploy → Microsoft Teams.**
+2. Under the hood this provisions an **Azure Bot Service** and produces a Teams `manifest.zip`.
+3. In Teams admin center, **upload custom app** → `manifest.zip`.
+4. Pin the bot in a test channel; send it a message.
+5. Bonus: add a **messaging extension** so `@CLM contract Contoso` works from any channel.
 
-1. **Agents → executive-assistant → Deploy → Web app**.
-2. Fill in:
-   - **App name:** `webapp-exec-assistant`
-   - **Region:** same as your Foundry project
-   - **Authentication:** *Sign in with Entra ID* (Easy Auth ON)
-   - **Managed identity:** *System-assigned*
-3. Click **Deploy**. When green, click **Open**, sign in, and run the meeting-prep prompt from Challenge 1.
+### Track C · API endpoint (5 min)
 
-### 2. Microsoft Teams App (10 min)
+1. **Foundry portal → Deploy → API endpoint.**
+2. Copy the endpoint URL and the deployment name.
+3. Authenticate downstream callers with a **Managed Identity** bearer token to `https://ai.azure.com/.default`.
 
-1. **Agents → executive-assistant → Deploy → Microsoft Teams**.
-2. **App display name:** `Executive Assistant`.
-3. Download the generated **`executive-assistant.zip`** Teams manifest.
-4. In Teams → **Apps → Manage your apps → Upload a custom app** → pick the zip.
-5. Chat with the app: *"Prep me for my next meeting."*
-
-### 3. API endpoint (5 min)
-
-1. **Agents → executive-assistant → Deploy → API endpoint**.
-2. Copy the URL: `https://<project>.services.ai.azure.com/api/agents/executive-assistant/runs`.
-3. Test with curl:
-
-   ```bash
-   TOKEN=$(az account get-access-token --resource https://ai.azure.com --query accessToken -o tsv)
-   curl -X POST "$AGENT_URL" \
-     -H "Authorization: Bearer $TOKEN" \
-     -H "Content-Type: application/json" \
-     -d '{"messages":[{"role":"user","content":"Prep me for my next meeting."}]}'
-   ```
-
-### 4. (Optional) Minimal chat proxy for the Web App
-
-If you want a lightweight custom front-end instead of the built-in Web App shell:
+Sample FastAPI proxy (`app/main.py`) if you want to front the API with your own service:
 
 ```python
-# app/main.py — FastAPI proxy
-import os
-from fastapi import FastAPI, Request
-from azure.ai.projects import AIProjectClient
+# pip install fastapi uvicorn azure-identity azure-ai-projects
+from fastapi import FastAPI
+from pydantic import BaseModel
 from azure.identity import DefaultAzureCredential
-from azure.monitor.opentelemetry import configure_azure_monitor
+from azure.ai.projects import AIProjectClient
 
-configure_azure_monitor()
-project = AIProjectClient(endpoint=os.environ["PROJECT_ENDPOINT"],
-                          credential=DefaultAzureCredential())
 app = FastAPI()
+project = AIProjectClient.from_connection_string(
+    conn_str="<project-connection-string>",
+    credential=DefaultAzureCredential(),
+)
+AGENT_ID = "<clm-agent-id>"
 
-@app.post("/chat")
-async def chat(req: Request):
-    body = await req.json()
-    thread_id = body.get("thread_id") or project.agents.threads.create().id
-    project.agents.messages.create(thread_id=thread_id, role="user",
-                                   content=body["message"])
-    run = project.agents.runs.create_and_process(
-        thread_id=thread_id, agent_id=os.environ["AGENT_ID"])
-    last = next(iter(project.agents.messages.list(thread_id=thread_id, order="desc")))
-    return {"thread_id": thread_id,
-            "reply": last.content[0].text.value,
-            "run_id": run.id}
+class Ask(BaseModel):
+    question: str
+    thread_id: str | None = None
+
+@app.post("/ask")
+def ask(payload: Ask):
+    thread_id = payload.thread_id or project.agents.create_thread().id
+    project.agents.create_message(thread_id=thread_id, role="user", content=payload.question)
+    run = project.agents.create_and_process_run(thread_id=thread_id, agent_id=AGENT_ID)
+    msgs = project.agents.list_messages(thread_id).data
+    return {"thread_id": thread_id, "answer": msgs[0].content[0].text.value}
 ```
 
-Deploy that FastAPI app to Azure App Service and put Easy Auth in front.
+---
 
-### 5. Governance / Security / Lifecycle checklist
+## 🛡️ Governance checklist
 
-Tick these before you announce the launch:
+Before flipping any of these to production, tick every box.
 
-**Identity & access**
-- [ ] Web App uses **Easy Auth** with Entra ID; anonymous access disabled.
-- [ ] Agent uses **Managed Identity** for Azure AI Search, Storage, and tool calls — no keys in code.
-- [ ] RBAC: only the `EA-Admins` group is `Cognitive Services Contributor` on the project.
+### Identity
+- [ ] Web App uses **Easy Auth** with an Entra ID app registration.
+- [ ] API endpoint uses **Managed Identity** — no static keys in code.
+- [ ] Access is restricted to a named Entra group (e.g., `Contracts-Users`).
 
-**Network**
-- [ ] Foundry project on a **private endpoint** (or IP allow-list) if data sensitivity requires it.
-- [ ] Azure AI Search with `publicNetworkAccess = Disabled` in production.
-- [ ] Storage account `allowBlobPublicAccess = false`.
+### Network
+- [ ] AI Search + Storage are on **Private Endpoints** (production).
+- [ ] Web App restricts inbound to known VNets or the corporate gateway.
+- [ ] Egress from the agent is limited to declared tools' hostnames.
 
-**Data protection**
-- [ ] PII redaction from Challenge 4 still enabled.
-- [ ] Content Safety filters unchanged from Challenge 4.
-- [ ] Data-retention policy on storage set to your legal-hold requirement.
+### Data
+- [ ] Contract repository has **Purview labels** applied.
+- [ ] Storage uses **Customer-Managed Keys** (CMK) if required by policy.
+- [ ] No PII / contract text is written to logs — traces store IDs, not content.
+- [ ] Retention on chat history and traces is set explicitly (e.g., 30 days).
 
-**Observability & operations**
-- [ ] App Insights is receiving traces for real user runs.
-- [ ] Alert on P95 latency > 8 s wired to the on-call rotation.
-- [ ] Evaluation from Challenge 4 attached to the **deployed** agent version.
-- [ ] SLO documented: *e.g. "P95 < 8 s, ≥ 85% task adherence, 0 safety defects/week"*.
+### Observability
+- [ ] **OpenTelemetry** is enabled — traces + metrics flow to Application Insights.
+- [ ] KQL dashboards for **cost, latency, tool-call success, hallucination rate**.
+- [ ] Alert on `IndirectAttack.defect_rate > 0` in production traffic.
 
-**Lifecycle**
-- [ ] `evaluation/testset.jsonl` runs in CI on every agent instruction change.
-- [ ] Model deployment version is pinned.
-- [ ] Rollback plan: **Agents → History → Restore vN-1**.
-- [ ] Owner + backup owner named in the repo `CODEOWNERS`.
-- [ ] Human review is **always** in the loop for outbound emails and workflow triggers.
+### Lifecycle
+- [ ] Evaluation gate from Challenge 4 is enforced in CI *before* deploy.
+- [ ] Rollback plan documented (previous agent version tag).
+- [ ] Instruction changes require peer review — treat prompt like code.
 
-### 6. (Optional) Publish this repo to GitHub Pages
+---
 
-The [index.html](../index.html) landing page is designed to be GitHub-Pages ready:
+## 🧪 End-to-end acceptance test
+
+Run this exact scenario once, on each deployment target (Web / Teams / API):
+
+1. *"Do we have any active contracts with Contoso?"* — expects `contract_search`.
+2. *"Show me the Contoso MSA termination clause."* — expects `clause_search` + citation.
+3. *"Draft an amendment reducing the liability cap to 6 months of fees."* — expects `generate_document`, returns a doc URI.
+4. *"Route this amendment for legal approval."* — confirms first, then `route_approval`, returns approval id.
+5. *"Mark the contract as In Review."* — confirms first, then `contract_status`.
+
+Every step should:
+- Cite sources where relevant.
+- Confirm before any irreversible action.
+- Emit a trace visible in Application Insights within ~30 seconds.
+
+---
+
+## 🌐 Optional — publish the hackathon site
+
+Publish this repo's `index.html` to **GitHub Pages** so your team can find the hack from anywhere.
 
 1. Push the repo to GitHub.
-2. In the repo **Settings → Pages** → source `main` branch, folder `/ (root)`.
-3. Wait ~1 min. Your visual landing page will be live at `https://<user>.github.io/<repo>/`.
+2. In the repo settings → **Pages** → source: `Deploy from a branch` → branch `main` / folder `/ (root)`.
+3. Wait a minute and open `https://<org>.github.io/MS-Foundry-Microhack/`.
 
-## 🧪 Success criteria
+You now have a public landing page for the CLM Agent MicroHack.
 
-- [ ] At least **one** deployment channel is live and returns a valid agent response for the meeting-prep prompt.
-- [ ] The other two channels validated with a smoke test.
-- [ ] **Every** item in the governance/security/lifecycle checklist above is ticked or explicitly deferred with owner + date.
-- [ ] The deployed version is the **evaluated** version from Challenge 4 (not a random later edit).
-- [ ] `index.html` renders correctly when opened locally (and, if published, on GitHub Pages).
+---
 
-## 🔎 Troubleshooting
+## ✅ Success criteria
 
-| Symptom | Fix |
-| --- | --- |
-| Web App deploy stuck | Retry once. If still failing, deploy the API endpoint channel and use a custom FastAPI proxy. |
-| Teams App upload rejected | Manifest is missing a bot-app-id; regenerate it from Foundry with the "Microsoft Teams" deploy option. |
-| API returns 401 | Wrong resource for the token. Use `https://ai.azure.com/.default` audience. |
-| GitHub Pages doesn't render Mermaid | GitHub Pages does render Mermaid in Markdown — check that fenced code blocks use ```` ```mermaid ````. |
+- [ ] Web App deployed with Easy Auth and end-to-end acceptance test passing.
+- [ ] Teams App installed with end-to-end acceptance test passing.
+- [ ] API endpoint returns a grounded answer to a `curl` request.
+- [ ] Full governance checklist ticked (or explicit exceptions documented).
+- [ ] Application Insights shows traces for the acceptance test.
+- [ ] (Optional) GitHub Pages site published.
 
-## ➡️ What's next
+## 🩹 Troubleshooting
 
-You've shipped an agent. Two doors are now open:
+| Symptom | Likely cause | Fix |
+| --- | --- | --- |
+| Web App returns 401 on load. | Easy Auth not configured. | Re-enable Easy Auth; add allowed audience; restart. |
+| Teams bot doesn't respond. | Manifest not sideloaded / bot channel not enabled. | Re-upload `manifest.zip`; enable Teams channel on Bot Service. |
+| API returns 403 from downstream. | Missing Managed Identity assignment. | Grant the MI the `Cognitive Services User` role on the Foundry project. |
+| No traces in App Insights. | OpenTelemetry not wired. | Install `azure-monitor-opentelemetry` + set `APPLICATIONINSIGHTS_CONNECTION_STRING`. |
+| Injection alert fires on the acceptance test. | Adversarial content in a document; likely fine. | Confirm defense worked (agent didn't obey); tune alert threshold. |
 
-- **Iterate** — the loop from Challenges 2 → 3 → 4 is the day job. Every time you touch the instructions, run the eval, ship if you win.
-- **Scale out** — connect this agent to specialists (a "Meeting Notes" agent, an "Email Composer" agent, a "Calendar" agent) via **Foundry Connected Agents** — a multi-agent EA team.
+## 🏁 You're done
 
-## 💡 Key takeaway
+You built, grounded, evaluated, and deployed a **Contract Lifecycle Management Agent** on **Microsoft Foundry** — with governance, identity, observability, and a real deployment gate. That's a production-shaped agent, not a demo.
 
-> Deployment is not the end of a build — it is the start of an operate loop. Foundry gives you the same governance surface wherever the agent lives.
+Wrap up by:
+- Sharing your Web / Teams / API links with the team.
+- Publishing the [`index.html`](../index.html) landing page.
+- Filing the improvements you spotted during evaluation as issues on the repo.
+
+Congratulations. Now go apply the same pattern to the next contract-adjacent workflow — renewals, RFPs, vendor onboarding — the shape is the same.

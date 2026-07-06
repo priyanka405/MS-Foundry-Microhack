@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Executive Assistant Agent MicroHack · Microsoft Foundry</title>
-<meta name="description" content="Build, ground, evaluate, and deploy an AI Executive Assistant using Microsoft Foundry." />
+<title>Contract Lifecycle Management Agent MicroHack · Microsoft Foundry</title>
+<meta name="description" content="Build, ground, evaluate, and deploy an AI Contract Lifecycle Management solution using Microsoft Foundry." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -205,13 +205,8 @@
   .hero-card li { margin: 6px 0; }
 
   /* -------- Sections -------- */
-  section.pane {
-    padding: 88px 24px;
-  }
-  section.pane .inner {
-    max-width: 1180px;
-    margin: 0 auto;
-  }
+  section.pane { padding: 88px 24px; }
+  section.pane .inner { max-width: 1180px; margin: 0 auto; }
   section.pane.alt { background: #fff; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 
   .section-eyebrow {
@@ -239,7 +234,7 @@
   /* -------- Feature list (Overview) -------- */
   .features {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 20px;
   }
   .feature {
@@ -313,6 +308,7 @@
     padding: 4px 10px;
     border-radius: 999px;
     margin-bottom: 16px;
+    align-self: flex-start;
   }
   .card .go {
     margin-top: auto;
@@ -326,49 +322,39 @@
   .card .go .arrow { transition: transform .18s ease; }
   .card:hover .go .arrow { transform: translateX(4px); }
 
-  /* -------- Journey timeline -------- */
-  .timeline {
-    position: relative;
+  /* -------- 9-step Journey (3x3 grid) -------- */
+  .journey-grid {
     display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    gap: 18px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
     margin-top: 12px;
+    counter-reset: js;
   }
-  .timeline::before {
-    content: "";
-    position: absolute;
-    top: 40px; left: 4%; right: 4%;
-    height: 3px;
-    background: linear-gradient(90deg, var(--ms-blue) 0%, var(--ms-blue-light) 50%, var(--ms-purple) 100%);
-    border-radius: 3px;
-    z-index: 0;
-  }
-  .step {
+  .jstep {
     position: relative;
     background: var(--card);
     border: 1px solid var(--line);
     border-radius: var(--radius);
-    padding: 20px 16px;
+    padding: 22px 20px 20px;
     box-shadow: var(--shadow-sm);
-    z-index: 1;
-    text-align: center;
+    transition: transform .18s ease, box-shadow .18s ease;
   }
-  .step .bubble {
-    width: 44px; height: 44px;
+  .jstep:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .jstep::before {
+    counter-increment: js;
+    content: counter(js);
+    position: absolute;
+    top: -16px; left: 20px;
+    width: 34px; height: 34px;
     border-radius: 50%;
+    background: var(--grad);
+    color: #fff;
     display: flex; align-items: center; justify-content: center;
-    background: #fff;
-    border: 3px solid var(--ms-blue);
-    color: var(--ms-blue-dark);
     font-weight: 800;
-    margin: -36px auto 12px;
-    box-shadow: var(--shadow-sm);
     font-size: 15px;
+    box-shadow: var(--shadow-sm);
   }
-  .step.persona-agent .bubble { border-color: var(--ms-purple); color: var(--ms-purple); }
-  .step h4 { margin: 0 0 6px; font-size: 15px; letter-spacing: -.01em; }
-  .step p { margin: 0; color: var(--muted); font-size: 13.5px; }
-  .step .who {
+  .jstep .who {
     display: inline-block;
     font-size: 11px;
     font-weight: 700;
@@ -378,12 +364,12 @@
     border-radius: 999px;
     background: rgba(0,120,212,.10);
     color: var(--ms-blue-dark);
-    margin-bottom: 8px;
+    margin: 6px 0 10px 44px;
   }
-  .step.persona-agent .who {
-    background: rgba(116,39,116,.10);
-    color: var(--ms-purple);
-  }
+  .jstep.persona-agent .who { background: rgba(116,39,116,.10); color: var(--ms-purple); }
+  .jstep.persona-approver .who { background: rgba(0,130,114,.12); color: var(--ms-teal); }
+  .jstep h4 { margin: 0 0 6px; font-size: 16px; letter-spacing: -.01em; }
+  .jstep p { margin: 0; color: var(--muted); font-size: 13.5px; }
 
   /* -------- Architecture -------- */
   .arch {
@@ -429,9 +415,7 @@
   .arch .center h4 { margin: 0 0 4px; font-size: 20px; }
   .arch .center p { margin: 0; opacity: .9; font-size: 13.5px; }
 
-  .arch .col.right .box, .arch .col.left .box {
-    position: relative;
-  }
+  .arch .col.right .box, .arch .col.left .box { position: relative; }
   .arch .col.left .box::after,
   .arch .col.right .box::before {
     content: "→";
@@ -465,9 +449,7 @@
     gap: 8px;
     color: var(--ink-2);
   }
-  .legend-chip .dot {
-    width: 10px; height: 10px; border-radius: 999px;
-  }
+  .legend-chip .dot { width: 10px; height: 10px; border-radius: 999px; }
   .dot.blue   { background: var(--ms-blue); }
   .dot.purple { background: var(--ms-purple); }
   .dot.teal   { background: var(--ms-teal); }
@@ -495,18 +477,8 @@
     font-size: 15px;
   }
   .panel li:last-child { border-bottom: none; }
-  .panel li .tick {
-    color: var(--ms-teal);
-    font-weight: 700;
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
-  .panel li .ico {
-    font-size: 20px;
-    flex-shrink: 0;
-    line-height: 1;
-    margin-top: 1px;
-  }
+  .panel li .tick { color: var(--ms-teal); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .panel li .ico  { font-size: 20px; flex-shrink: 0; line-height: 1; margin-top: 1px; }
 
   /* -------- Footer -------- */
   footer.site {
@@ -560,10 +532,9 @@
   /* -------- Responsive -------- */
   @media (max-width: 900px) {
     .hero .inner { grid-template-columns: 1fr; }
-    .features, .cards { grid-template-columns: 1fr 1fr; }
-    .timeline { grid-template-columns: 1fr 1fr; gap: 32px; }
-    .timeline::before { display: none; }
-    .step .bubble { margin-top: 0; }
+    .features { grid-template-columns: 1fr 1fr; }
+    .cards { grid-template-columns: 1fr 1fr; }
+    .journey-grid { grid-template-columns: 1fr 1fr; }
     .arch { grid-template-columns: 1fr; }
     .arch .col.left .box::after,
     .arch .col.right .box::before { display: none; }
@@ -573,7 +544,7 @@
     nav.site a:not(.cta) { display: none; }
   }
   @media (max-width: 560px) {
-    .features, .cards, .timeline { grid-template-columns: 1fr; }
+    .features, .cards, .journey-grid { grid-template-columns: 1fr; }
     section.pane { padding: 64px 20px; }
     section.hero { padding: 72px 20px 64px; }
   }
@@ -585,7 +556,7 @@
   <div class="inner">
     <a href="#top" class="brand">
       <span class="dot" aria-hidden="true"></span>
-      <span>Executive Assistant Agent · MicroHack</span>
+      <span>CLM Agent · MicroHack</span>
     </a>
     <nav class="site" aria-label="Primary">
       <a href="#overview">Overview</a>
@@ -605,21 +576,23 @@
   <div class="inner">
     <div>
       <span class="eyebrow">Microsoft Foundry · MicroHack</span>
-      <h1 class="hero-title">Executive Assistant Agent MicroHack</h1>
-      <p class="hero-sub">Build, ground, evaluate, and deploy an AI Executive Assistant using Microsoft Foundry — from *"prompt in a chat window"* to *"governed, evaluated, deployed agent"* in one focused session.</p>
+      <h1 class="hero-title">Contract Lifecycle Management Agent MicroHack</h1>
+      <p class="hero-sub">Build, Ground, Evaluate, and Deploy an AI Contract Management Solution using Microsoft Foundry — from *"prompt in a chat window"* to *"governed, evaluated, deployed CLM agent"* in one focused session.</p>
       <div class="hero-actions">
         <a class="cta" href="docs/challenge-1-build-agent.md">🏗️ Start Challenge 1</a>
-        <a class="cta ghost" href="#overview">Learn more</a>
+        <a class="cta ghost" href="#architecture">View Architecture</a>
+        <a class="cta ghost" href="#challenges">Explore Challenges</a>
       </div>
     </div>
     <aside class="hero-card" aria-label="Quick summary">
       <h3>What you will build</h3>
       <ul>
-        <li>📝 Summarize meetings + generate action items</li>
-        <li>✉️ Draft follow-up emails</li>
-        <li>🔎 Search enterprise knowledge</li>
-        <li>⚙️ Trigger business workflows</li>
-        <li>🧑‍💼 Support executive assistant scenarios</li>
+        <li>🔎 Search contracts &amp; retrieve clauses</li>
+        <li>⚖️ Compare and summarize agreements</li>
+        <li>🚨 Identify risks &amp; missing clauses</li>
+        <li>🚦 Route approvals through Logic Apps</li>
+        <li>🏗️ Generate contracts from templates</li>
+        <li>📊 Track contract status end-to-end</li>
       </ul>
     </aside>
   </div>
@@ -629,39 +602,49 @@
 <section class="pane" id="overview">
   <div class="inner">
     <span class="section-eyebrow">Hackathon overview</span>
-    <h2>An AI teammate for the busiest people in your company</h2>
-    <p class="lede">Executive assistants juggle 40+ meetings a week, thousands of documents, hundreds of open action items. This MicroHack shows you how to give them a real AI teammate — one that summarizes meetings, drafts follow-ups, searches enterprise knowledge, and triggers business workflows.</p>
+    <h2>An AI teammate for the whole contract lifecycle</h2>
+    <p class="lede">Enterprise contract portfolios are large, unstructured, and expensive to reason about. This MicroHack shows you how to give Legal, Procurement, and Sales a real AI teammate — one that searches contracts, retrieves clauses, identifies risks, routes approvals, and tracks status across the lifecycle.</p>
 
     <div class="features">
       <div class="feature">
-        <div class="ico">📝</div>
-        <h4>Summarize meetings</h4>
-        <p>Extract decisions, risks, and open questions in the executive's tone.</p>
-      </div>
-      <div class="feature">
-        <div class="ico">✅</div>
-        <h4>Generate action items</h4>
-        <p>With owners, due dates, and a clean structure ready for tasking.</p>
-      </div>
-      <div class="feature">
-        <div class="ico">✉️</div>
-        <h4>Draft follow-up emails</h4>
-        <p>In the executive's voice, grounded in the meeting context.</p>
-      </div>
-      <div class="feature">
         <div class="ico">🔎</div>
-        <h4>Search enterprise knowledge</h4>
-        <p>Docs, emails, briefs, meeting notes — with citations.</p>
+        <h4>Contract search</h4>
+        <p>Find any contract by counterparty, type, or free text — with citations.</p>
       </div>
       <div class="feature">
-        <div class="ico">⚙️</div>
-        <h4>Trigger business workflows</h4>
-        <p>Book time, create tasks, kick off approvals via Logic Apps.</p>
+        <div class="ico">📄</div>
+        <h4>Clause retrieval</h4>
+        <p>Termination, liability, indemnity, GDPR, payment — quoted verbatim.</p>
       </div>
       <div class="feature">
-        <div class="ico">🧑‍💼</div>
-        <h4>Support EA productivity</h4>
-        <p>Real executive-assistant scenarios — end to end.</p>
+        <div class="ico">⚖️</div>
+        <h4>Contract comparison</h4>
+        <p>Compare terms across agreements in a structured, side-by-side table.</p>
+      </div>
+      <div class="feature">
+        <div class="ico">📝</div>
+        <h4>Contract summarization</h4>
+        <p>Obligations, key dates, and risk flags in a clean contract brief.</p>
+      </div>
+      <div class="feature">
+        <div class="ico">🚨</div>
+        <h4>Risk identification</h4>
+        <p>Non-standard or missing clauses surfaced with a numeric risk score.</p>
+      </div>
+      <div class="feature">
+        <div class="ico">🚦</div>
+        <h4>Approval routing</h4>
+        <p>Route changes to Legal or Procurement via Logic Apps — with confirmation.</p>
+      </div>
+      <div class="feature">
+        <div class="ico">🏗️</div>
+        <h4>Document generation</h4>
+        <p>Draft NDAs, SOWs, and amendments from templates using Power Automate.</p>
+      </div>
+      <div class="feature">
+        <div class="ico">📊</div>
+        <h4>Status tracking</h4>
+        <p>Move contracts through Draft → In Review → Approved → Signed → Active.</p>
       </div>
     </div>
   </div>
@@ -671,14 +654,14 @@
 <section class="pane alt" id="challenges">
   <div class="inner">
     <span class="section-eyebrow">Challenge navigation</span>
-    <h2>Five challenges. One agent. Real Foundry.</h2>
-    <p class="lede">Each challenge is self-contained, ~30–50 minutes, and ends with a checklist plus a bridge into the next challenge.</p>
+    <h2>Five challenges. One CLM agent. Real Foundry.</h2>
+    <p class="lede">Each challenge is self-contained, ~30–60 minutes, and ends with a checklist plus a bridge into the next challenge.</p>
 
     <div class="cards">
       <a class="card" href="docs/challenge-1-build-agent.md">
         <span class="num">1</span>
         <h3>Build the Agent</h3>
-        <p>Create the base Executive Assistant agent — model + instructions + first meaningful turn.</p>
+        <p>Create the base Contract Lifecycle Management agent — model, instructions, and a contract-expert persona.</p>
         <span class="tag">Foundry Agent Service</span>
         <span class="go">Open challenge <span class="arrow">→</span></span>
       </a>
@@ -686,31 +669,31 @@
       <a class="card" href="docs/challenge-2-grounding.md">
         <span class="num">2</span>
         <h3>Ground with Knowledge</h3>
-        <p>Give the agent access to enterprise documents, emails, and meeting notes with citations.</p>
+        <p>Connect the agent to the contract repository. Enable RAG with Azure AI Search + File Search.</p>
         <span class="tag">Foundry IQ · Azure AI Search · File Search</span>
         <span class="go">Open challenge <span class="arrow">→</span></span>
       </a>
 
       <a class="card" href="docs/challenge-3-tools-actions.md">
         <span class="num">3</span>
-        <h3>Add Tools & Actions</h3>
-        <p>Move from chatbot to agent — call APIs, trigger flows, act on the world.</p>
+        <h3>Tools &amp; Actions</h3>
+        <p>Clause search, approval routing, document generation, and contract status tracking — all wired up.</p>
         <span class="tag">Logic Apps · Power Automate · Functions</span>
         <span class="go">Open challenge <span class="arrow">→</span></span>
       </a>
 
       <a class="card" href="docs/challenge-4-evaluation.md">
         <span class="num">4</span>
-        <h3>Evaluate & Improve</h3>
-        <p>Measure quality, safety, and groundedness. Set a shippable bar and enforce it.</p>
+        <h3>Evaluation &amp; Optimization</h3>
+        <p>Measure accuracy, groundedness, and safety. Set a shippable bar and enforce it before deployment.</p>
         <span class="tag">Foundry Evaluators · Content Safety</span>
         <span class="go">Open challenge <span class="arrow">→</span></span>
       </a>
 
       <a class="card" href="docs/challenge-5-deploy-share.md">
         <span class="num">5</span>
-        <h3>Deploy & Share</h3>
-        <p>Ship as a Web App, a Teams App, and an API endpoint — with governance included.</p>
+        <h3>Deploy &amp; Share</h3>
+        <p>Ship as a Web App, a Teams App, and an API endpoint — with governance and observability baked in.</p>
         <span class="tag">Foundry Deploy · Web · Teams · API</span>
         <span class="go">Open challenge <span class="arrow">→</span></span>
       </a>
@@ -718,8 +701,8 @@
       <a class="card" href="assets/user-journey.md" style="background: linear-gradient(135deg, rgba(0,120,212,.06), rgba(116,39,116,.06));">
         <span class="num" style="background:#fff;">★</span>
         <h3>Bonus: End-to-end scenario</h3>
-        <p>Run the full user journey against your finished agent as an integration test.</p>
-        <span class="tag">Executive workflow · demo script</span>
+        <p>Run the full 9-step contract lifecycle against your finished agent as an integration test.</p>
+        <span class="tag">CLM workflow · demo script</span>
         <span class="go">Read the journey <span class="arrow">→</span></span>
       </a>
     </div>
@@ -730,45 +713,54 @@
 <section class="pane" id="journey">
   <div class="inner">
     <span class="section-eyebrow">User journey</span>
-    <h2>From meeting prep to executive approval</h2>
-    <p class="lede">A six-step, real-world executive workflow. The Executive Assistant Agent supports the executive at every step and always ends with a human review.</p>
+    <h2>From contract intake to signature — in nine steps</h2>
+    <p class="lede">A real-world CLM workflow across Legal, Procurement, and Approvers. The CLM Agent supports the user at every step and always confirms before irreversible actions.</p>
 
-    <div class="timeline" aria-label="User journey timeline">
-      <div class="step persona-executive">
-        <div class="bubble">1</div>
-        <span class="who">Executive</span>
-        <h4>Prepare for a meeting</h4>
-        <p>User asks the agent to prep for an upcoming meeting.</p>
+    <div class="journey-grid" aria-label="Nine-step user journey">
+      <div class="jstep persona-executive">
+        <span class="who">Legal user</span>
+        <h4>Upload contracts</h4>
+        <p>Legal user uploads new vendor contracts to the enterprise repository.</p>
       </div>
-      <div class="step persona-agent">
-        <div class="bubble">2</div>
+      <div class="jstep persona-agent">
         <span class="who">Agent</span>
-        <h4>Search enterprise sources</h4>
-        <p>Docs, previous emails, meeting notes — with citations.</p>
+        <h4>Index &amp; enrich</h4>
+        <p>Agent chunks, embeds, and enriches contracts in Azure AI Search.</p>
       </div>
-      <div class="step persona-agent">
-        <div class="bubble">3</div>
+      <div class="jstep persona-executive">
+        <span class="who">User</span>
+        <h4>Search a contract</h4>
+        <p>User asks about a specific contract, counterparty, or clause.</p>
+      </div>
+      <div class="jstep persona-agent">
         <span class="who">Agent</span>
-        <h4>Summarize context</h4>
-        <p>Key context, decisions, and open tasks in one brief.</p>
+        <h4>Retrieve clauses</h4>
+        <p>Agent returns exact clause text quoted verbatim, with citations.</p>
       </div>
-      <div class="step persona-executive">
-        <div class="bubble">4</div>
-        <span class="who">Executive</span>
-        <h4>Ask for follow-ups</h4>
-        <p>User asks the agent to draft follow-up actions.</p>
-      </div>
-      <div class="step persona-agent">
-        <div class="bubble">5</div>
+      <div class="jstep persona-agent">
         <span class="who">Agent</span>
-        <h4>Draft & suggest</h4>
-        <p>Action items, email draft, suggested next steps.</p>
+        <h4>Summarize obligations</h4>
+        <p>Structured brief: obligations, unusual terms, risk score, key dates.</p>
       </div>
-      <div class="step persona-executive">
-        <div class="bubble">6</div>
-        <span class="who">Executive</span>
-        <h4>Review & approve</h4>
-        <p>Human review and approval — always in the loop.</p>
+      <div class="jstep persona-executive">
+        <span class="who">User</span>
+        <h4>Request approval</h4>
+        <p>User asks the agent to route a contract change for approval.</p>
+      </div>
+      <div class="jstep persona-agent">
+        <span class="who">Agent</span>
+        <h4>Trigger workflow</h4>
+        <p>After confirmation, Logic App fires an approval email to Legal.</p>
+      </div>
+      <div class="jstep persona-approver">
+        <span class="who">Approver</span>
+        <h4>Contract approved</h4>
+        <p>Legal approver reviews and clicks Approve. Decision flows back.</p>
+      </div>
+      <div class="jstep persona-agent">
+        <span class="who">Agent</span>
+        <h4>Update status</h4>
+        <p>Agent updates contract state and notifies the requester.</p>
       </div>
     </div>
   </div>
@@ -778,8 +770,8 @@
 <section class="pane alt" id="architecture">
   <div class="inner">
     <span class="section-eyebrow">Architecture</span>
-    <h2>One Foundry project. Every capability wired in.</h2>
-    <p class="lede">Grounding, tools, evaluation, and deployment all live inside the same Foundry project — one control plane for the whole solution.</p>
+    <h2>One Foundry project. Every CLM capability wired in.</h2>
+    <p class="lede">Grounding on the contract repository, business tools for approvals and doc-gen, evaluators, and deployment all live inside the same Foundry project — one control plane for the whole solution.</p>
 
     <div class="arch" role="img" aria-label="Solution architecture diagram">
       <div class="col left">
@@ -787,14 +779,21 @@
           <span class="ico">👤</span>
           <div>
             <div>User</div>
-            <small>Executive / EA</small>
+            <small>Legal · Procurement · Sales</small>
           </div>
         </div>
         <div class="box">
           <span class="ico">💬</span>
           <div>
-            <div>Copilot / Web App</div>
-            <small>Entry point</small>
+            <div>Copilot / Web / Teams</div>
+            <small>Entry points</small>
+          </div>
+        </div>
+        <div class="box">
+          <span class="ico">📂</span>
+          <div>
+            <div>Contract Repository</div>
+            <small>SharePoint · DMS · Blob</small>
           </div>
         </div>
       </div>
@@ -815,17 +814,24 @@
         <div class="box">
           <span class="ico">🔌</span>
           <div>
-            <div>Tools & Actions</div>
-            <small>Logic Apps · Power Automate · APIs</small>
+            <div>Tools &amp; Actions</div>
+            <small>Approvals · Doc-gen · Status</small>
           </div>
         </div>
       </div>
 
       <div class="col right">
         <div class="box">
+          <span class="ico">🚦</span>
+          <div>
+            <div>Approval Workflow</div>
+            <small>Logic Apps · Power Automate</small>
+          </div>
+        </div>
+        <div class="box">
           <span class="ico">📊</span>
           <div>
-            <div>Evaluation & Monitoring</div>
+            <div>Evaluation &amp; Monitoring</div>
             <small>Foundry Evaluators · App Insights</small>
           </div>
         </div>
@@ -852,17 +858,17 @@
 <section class="pane" id="objectives">
   <div class="inner">
     <span class="section-eyebrow">Learning outcomes</span>
-    <h2>Objectives & prerequisites</h2>
+    <h2>Objectives &amp; prerequisites</h2>
     <p class="lede">What you'll learn, and what you need before you start.</p>
 
     <div class="two-col">
       <div class="panel">
         <h3>🎯 Learning objectives</h3>
         <ul>
-          <li><span class="tick">✓</span> <span>Build an agent in Microsoft Foundry (model + instructions + tools).</span></li>
-          <li><span class="tick">✓</span> <span>Ground the agent with enterprise knowledge and force citations.</span></li>
-          <li><span class="tick">✓</span> <span>Connect tools and actions to real business workflows.</span></li>
-          <li><span class="tick">✓</span> <span>Evaluate the agent for quality, safety, and groundedness.</span></li>
+          <li><span class="tick">✓</span> <span>Build a CLM Agent in Microsoft Foundry with a strong contract-expert persona.</span></li>
+          <li><span class="tick">✓</span> <span>Ground the agent with an enterprise contract repository and force citations.</span></li>
+          <li><span class="tick">✓</span> <span>Connect tools for approvals, doc-gen, and status tracking.</span></li>
+          <li><span class="tick">✓</span> <span>Evaluate the agent for accuracy, groundedness, and safety.</span></li>
           <li><span class="tick">✓</span> <span>Deploy and share the solution across Web, Teams, and API.</span></li>
         </ul>
       </div>
@@ -871,9 +877,9 @@
         <ul>
           <li><span class="ico">🧠</span> <span>Microsoft Foundry access (project on <a href="https://ai.azure.com">ai.azure.com</a>).</span></li>
           <li><span class="ico">☁️</span> <span>An Azure subscription or Foundry sandbox.</span></li>
-          <li><span class="ico">📚</span> <span>Basic understanding of what an agent is.</span></li>
-          <li><span class="ico">📄</span> <span>A few sample documents for grounding (notes, briefs, policies).</span></li>
-          <li><span class="ico">🧰</span> <span>Optional: VS Code and GitHub Copilot.</span></li>
+          <li><span class="ico">📄</span> <span>A handful of sample contracts (MSA / NDA / SOW — real or synthetic).</span></li>
+          <li><span class="ico">📚</span> <span>Basic understanding of what an agent is (model + instructions + tools).</span></li>
+          <li><span class="ico">🧰</span> <span>Optional: VS Code, GitHub Copilot, <code>az</code> CLI.</span></li>
         </ul>
       </div>
     </div>
@@ -912,7 +918,7 @@
       <div class="card">
         <span class="num">4</span>
         <h3>Follow docs/challenge-1 → 5</h3>
-        <p>Work the five challenges in order — each ~30–50 minutes with a checkpoint at the end.</p>
+        <p>Work the five challenges in order — each ~30–60 minutes with a checkpoint at the end.</p>
         <span class="tag">Challenges</span>
         <a class="go" href="docs/challenge-1-build-agent.md">Start now <span class="arrow">→</span></a>
       </div>
@@ -926,18 +932,18 @@
     <div>
       <div class="foot-brand">
         <span class="dot"></span>
-        Executive Assistant Agent · MicroHack
+        Contract Lifecycle Management Agent · MicroHack
       </div>
-      <p class="foot-blurb">A hands-on MicroHack that walks you through building a governed, evaluated, and deployed AI agent on Microsoft Foundry — using an executive-assistant scenario.</p>
+      <p class="foot-blurb">A hands-on MicroHack that walks you through building a governed, evaluated, and deployed AI agent on Microsoft Foundry — for the full contract lifecycle.</p>
     </div>
     <div>
       <h4>Challenges</h4>
       <ul>
         <li><a href="docs/challenge-1-build-agent.md">1 · Build the Agent</a></li>
         <li><a href="docs/challenge-2-grounding.md">2 · Ground with Knowledge</a></li>
-        <li><a href="docs/challenge-3-tools-actions.md">3 · Tools & Actions</a></li>
-        <li><a href="docs/challenge-4-evaluation.md">4 · Evaluate & Improve</a></li>
-        <li><a href="docs/challenge-5-deploy-share.md">5 · Deploy & Share</a></li>
+        <li><a href="docs/challenge-3-tools-actions.md">3 · Tools &amp; Actions</a></li>
+        <li><a href="docs/challenge-4-evaluation.md">4 · Evaluation &amp; Optimization</a></li>
+        <li><a href="docs/challenge-5-deploy-share.md">5 · Deploy &amp; Share</a></li>
       </ul>
     </div>
     <div>
@@ -952,7 +958,7 @@
     </div>
   </div>
   <div class="foot-bottom">
-    <span>© Executive Assistant Agent MicroHack. MIT licensed.</span>
+    <span>© Contract Lifecycle Management Agent MicroHack. MIT licensed.</span>
     <span>Built with ❤️ on Microsoft Foundry.</span>
   </div>
 </footer>

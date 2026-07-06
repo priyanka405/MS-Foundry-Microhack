@@ -1,8 +1,8 @@
-# Executive Assistant Agent MicroHack
+# Contract Lifecycle Management Agent MicroHack
 
-**Build, ground, evaluate, and deploy an AI Executive Assistant using Microsoft Foundry.**
+**Build, Ground, Evaluate, and Deploy an AI Contract Management Solution using Microsoft Foundry.**
 
-> A hands-on, challenge-based MicroHack that takes an idea from *"a prompt in a chat window"* to *"a governed, evaluated, deployed agent"* — using **Microsoft Foundry**.
+> A hands-on, challenge-based MicroHack that takes an idea from *"a prompt in a chat window"* to *"a governed, evaluated, deployed CLM agent"* — using **Microsoft Foundry**.
 
 <p align="center">
   <a href="docs/challenge-1-build-agent.md">🏗️ Build</a> ·
@@ -16,53 +16,63 @@
 
 ## 🌟 Overview
 
-Executive assistants are the ultimate context-switchers: 40+ meetings a week, thousands of documents, hundreds of open action items. This MicroHack shows you how to give them a **real AI teammate** built on **Microsoft Foundry**.
+Enterprise contract portfolios are large, unstructured, and expensive to reason about. Legal teams spend hours locating clauses, procurement teams struggle to compare vendor agreements, and sales teams wait days for turnaround on standard templates. This MicroHack shows you how to give them a **real AI teammate** built on **Microsoft Foundry**.
 
-By the end of the day you will have built an **Executive Assistant Agent** that can:
+By the end of the session you will have built a **Contract Lifecycle Management Agent** that can:
 
-- 📝 **Summarize meetings** — extract decisions, risks, and open questions.
-- ✅ **Generate action items** — with owners and due dates.
-- ✉️ **Draft follow-up emails** — in the executive's voice.
-- 🔎 **Search enterprise knowledge** — docs, emails, meeting notes, briefs.
-- ⚙️ **Trigger business workflows** — book time, create tasks, send updates.
-- 🧑‍💼 **Support executive assistant productivity scenarios** end-to-end.
+- 🔎 **Search contracts** across the enterprise repository.
+- 📄 **Retrieve clauses** — termination, liability, indemnity, GDPR, payment terms.
+- ⚖️ **Compare agreements** side by side.
+- 🧠 **Explain contract terms** in plain business language.
+- 📝 **Draft contract summaries** with obligations and key dates.
+- 🚦 **Route approvals** through Logic Apps.
+- 🏗️ **Generate contract documents** from templates.
+- 📊 **Track contract status** across the lifecycle.
+- 🚨 **Identify risks and missing clauses** proactively.
 
 ## 🧭 Challenge navigation
 
 | # | Challenge | Description | Key Foundry feature | Link |
 | --- | --- | --- | --- | --- |
-| **1** | **Build the Agent** | Create the base Executive Assistant agent — model + instructions + first turn. | Foundry **Agent Service** | [→ open](docs/challenge-1-build-agent.md) |
-| **2** | **Ground the Agent with Knowledge** | Give the agent access to enterprise documents, emails, and meeting notes. | **Foundry IQ** on **Azure AI Search** + **File Search** | [→ open](docs/challenge-2-grounding.md) |
-| **3** | **Add Tools and Actions** | Move from chatbot to agent — call APIs, trigger flows, act on the world. | **Tools catalog**, **Logic Apps**, **Power Automate**, **Azure Functions** | [→ open](docs/challenge-3-tools-actions.md) |
-| **4** | **Evaluate and Improve the Agent** | Measure quality, safety, and groundedness. Set a shippable bar. | **Foundry Evaluators** + **Content Safety** | [→ open](docs/challenge-4-evaluation.md) |
-| **5** | **Deploy and Share the Agent** | Ship as a Web App, a Teams App, and an API. Governance included. | **Foundry Deploy** + Web / Teams / API endpoints | [→ open](docs/challenge-5-deploy-share.md) |
+| **1** | **Build the Agent** | Create the base CLM Agent — model + instructions + contract-expert persona. | Foundry **Agent Service** | [→ open](docs/challenge-1-build-agent.md) |
+| **2** | **Ground the Agent with Knowledge** | Give the agent access to the contract repository and enable RAG. | **Foundry IQ** on **Azure AI Search** + **File Search** | [→ open](docs/challenge-2-grounding.md) |
+| **3** | **Tools and Actions** | Move from chatbot to agent — clause search, approvals, doc-gen, status tracking. | **Tools catalog**, **Logic Apps**, **Power Automate**, **Azure Functions** | [→ open](docs/challenge-3-tools-actions.md) |
+| **4** | **Evaluation and Optimization** | Measure accuracy, groundedness, and safety. Set a shippable bar. | **Foundry Evaluators** + **Content Safety** | [→ open](docs/challenge-4-evaluation.md) |
+| **5** | **Deploy and Share** | Ship as a Web App, a Teams App, and an API. Governance included. | **Foundry Deploy** + Web / Teams / API endpoints | [→ open](docs/challenge-5-deploy-share.md) |
 
 ## 🧑‍💼 User journey
 
-The Executive Assistant Agent supports a six-step, real-world executive workflow:
+The CLM Agent supports the full contract lifecycle — nine real-world steps:
 
 ```mermaid
 journey
-    title Executive Assistant — from prep to approval
-    section Before the meeting
-      1 · Ask the agent to prepare for a meeting: 5: Executive
-      2 · Agent searches docs, emails, and meeting notes: 4: Agent
-      3 · Agent summarizes key context and open tasks: 5: Agent
-    section After the meeting
-      4 · Ask the agent to draft follow-up actions: 5: Executive
-      5 · Agent creates action items, drafts email, suggests next steps: 4: Agent
-      6 · Executive reviews and approves the final output: 5: Executive
+    title Contract Lifecycle Management — from intake to signature
+    section Intake
+      1 · Legal user uploads contracts: 5: Legal user
+      2 · Contracts are indexed and enriched: 4: Agent
+    section Discovery
+      3 · User searches a contract or clause: 5: User
+      4 · Agent retrieves clauses with citations: 5: Agent
+      5 · Agent summarizes obligations and risks: 5: Agent
+    section Action
+      6 · User requests approval on a change: 5: User
+      7 · Agent triggers approval workflow: 4: Agent
+      8 · Contract approved: 5: Approver
+      9 · Contract status is updated: 4: Agent
 ```
 
 Or as a flow:
 
 ```mermaid
 flowchart LR
-    S1([1 · Prepare for meeting]) --> S2([2 · Search docs, emails, notes])
-    S2 --> S3([3 · Summarize context and open tasks])
-    S3 --> S4([4 · Ask for follow-up actions])
-    S4 --> S5([5 · Draft email + action items + next steps])
-    S5 --> S6([6 · Review and approve])
+    S1([1 · Upload contracts]) --> S2([2 · Index and enrich])
+    S2 --> S3([3 · Search a contract])
+    S3 --> S4([4 · Retrieve clauses])
+    S4 --> S5([5 · Summarize obligations])
+    S5 --> S6([6 · Request approval])
+    S6 --> S7([7 · Trigger workflow])
+    S7 --> S8([8 · Contract approved])
+    S8 --> S9([9 · Update status])
 ```
 
 See [`assets/user-journey.md`](assets/user-journey.md) for the full narrative with example prompts and expected outputs.
@@ -70,8 +80,8 @@ See [`assets/user-journey.md`](assets/user-journey.md) for the full narrative wi
 ## 🏗️ Architecture
 
 ```mermaid
-flowchart LR
-    User([👤 Executive]) --> Entry[Microsoft Copilot / Web App<br/>Entry point]
+flowchart TD
+    User([👤 Legal / Procurement / Sales]) --> Entry[Microsoft Copilot / Web App<br/>Entry point]
     Entry --> Agent[🤖 Microsoft Foundry Agent<br/>Model + Instructions]
 
     subgraph FoundryProject[Microsoft Foundry Project]
@@ -80,14 +90,15 @@ flowchart LR
         Agent --> Eval[Evaluation & Monitoring]
     end
 
-    KG --> Search[Azure AI Search]
+    KG --> Search[Azure AI Search<br/>idx-clm-contracts]
     KG --> FileSearch[File Search]
+    Search --> Repo[(Contract Repository<br/>SharePoint · DMS · Blob)]
 
-    Tools --> Logic[Logic Apps]
-    Tools --> Power[Power Automate]
-    Tools --> API[API Calls]
+    Tools --> Logic[Logic Apps<br/>Approval routing]
+    Tools --> Power[Power Automate<br/>Doc generation]
+    Tools --> API[REST APIs<br/>Contract status · CRM]
 
-    Eval --> Evaluators[Foundry Evaluators]
+    Eval --> Evaluators[Foundry Evaluators<br/>Groundedness · Safety]
     Eval --> AppInsights[Application Insights]
 
     Agent --> Deploy[Deployment / Sharing Layer]
@@ -104,18 +115,18 @@ Before you start, make sure you have:
 
 - 🧠 **Microsoft Foundry** access — a project on [ai.azure.com](https://ai.azure.com).
 - ☁️ An **Azure subscription** or a Foundry sandbox.
+- 📄 A handful of **sample contracts** — MSA, NDA, SOW, vendor agreements. Real or synthetic.
 - 📚 **Basic understanding** of what an agent is (model + instructions + tools).
-- 📄 A handful of **sample documents** for grounding — meeting notes, briefs, policies, anything you'd want the assistant to know.
-- 🧰 **Optional:** VS Code and GitHub Copilot.
+- 🧰 **Optional:** VS Code, GitHub Copilot, `az` CLI.
 
 ## 🎯 Learning objectives
 
 After completing this MicroHack you will know how to:
 
-- 🏗️ **Build an agent** in Microsoft Foundry.
-- 📚 **Ground an agent** with enterprise knowledge.
+- 🏗️ **Build an agent** in Microsoft Foundry with a strong domain persona.
+- 📚 **Ground an agent** with an enterprise contract repository.
 - 🔌 **Connect tools and actions** to make the agent *do*, not just *say*.
-- 📊 **Evaluate agent quality and safety** — and set a real deployment gate.
+- 📊 **Evaluate agent quality, groundedness, and safety** — and set a real deployment gate.
 - 🚀 **Deploy and share** the solution to Web, Teams, and an API endpoint.
 
 ## 📂 Repository structure
@@ -157,6 +168,6 @@ After completing this MicroHack you will know how to:
 - Every challenge ends with a **Success Criteria** checklist and a **Next Steps** bridge — use those to unblock.
 - Stuck on grounding? Re-read the *"cite your sources"* instruction block in Challenge 2.
 - Stuck on tools? Check that your tool descriptions are unambiguous — the model routes on those strings.
-- Stuck on eval? Start with a 10-row test set; grow it later.
+- Stuck on eval? Start with a 10–15 row test set; grow it later.
 
 Good luck — and welcome to Foundry.

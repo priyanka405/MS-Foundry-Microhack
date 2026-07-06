@@ -1,183 +1,165 @@
 # Challenge 1 — Build the Agent
 
-⏱ **~40 minutes**  ·  🧠 Key Foundry feature: **Foundry Agent Service (Model + Instructions)**
+> **Goal:** Create the base **Contract Lifecycle Management (CLM) Agent** in Microsoft Foundry — model + instructions + a contract-expert persona — and have your first real contract conversation.
+
+**Foundry feature:** Agent Service (Model + Instructions)
+**Estimated time:** 30–40 min
+**Prerequisite:** Foundry project on [ai.azure.com](https://ai.azure.com).
+
+---
 
 ## 🎯 Objective
 
-Create the **Executive Assistant Agent** — the core "brain" of the solution. By the end of this challenge you will have:
+Build a Foundry Agent that behaves like a **senior contracts analyst**: precise, cautious, and grounded in facts. In this challenge the agent has **no external knowledge yet** — you're establishing the persona, the behavior rules, and the output shapes. Grounding, tools, evaluation, and deployment come in Challenges 2–5.
 
-- A Foundry project with a deployed chat model.
-- A working Agent with a well-crafted instruction set for an Executive Assistant scenario.
-- A first meaningful turn in the Foundry Playground (or via the SDK).
+## 📋 Tasks
 
-## 🧭 Context
+1. Create a **Foundry Project** (or use an existing one).
+2. Create an **Agent** named `clm-agent`.
+3. Configure **Instructions** using the block below.
+4. Define the **Contract Expert persona**.
+5. Implement **basic contract Q&A** in the Foundry playground.
 
-An **agent** in Microsoft Foundry is not just a prompt — it is **Model + Instructions + Tools** running on the Foundry Agent Service, with state, tracing, identity, and evaluators. In this challenge you build the *Model + Instructions* part. Grounding comes in Challenge 2, tools in Challenge 3.
+## 🛠️ Step-by-step
 
-> **Prompt + Model ≠ Production Agent.**
-> A great prompt in a chat window has no memory of your enterprise knowledge, no way to trigger workflows, no telemetry, and no evaluations. An agent does.
+### 1. Create the Foundry Project
 
-## ✅ Prerequisites
+1. Open [ai.azure.com](https://ai.azure.com).
+2. **+ Create project** → name it `prj-clm-hackathon`.
+3. Pick a hub in a region that supports Agents (e.g., East US 2 / Sweden Central).
+4. Wait for provisioning — this creates the Foundry project, the connected Azure AI Search, Storage, and Key Vault.
 
-- Microsoft Foundry access (project on [ai.azure.com](https://ai.azure.com)).
-- Azure subscription **or** a Foundry sandbox.
-- (Pro-code path) Python 3.10+ and `pip`, or .NET 8 SDK.
+### 2. Create the Agent
 
-## 🏗️ Steps
+1. In the project, open **Agents** → **+ New agent**.
+2. Name: `clm-agent`.
+3. Model: `gpt-4o` (or `gpt-4.1` if available in your region).
+4. Save. You now have a bare-bones agent.
 
-### 1. Create the Foundry project (if you don't have one)
+### 3. Paste the Instructions
 
-1. Go to **[ai.azure.com](https://ai.azure.com)** and sign in.
-2. Click **+ Create a project**.
-3. **Name:** `exec-assistant`. Region: any supported (recommended `eastus2`, `swedencentral`, `westus3`).
-4. Accept defaults for hub/resource group and click **Create**.
+Open the **Instructions** tab on the agent and paste this block verbatim.
 
-### 2. Deploy a chat model
-
-1. In the project left nav → **Models + endpoints** → **+ Deploy base model**.
-2. Pick **`gpt-4o-mini`** (or `gpt-4o` if you have quota).
-3. **Deployment name:** `gpt-4o-mini`. **Type:** Standard. **TPM:** 30k (default).
-4. Click **Deploy** and wait for status **Succeeded**.
-
-### 3. Create the Agent (portal)
-
-1. Left nav → **Build → Agents → + New agent**.
-2. Fill in:
-   - **Agent name:** `executive-assistant`
-   - **Model deployment:** `gpt-4o-mini`
-   - **Description:** *"Executive Assistant agent that prepares for meetings, summarizes context, drafts follow-ups, and triggers workflows."*
-3. Paste the following into **Instructions**:
-
-   ```text
-   You are the Executive Assistant Agent for a busy executive.
-
-   MISSION
-   - Help the executive prepare for meetings, understand context, and act on
-     what was decided.
-   - Produce output that a human EA would be proud to send.
-
-   BEHAVIOR
-   - Ask ONE clarifying question at a time when required inputs are missing
-     (attendees, meeting purpose, decisions taken, preferred tone).
-   - Prefer bullet points, short sentences, and clear headings for briefs.
-   - When you generate action items, ALWAYS include: owner, action, due date.
-   - When you draft emails, match the executive's tone (professional, warm,
-     concise) unless the user asks otherwise.
-   - Distinguish clearly between "facts I found" and "suggestions I inferred".
-
-   GROUNDING & TOOLS
-   - You do not yet have enterprise-knowledge grounding or tools — tell the
-     user honestly if they ask you to look up a real document, calendar, or
-     workflow. These come in later challenges.
-
-   OUTPUT SHAPES
-   - Meeting brief:
-       ## Meeting brief — <Title>
-       **Attendees**: ...
-       **Purpose**: ...
-       **Key context**: bullets
-       **Open questions**: bullets
-       **Suggested talking points**: bullets
-   - Follow-up email:
-       Subject: <clear subject>
-       Body: 3–5 short paragraphs, ending with next-step ask.
-   - Action items:
-       | # | Owner | Action | Due |
-       |---|-------|--------|-----|
-
-   NEVER
-   - Never invent attendees, dates, or numbers. If missing, ASK.
-   - Never send anything — you draft; the executive approves.
-   ```
-
-4. Click **Save**.
-
-### 4. Test the agent in the Playground
-
-Open **Try in playground** and run these prompts in order:
-
-**Prompt 1 — meeting prep**
 ```text
-Prep me for a 30-min meeting with the CFO tomorrow to review the Q3 forecast.
-Attendees: me, CFO, Head of FP&A. Tone: professional, direct.
+You are the Contract Lifecycle Management (CLM) Agent, a senior contracts analyst
+for a global enterprise. You help Legal, Procurement, and Sales teams work with
+contracts across the full lifecycle.
+
+# MISSION
+Answer questions and take actions about contracts:
+- Search contracts and retrieve clauses.
+- Compare agreements side by side.
+- Explain contract terms in plain business language.
+- Draft contract summaries with obligations and key dates.
+- Identify risks and missing / non-standard clauses.
+- Route approvals when the user requests them.
+
+# BEHAVIOR
+- Be precise. Contracts are legal documents; do not paraphrase away important terms.
+- Prefer *"I don't have that on file"* over guessing. Never fabricate contract text.
+- Always quote clause text verbatim between quotes when the user asks for a clause.
+- After every clause quote, add a one-paragraph plain-English explanation.
+- For any risk you flag, name the specific clause and why it deviates from standard.
+- You are NOT a lawyer. Never give legal advice — retrieval and summarization only.
+- Human in the loop for irreversible actions (approvals, doc-generation, signature).
+
+# GROUNDING (will be added in Challenge 2)
+When knowledge sources are attached, every factual claim about a specific contract
+MUST include an inline citation of the form [source: <file>#<anchor>].
+If a fact is not supported by an attached source, say so plainly.
+
+# OUTPUT SHAPES
+- Clause retrieval → quoted clause + plain-English summary + citation.
+- Contract brief → structured markdown (Key obligations · Risks · Key dates).
+- Comparison → 3-column markdown table (Term | Contract A | Contract B).
+- Risk summary → bulleted list with clause reference and severity (Low/Med/High).
+
+# NEVER
+- Never sign a contract on behalf of a user.
+- Never approve a change without an explicit user confirmation.
+- Never invent counterparty names, dates, amounts, or clause text.
+- Never give legal advice.
 ```
 
-Expected: the agent should ask 1 clarifying question (e.g. *"What's the primary decision you want out of this meeting?"*), then produce a **Meeting brief** structured exactly as the instructions specify.
+### 4. Save and open the Playground
 
-**Prompt 2 — follow-up**
-```text
-The meeting is done. Decisions:
-- Cut the marketing ask by 15%
-- Approve €400k for the pricing tooling project
-- Push the retail launch decision to Oct 15
+Click **Save**, then **Try in Playground**.
 
-Draft a follow-up email to the attendees and give me action items with owners.
-```
+### 5. Run these three test prompts
 
-Expected: a **follow-up email** + an **action-items table** with realistic owners and due dates that the model does *not* invent for people it wasn't told about.
+Paste each prompt and observe the response quality.
 
-### 5. (Optional) Pro-code — same agent via the SDK
+**Prompt 1 — persona check:**
 
-```bash
-pip install azure-ai-projects azure-identity python-dotenv
-```
+> Introduce yourself. What are you good at, and what are you *not* good at?
+
+**Expected:** Concise self-intro that mirrors the MISSION block. Should include a *"not a lawyer / no legal advice"* disclaimer. Should mention it needs sources to answer specific contract questions.
+
+**Prompt 2 — clause explanation (no source yet):**
+
+> Explain what a "termination for convenience" clause is, in plain English.
+
+**Expected:** A clean plain-English explanation. Because no contract source is attached yet, the agent should stay generic and **not** cite a specific contract.
+
+**Prompt 3 — refusal check:**
+
+> What are the payment terms in the Contoso MSA?
+
+**Expected:** The agent refuses to fabricate. Something like: *"I don't have the Contoso MSA on file yet. Please upload it, or connect the contract repository. I don't want to guess at payment terms."*
+
+This third prompt is the whole point of the challenge — **the agent refuses to hallucinate**.
+
+## 🧪 Optional — do the same with the SDK
+
+If you'd rather do this in code (Python):
 
 ```python
-# scripts/build_agent.py
-import os
-from dotenv import load_dotenv
-from azure.ai.projects import AIProjectClient
+# pip install azure-ai-projects azure-identity
 from azure.identity import DefaultAzureCredential
+from azure.ai.projects import AIProjectClient
 
-load_dotenv()
-
-INSTRUCTIONS = """You are the Executive Assistant Agent for a busy executive.
-...  (paste the same block used in step 3.3) ..."""
-
-client = AIProjectClient(
-    endpoint=os.environ["PROJECT_ENDPOINT"],
+client = AIProjectClient.from_connection_string(
+    conn_str="<your-project-connection-string>",
     credential=DefaultAzureCredential(),
 )
 
+INSTRUCTIONS = """<paste the instruction block above>"""
+
 agent = client.agents.create_agent(
-    model=os.environ["MODEL_DEPLOYMENT_NAME"],
-    name="executive-assistant",
+    model="gpt-4o",
+    name="clm-agent",
     instructions=INSTRUCTIONS,
 )
-print(f"Created agent {agent.id}")
 
-thread = client.agents.threads.create()
-client.agents.messages.create(
-    thread_id=thread.id, role="user",
-    content=("Prep me for a 30-min meeting with the CFO tomorrow to review "
-             "the Q3 forecast. Attendees: me, CFO, Head of FP&A."),
+thread = client.agents.create_thread()
+client.agents.create_message(
+    thread_id=thread.id,
+    role="user",
+    content="What are the payment terms in the Contoso MSA?",
 )
-run = client.agents.runs.create_and_process(thread_id=thread.id, agent_id=agent.id)
-
-for msg in client.agents.messages.list(thread_id=thread.id):
-    print(f"[{msg.role}] {msg.content[0].text.value}\n")
+run = client.agents.create_and_process_run(thread_id=thread.id, agent_id=agent.id)
+for m in client.agents.list_messages(thread.id).data:
+    print(m.role, "→", m.content[0].text.value)
 ```
 
-## 🧪 Success criteria
+## ✅ Success criteria
 
-- [ ] Agent `executive-assistant` appears in the project's **Agents** list.
-- [ ] Meeting-prep prompt returns a structured brief matching the instruction template.
-- [ ] Follow-up prompt returns both an email draft **and** an action-items table.
-- [ ] Agent asks a clarifying question when required inputs are missing.
-- [ ] Agent does **not** invent attendees, decisions, or dates.
+- [ ] Foundry project created and the `clm-agent` agent exists.
+- [ ] Instructions include MISSION · BEHAVIOR · GROUNDING · OUTPUT SHAPES · NEVER.
+- [ ] Prompt 1 returns a persona-consistent self-introduction with a non-legal-advice disclaimer.
+- [ ] Prompt 2 returns a clean plain-English explanation of a "termination for convenience" clause.
+- [ ] Prompt 3 **refuses** to fabricate a contract term.
+- [ ] Optional: the same three prompts work through the SDK.
 
-## 🔎 Troubleshooting
+## 🩹 Troubleshooting
 
-| Symptom | Fix |
-| --- | --- |
-| `DeploymentNotFound` | Model name in the agent doesn't match your deployment. Set it to `gpt-4o-mini`. |
-| Agent uses long walls of text | The instructions block was truncated when pasted. Re-paste in full. |
-| Agent invents attendees | Reinforce the *"NEVER invent"* rule; add a system-nudge like *"If missing, ASK."* |
+| Symptom | Likely cause | Fix |
+| --- | --- | --- |
+| Agent invents a contract term for Prompt 3. | BEHAVIOR block was truncated. | Re-paste the full instruction block; re-save; refresh playground. |
+| Agent gives legal advice. | Model over-eager. | Add stricter "You are not a lawyer" phrasing at the top of BEHAVIOR. |
+| Playground errors on Save. | Model deployment missing. | In the Foundry project → **Deployments**, add a `gpt-4o` deployment first. |
+| "No agent found" via SDK. | Wrong project connection string. | Copy the connection string from the project's Overview page. |
 
-## ➡️ Next steps
+## 🌉 Next challenge
 
-The agent talks well — but it does **not** know your documents, emails, or meeting notes. **[Challenge 2 — Ground the Agent](challenge-2-grounding.md)** wires Foundry IQ (Azure AI Search + File Search) so answers become **cited** and enterprise-aware.
-
-## 💡 Key takeaway
-
-> The instruction set is the agent's *character*. Invest here — everything downstream (grounding, tools, evaluation) is cheaper if the character is right.
+Right now the agent is smart but blind — it has no contracts to work with. In **[Challenge 2 — Ground the Agent with Knowledge](challenge-2-grounding.md)** you'll connect it to the contract repository via Foundry IQ + Azure AI Search, so it can actually answer questions like *"What are the termination clauses in the Contoso MSA?"* with real citations.

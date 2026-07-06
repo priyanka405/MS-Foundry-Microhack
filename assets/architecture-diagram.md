@@ -1,148 +1,129 @@
-# Architecture Diagram
+# Architecture — Contract Lifecycle Management Agent
 
-The Executive Assistant Agent is a **single agent** running inside **one Microsoft Foundry project** — with grounding, tools, evaluation, and deployment all wired through the same control plane.
+This document describes the reference architecture for the **Contract Lifecycle Management (CLM) Agent** built on **Microsoft Foundry**. It shows how a contract question travels from a legal or procurement user to a grounded, tool-using, evaluated response.
 
-## High-level architecture
+## 🗺️ End-to-end architecture
 
 ```mermaid
-flowchart LR
-    User([👤 Executive / EA])
-    Entry[Microsoft Copilot<br/>or Web App]
-
-    subgraph Foundry[Microsoft Foundry Project]
-      Agent[🤖 Executive Assistant Agent<br/>Model + Instructions]
-      KG[(Knowledge Grounding)]
-      Tools[Tools & Actions]
-      Eval[Evaluation & Monitoring]
+flowchart TB
+    subgraph Users[👤 Users]
+        Legal[Legal reviewer]
+        Proc[Procurement lead]
+        Sales[Sales / AE]
     end
 
-    subgraph Sources[Enterprise sources]
-      Docs[(Documents<br/>SharePoint / OneDrive)]
-      Mails[(Emails / Meeting notes)]
-      Policies[(Policies / Briefs)]
+    Users --> Entry[💬 Copilot / Web App / Teams<br/>Entry points]
+    Entry --> Agent
+
+    subgraph Foundry[🧠 Microsoft Foundry Project]
+        Agent[🤖 CLM Agent<br/>Model · Instructions · Orchestration]
+        Agent --> KG[📚 Knowledge Grounding]
+        Agent --> Tools[🔌 Tools & Actions]
+        Agent --> Eval[📊 Evaluation & Monitoring]
     end
 
-    subgraph Actions[Business actions]
-      Logic[Logic Apps]
-      Power[Power Automate]
-      APIs[Custom APIs / Functions]
+    subgraph Sources[📂 Contract Sources]
+        Repo[(Contract Repository<br/>SharePoint · DMS · Blob)]
+        Templates[(Templates<br/>MSA · NDA · SOW)]
+        Policies[(Clause library<br/>+ policies)]
     end
+    KG --> AISearch[🔍 Azure AI Search<br/>idx-clm-contracts]
+    KG --> FileSearch[📄 File Search<br/>Session attachments]
+    AISearch --> Repo
+    AISearch --> Templates
+    AISearch --> Policies
 
-    subgraph Ops[Observability & Quality]
-      AppInsights[Application Insights]
-      Evaluators[Foundry Evaluators]
-      Safety[Content Safety<br/>+ Prompt Shields]
+    subgraph Actions[⚙️ Business Actions]
+        Approval[Logic App<br/>la-clm-approval]
+        DocGen[Power Automate<br/>generate_document]
+        Status[Azure Function<br/>contract_status]
+        Risk[Azure Function<br/>risk_score]
+        CRM[REST API<br/>CRM · Dataverse]
     end
+    Tools --> Approval
+    Tools --> DocGen
+    Tools --> Status
+    Tools --> Risk
+    Tools --> CRM
 
-    subgraph Deploy[Deployment / Sharing]
-      Web[Azure Web App]
-      Teams[Microsoft Teams]
-      Endpoint[API Endpoint]
+    subgraph Ops[🛡️ Governance & Ops]
+        Evaluators[Foundry Evaluators<br/>Groundedness · Relevance · Safety]
+        Safety[Content Safety<br/>Prompt Shields]
+        AppI[Application Insights<br/>OpenTelemetry]
     end
-
-    User --> Entry --> Agent
-    Agent --> KG
-    Agent --> Tools
-    Agent --> Eval
-
-    KG --> Docs
-    KG --> Mails
-    KG --> Policies
-
-    Tools --> Logic
-    Tools --> Power
-    Tools --> APIs
-
-    Eval --> AppInsights
     Eval --> Evaluators
     Eval --> Safety
+    Eval --> AppI
 
-    Agent --> Deploy
-    Deploy --> Web
-    Deploy --> Teams
-    Deploy --> Endpoint
-
-    style Agent fill:#0078d4,stroke:#005a9e,color:#fff
-    style Foundry fill:#eef6fc,stroke:#0078d4
-    style Sources fill:#faf3fa,stroke:#742774
-    style Actions fill:#f0fbf9,stroke:#008272
-    style Ops fill:#fff5ee,stroke:#ca5010
-    style Deploy fill:#f5f5f5,stroke:#605e5c
+    subgraph Deploy[🚀 Deploy / Share]
+        Web[Web App<br/>Easy Auth]
+        TeamsApp[Teams App<br/>Bot Service]
+        APIep[API Endpoint<br/>Managed Identity]
+    end
+    Agent --> Web
+    Agent --> TeamsApp
+    Agent --> APIep
 ```
 
-## Component notes
+## 🧩 Component notes
 
-### 🤖 Microsoft Foundry Agent (core)
-
-- Model + instructions + orchestration logic.
-- Same agent surfaces via all deployment channels (Web, Teams, API).
-- Uses **Managed Identity** to call every downstream Azure service — no keys in code.
-
-### 📚 Knowledge Grounding
-
-- **Foundry IQ** on top of **Azure AI Search** — indexes meeting notes, briefs, policies, prior email threads.
-- **File Search** — thread-scoped attachments (a PDF the executive drops in *right now*).
-- Chunking: 1024 tokens / 100 overlap works well for exec-style prose.
-- Every grounded answer must include a **citation** (enforced in instructions, measured by the Groundedness evaluator).
-
-### 🔌 Tools & Actions
-
-| Tool | Purpose | Backing service |
+| Component | Purpose | Notes |
 | --- | --- | --- |
-| `create_tasks` | Create Planner / To-Do tasks after approval | Power Automate |
-| `send_for_approval` | Email the executive a draft, get a decision back | Logic Apps |
-| `propose_meeting_slots` | Return 3 candidate slots | Logic App / Graph |
-| `score_urgency` | Compute urgency 0–100 | Azure Function (OpenAPI) |
-| MCP tool *(optional)* | Connect an external system (CRM, ticketing) | MCP server + approval flow |
+| **Foundry Agent** | Orchestrator: routes a user turn to grounding + tools + eval. | `Model + Instructions + Tools`. Instructions define the contract-expert persona. |
+| **Azure AI Search (`idx-clm-contracts`)** | Vector + hybrid retrieval over the contract repository. | `text-embedding-3-large`, chunk 1024 / overlap 100, `VECTOR_SEMANTIC_HYBRID`. |
+| **File Search** | Session-scoped retrieval on user-attached contracts. | Great for one-off "review this contract" flows. |
+| **Contract Repository** | SharePoint, DMS, Blob — the actual documents. | Indexed by the AI Search indexer; kept in sync. |
+| **Logic App `la-clm-approval`** | HTTP-triggered approval routing to Legal / Procurement. | Office 365 approval email → response → returns decision to the agent. |
+| **Power Automate `generate_document`** | Template-based document generation (NDA, SOW, amendment). | Fills templates using `{{party}}`, `{{effective_date}}`, `{{clauses}}`. |
+| **Azure Function `contract_status`** | Reads / updates contract lifecycle state. | States: `Draft → In Review → Approved → Signed → Active → Expired`. |
+| **Azure Function `risk_score`** | Deterministic 0–100 risk score based on missing / non-standard clauses. | Called by the agent when summarizing risks. |
+| **CRM / Dataverse REST API** | Metadata about the counterparty and account. | Optional bonus tool for enrichment. |
+| **Foundry Evaluators** | Groundedness, Relevance, Coherence, Task Adherence, Safety. | Gate: task adherence ≥ 4.25, groundedness ≥ 4.0, 0 injection defects. |
+| **Content Safety / Prompt Shields** | Defense against jailbreaks and prompt injection in contract text. | Enabled globally at the project level. |
+| **Application Insights** | Traces + evals via OpenTelemetry. | Dashboards for cost, latency, tool-call success, hallucination rate. |
 
-Rule of thumb: **prose belongs to the grounded model; verbs belong to tools**.
-
-### 📊 Evaluation & Monitoring
-
-- **Foundry Evaluators** — Task Adherence (≥ 4.25 = ~85% gate), Groundedness, Relevance, Coherence, plus the safety suite.
-- **Content Safety + Prompt Shields** — categorical filters + jailbreak + indirect-prompt-injection detection.
-- **Application Insights** — every agent run emits OpenTelemetry spans; the whole trace tree is visible in App Insights.
-
-### 🚀 Deployment / Sharing
-
-- **Web App** — Easy Auth (Entra ID) protects a demo URL.
-- **Microsoft Teams** — Bot Service + a Teams manifest surfaces the agent in the app people already have open.
-- **API endpoint** — for integration into Copilot Studio, custom UIs, or backend workflows.
-
-## Design principles
-
-1. **One Foundry project = one control plane.** Grounding, tools, guardrails, telemetry, RBAC all live there.
-2. **The executive is always in the loop.** The agent drafts, scores, and prepares — the human sends and approves.
-3. **Managed identity everywhere.** No keys, no service accounts, no drift.
-4. **Measured before deployed.** Task adherence must ≥ 85%; safety defect rate must = 0 before shipping.
-5. **Same agent, many surfaces.** The Web App, Teams App, and API endpoint all wrap the same underlying agent.
-
-## Data flow (single request)
+## 🔁 Single-request flow
 
 ```mermaid
 sequenceDiagram
-    actor U as 👤 Executive
-    participant W as Web / Teams / API
-    participant A as 🤖 Foundry Agent
-    participant S as Azure AI Search
-    participant L as Logic App / Function
-    participant M as Azure Monitor
+    autonumber
+    participant U as User (Legal)
+    participant W as Web App
+    participant A as Foundry Agent
+    participant S as AI Search
+    participant L as Logic App
+    participant M as App Insights
 
-    U ->> W: "Prep me for Q3 review"
-    W ->> A: POST /runs
-    A ->> S: retrieve top-k chunks from ea-corpus
-    S -->> A: chunks + citations
-    A ->> A: draft brief (grounded)
-    A ->> L: score_urgency(...) & send_for_approval(draft)
-    L -->> A: {decision: Approved}
-    A -->> W: brief + email + action items + citations
-    A ->> M: OTel spans (trace, tokens, tool calls)
-    W -->> U: rendered response
+    U->>W: "What are the termination clauses in Vendor Contract A?"
+    W->>A: user_turn
+    A->>S: hybrid_search(query, filters={contract_id: "vendor-a"})
+    S-->>A: top-k chunks with citations
+    A->>A: synthesize answer + require citations
+    A-->>W: grounded response
+    W-->>U: renders answer + citations
+    U->>W: "Route this change for legal approval"
+    W->>A: user_turn
+    A->>L: POST /approval (subject, requester, doc_uri)
+    L-->>A: {status: pending, approval_id}
+    A-->>W: "Approval sent to Legal (id 42). I'll update you."
+    A->>M: emit trace + eval score
 ```
 
-## When to change this architecture
+## 🧱 Design principles
 
-- **You want more than one agent** → split into specialists and orchestrate with **Foundry Connected Agents** (e.g., Meeting-Notes agent → Email-Composer agent → Calendar agent). Same project, more agents.
-- **You need strict tenant isolation** → move Foundry, Search, and Storage behind **private endpoints**; disable public network access.
-- **You need custom evaluators** → author them alongside the built-ins in `evaluation/`.
-- **You need multi-region** → deploy the Foundry account in a second region and point the Web App / Teams bot at a Traffic Manager or Front Door in front.
+1. **Grounding first, generation second.** The agent must not answer contract questions without a citation from the repository.
+2. **Tools describe capability, not implementation.** Tool names + descriptions are the routing surface — write them for the model.
+3. **Human in the loop for irreversible actions.** Approvals, doc generation, and status changes are proposed by the agent and confirmed by a human.
+4. **Evaluated before shipped.** No promotion to Web / Teams / API without passing the evaluator gate.
+5. **Observable by default.** OpenTelemetry to App Insights on day one — you cannot fix what you cannot see.
+
+## 🔧 When to change this architecture
+
+- **Contract volume > 100k documents:** partition the AI Search index by counterparty or contract type; add a router step.
+- **Multi-language contracts:** add a translation step before indexing; keep original text in a separate field.
+- **Regulated deployments:** add Purview labels and Customer-Managed Keys on Blob + Search; use Private Endpoints.
+- **Multi-agent scenarios:** split into a **Retriever Agent** + **Drafting Agent** + **Approval Agent** with explicit handoff instructions.
+
+---
+
+Back to the [landing page](../landing-page.md) or jump straight to [Challenge 1 — Build the Agent](../docs/challenge-1-build-agent.md).

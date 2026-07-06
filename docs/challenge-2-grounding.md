@@ -1,169 +1,190 @@
 # Challenge 2 — Ground the Agent with Knowledge
 
-⏱ **~45 minutes**  ·  🧠 Key Foundry feature: **Foundry IQ · Azure AI Search · File Search**
+> **Goal:** Enable the CLM Agent to answer real questions about your **contract repository** by grounding it with **Foundry IQ + Azure AI Search + File Search**.
+
+**Foundry feature:** Foundry IQ, Azure AI Search (`AzureAISearchTool`), File Search
+**Estimated time:** 45–55 min
+**Prerequisite:** Challenge 1 complete.
+
+---
 
 ## 🎯 Objective
 
-Turn your Executive Assistant from *"a smart writer"* into *"a smart writer that answers with **citations** from **your** documents"*.
+Give the agent access to your enterprise contract repository so it can:
 
-You will:
+- Search across all contracts on file (hybrid vector + keyword).
+- Retrieve exact clause text with citations.
+- Answer *"What are the termination clauses in Vendor Contract A?"* and *"Which contracts mention GDPR?"*
+- Refuse when a contract isn't in the repository, instead of guessing.
 
-- Upload a small corpus (sample docs, meeting notes, briefs, policies).
-- Index it into **Azure AI Search** and attach it to the agent as a **knowledge source** (Foundry IQ).
-- Enable **File Search** so users can also attach ad-hoc files at run time.
-- Force the agent to **cite** every factual claim.
-- Verify a cited answer on a realistic executive question.
+## 📋 Tasks
 
-## 🧭 Context
+1. Prepare **sample contracts** (a few MSAs, NDAs, SOWs — real or synthetic).
+2. Provision the **`srch-clm`** Azure AI Search service.
+3. Create the **`idx-clm-contracts`** vector + hybrid index.
+4. Configure the **AzureAISearchTool** on the agent.
+5. Enable **File Search** for session-scoped attachments.
+6. Append the **KNOWLEDGE** block to the agent instructions.
+7. Run three grounded prompts (including an out-of-corpus refusal).
 
-Foundry's **enterprise knowledge grounding** — branded **Foundry IQ** — is built on **Azure AI Search**. The Agent Service knows how to call the index, thread top-k chunks into the model's context, and return citations back to the calling app.
+## 🛠️ Step-by-step
 
-Why grounding is not "just RAG":
+### 1. Sample contracts
 
-- **Freshness** — reindexing is a first-class Foundry concern.
-- **ACL trimming** — search results can respect user identity.
-- **Citations** — the agent returns file names + snippets you can render in the UI.
-- **Evaluability** — grounding lets you measure **groundedness** in Challenge 4.
+Put 8–12 sample contracts into a folder. Any mix of `.pdf`, `.docx`, `.txt` works. If you don't have real ones, synthesize small samples — the important thing is that each document *looks like* a real contract with clauses.
 
-## ✅ Prerequisites
+Suggested distribution:
+- 2× MSA (one with a standard liability cap, one with a non-standard 12-month cap).
+- 2× NDA (one mutual, one one-way).
+- 2× SOW (one referencing GDPR, one not).
+- 2× Vendor agreements (one with a `termination for convenience` clause, one without).
+- Optional: 2× policy documents (a *"Standard Clause Library"* and an *"Approval Policy"*).
 
-- [Challenge 1](challenge-1-build-agent.md) complete — `executive-assistant` agent exists.
-- 5–20 sample documents you're willing to upload. Anything works: prior meeting notes (markdown or PDF), a couple of company policies, a strategy brief, a product one-pager. If you have nothing on hand, use fictional content.
+### 2. Provision Azure AI Search
 
-## 🏗️ Steps
+If your Foundry project auto-connected an AI Search resource, use it. Otherwise:
 
-### 1. Prepare a small corpus
+```bash
+# Optional — quick provision via az CLI
+az search service create \
+  --name srch-clm \
+  --resource-group rg-clm-hackathon \
+  --sku standard \
+  --location eastus2
+```
 
-Create a folder `sample-corpus/` on your machine with:
+### 3. Create the vector + hybrid index
 
-- `meeting-notes-q3-review.md`
-- `product-strategy-brief.md`
-- `travel-and-expenses-policy.md`
-- `board-update-summary.md`
-- `email-thread-project-atlas.md`
+In the Foundry portal:
 
-Any 5–10 docs will do — the point is to make the citations visible.
+1. **Agents → your agent → Knowledge → + Add source → Azure AI Search**.
+2. Pick your AI Search resource.
+3. Point it at the folder / Blob container where your contracts live.
+4. Configure the index as follows:
 
-### 2. Add an Azure AI Search connection to the project
+| Setting | Value |
+| --- | --- |
+| Index name | `idx-clm-contracts` |
+| Embedding model | `text-embedding-3-large` |
+| Chunk size | `1024` tokens |
+| Chunk overlap | `100` tokens |
+| Retrieval strategy | `VECTOR_SEMANTIC_HYBRID` |
+| Semantic ranker | `enabled` |
 
-1. In the project → **Management center → Connected resources → + New connection → Azure AI Search**.
-2. Choose **Create new** → name `srch-execassistant` → **Basic** tier → **Create**.
-3. When it appears, click **Add connection**.
-4. In the same **Management center** view, deploy a **text-embedding-3-large** model (30k TPM, Standard). Grounding needs an embedding model.
+5. Kick off the indexer. Wait for indexing to complete (Overview → Indexers → status = *Success*).
 
-### 3. Upload the corpus as a dataset
+### 4. Attach the AzureAISearchTool
 
-1. Left nav → **Data + indexes → + New data → Upload files or folders**.
-2. Upload the contents of `sample-corpus/` as a dataset named **`ea-corpus`**.
+In the agent's **Knowledge / Tools** tab:
 
-### 4. Create the search index
+1. Add the **AzureAISearchTool**.
+2. Point it at `idx-clm-contracts`.
+3. Choose top-k = `5`.
+4. **Require citations** = on. (This forces the agent to include the source anchor.)
 
-1. Left nav → **Data + indexes → + Create index → Vector index**.
-2. Configure:
-   - **Index name:** `idx-ea-corpus`
-   - **Data source:** the `ea-corpus` dataset
-   - **Search resource:** `srch-execassistant`
-   - **Embedding model:** `text-embedding-3-large`
-   - **Chunk size:** `1024` / **overlap:** `100`
-3. Click **Create** — wait until status is **Succeeded** (2–5 min).
+### 5. Enable File Search
 
-### 5. Attach the index to the agent
+1. In the same tab, enable **File Search**.
+2. This lets users drop a contract PDF into the chat and ask questions about *just that document* — perfect for one-off reviews.
 
-1. **Build → Agents → executive-assistant → + Add knowledge → Azure AI Search**.
-2. Pick `idx-ea-corpus`.
-3. Toggle **Return citations** ON.
-4. Append the following block to the agent's **Instructions** (do not overwrite the earlier block):
+### 6. Append this block to the agent instructions
 
-   ```text
-   KNOWLEDGE (grounding)
-   - You now have grounded search over: internal meeting notes, briefs,
-     policies, and email threads.
-   - ALWAYS cite the source file for every factual claim, in the form
-     [filename § short section].
-   - If the corpus does not contain an answer, say so. Do NOT guess.
-   - Prefer grounded facts over parametric memory when they conflict.
-   ```
+Paste this **KNOWLEDGE** block at the end of your Challenge 1 instructions.
 
-### 6. Enable File Search (for run-time attachments)
+```text
+# KNOWLEDGE
+You have two sources of contract knowledge:
+1. `AzureAISearchTool` connected to index `idx-clm-contracts` — the enterprise
+   contract repository.
+2. `FileSearch` — for contracts the user attaches to the current session.
 
-1. Same agent → **Tools → + Add tool → File Search** → enable.
-2. This lets the executive attach a fresh PDF/Word doc to a message (e.g. a third-party deck) and the agent can search it just for that conversation.
+# RETRIEVAL RULES
+- Always ground factual claims about a specific contract in a retrieved passage.
+- Every clause quote MUST include a citation of the form
+  [source: <file>#<page_or_anchor>].
+- If the top-k results do not contain the answer, say so plainly:
+  "I don't have that contract on file. Try uploading it or refining your search."
+- Do NOT combine facts from different contracts unless the user asked for a
+  comparison. Contracts are legal documents — do not mix them up.
+- When the user attaches a file, prefer FileSearch results over the repository
+  for that specific document.
+
+# WHEN TO SEARCH
+- Any question that references a specific counterparty, contract, or clause.
+- Any question about dates, amounts, obligations, or terms.
+- Any comparison or risk-summary request.
+Do NOT search for generic legal-concept questions ("What is force majeure?");
+answer those from your own general knowledge, no citation required.
+```
 
 ### 7. Test in the Playground
 
-Try the following prompts:
+**Prompt A — clause retrieval:**
 
-**Prompt 1 — grounded prep**
-```text
-Prep me for my next meeting on Project Atlas. Use our internal notes
-and past emails. Cite everything.
-```
+> What are the termination clauses in the Contoso MSA?
 
-Expected: the agent answers using content from your uploaded docs (e.g. `email-thread-project-atlas.md`, `product-strategy-brief.md`) with citations in the form `[email-thread-project-atlas.md § …]`.
+**Expected:** The agent calls `AzureAISearchTool`, retrieves passages from `msa-contoso-*.pdf`, quotes the clause verbatim between quotes, and includes an inline citation. Follows with a plain-English summary.
 
-**Prompt 2 — out-of-corpus refusal**
-```text
-What's our approved policy for reimbursing crypto-currency travel expenses?
-```
+**Prompt B — cross-corpus search:**
 
-Expected: the agent says the corpus does not cover crypto — it does **not** invent a policy.
+> Which contracts mention GDPR?
 
-**Prompt 3 — File Search on an attachment**
+**Expected:** The agent searches the index for `"GDPR"`, returns a bulleted list of matching contracts (each with a citation), and briefly summarizes what each says.
 
-Attach any PDF to the thread and ask:
-```text
-Summarize this deck and pull out the top 3 risks. Reference the slides.
-```
+**Prompt C — out-of-corpus refusal:**
 
-Expected: the agent uses File Search to open the attached file and cites slide numbers or page numbers.
+> What are the payment terms in the Northwind Traders MSA?
 
-### 8. (Optional) Pro-code — attach the index via SDK
+**Expected:** If Northwind Traders isn't in your sample corpus, the agent replies: *"I don't have a Northwind Traders MSA on file. Try uploading it or double-check the counterparty name."* It should **not** invent a contract.
+
+**Prompt D — File Search bonus:**
+
+Attach a fresh contract PDF (not in the index) and ask:
+
+> Summarize this attachment and flag anything unusual.
+
+**Expected:** The agent calls FileSearch, produces a structured contract brief, and cites sections of the attachment.
+
+## 🧪 Optional — SDK version
 
 ```python
-# scripts/ground_agent.py
-import os
-from azure.ai.projects import AIProjectClient
-from azure.identity import DefaultAzureCredential
-from azure.ai.agents.models import (
-    AzureAISearchTool, AzureAISearchQueryType, FileSearchTool
-)
+from azure.ai.projects.models import AzureAISearchTool, FileSearchTool
 
-client = AIProjectClient(endpoint=os.environ["PROJECT_ENDPOINT"],
-                        credential=DefaultAzureCredential())
-conn = next(c for c in client.connections.list() if c.type == "CognitiveSearch")
-
-tools = []
-tools += AzureAISearchTool(
-    index_connection_id=conn.id,
-    index_name="idx-ea-corpus",
-    query_type=AzureAISearchQueryType.VECTOR_SEMANTIC_HYBRID,
+search_tool = AzureAISearchTool(
+    index_connection_id="<connection-id>",
+    index_name="idx-clm-contracts",
     top_k=5,
-).definitions
-tools += FileSearchTool().definitions
+)
+file_tool = FileSearchTool()
 
-client.agents.update_agent(agent_id=os.environ["AGENT_ID"], tools=tools)
+agent = client.agents.update_agent(
+    agent_id=agent.id,
+    tools=[search_tool.definitions[0], file_tool.definitions[0]],
+    tool_resources={**search_tool.resources, **file_tool.resources},
+)
 ```
 
-## 🧪 Success criteria
+## ✅ Success criteria
 
-- [ ] Index `idx-ea-corpus` exists in `srch-execassistant` with status **Succeeded**.
-- [ ] Agent shows the index under its **Knowledge** section.
-- [ ] Grounded prompt returns an answer with **at least one citation**.
-- [ ] Out-of-corpus prompt returns an *"I don't know"*-style response instead of a hallucination.
-- [ ] File Search works when a fresh document is attached to a thread.
+- [ ] `idx-clm-contracts` exists and is *Successful* in the indexer view.
+- [ ] The AzureAISearchTool is attached to the agent.
+- [ ] File Search is enabled.
+- [ ] The **KNOWLEDGE** block is in the agent instructions.
+- [ ] Prompt A retrieves the termination clause with a real citation.
+- [ ] Prompt B lists contracts mentioning GDPR with citations.
+- [ ] Prompt C **refuses** to fabricate a contract that isn't in the corpus.
+- [ ] Prompt D produces a grounded brief from an attached file.
 
-## 🔎 Troubleshooting
+## 🩹 Troubleshooting
 
-| Symptom | Fix |
-| --- | --- |
-| Agent answers without citations | The KNOWLEDGE block wasn't appended to Instructions. Re-paste it. |
-| Index creation fails: *"no default embedding"* | Deploy `text-embedding-3-large` first. |
-| Search returns nothing | Wait for indexing to finish; check the dataset actually points at your files. |
+| Symptom | Likely cause | Fix |
+| --- | --- | --- |
+| No citations in the response. | "Require citations" not enabled, or KNOWLEDGE block missing. | Re-enable in the tool config; re-paste the block. |
+| Empty search results for known contracts. | Indexer hasn't finished / wrong index name. | Check indexer status; verify `idx-clm-contracts` is bound in the tool config. |
+| Agent hallucinates a contract in Prompt C. | RETRIEVAL RULES block was skipped. | Add stricter phrasing: *"If the top-k results are empty or off-topic, refuse."* |
+| Bad relevance for cross-corpus queries. | Chunk size / overlap too small. | Re-index with 1024/100; ensure `VECTOR_SEMANTIC_HYBRID` is on. |
+| File Search returns nothing for attachment. | File wasn't uploaded to the thread. | Attach via the paperclip icon *inside the same thread* before asking. |
 
-## ➡️ Next steps
+## 🌉 Next challenge
 
-The agent can now **read**. In **[Challenge 3 — Add Tools and Actions](challenge-3-tools-actions.md)** you'll let it **act** — call APIs, kick off Logic Apps and Power Automate flows, and generate real artifacts. That's the leap from *chatbot* to *agent*.
-
-## 💡 Key takeaway
-
-> A grounded, cited answer is auditable. A parametric answer is a rumor.
+The agent can now *read* contracts. In **[Challenge 3 — Tools and Actions](challenge-3-tools-actions.md)** you'll teach it to *act* on them — route approvals, generate documents, and update contract status.
