@@ -1,159 +1,129 @@
-# MS-Foundry-Microhack
+# Executive Assistant Agent MicroHack
 
-> **Microsoft Foundry: Contract Lifecycle Management (CLM) Agent — From Prototype to Production**
+> **Build, ground, evaluate, and deploy an AI Executive Assistant using Microsoft Foundry.**
 
-Build a multi-agent **Contract Lifecycle Management** system end-to-end inside **one Microsoft Foundry project**. Every challenge ships with a **🟢 Low-Code** (Foundry portal) and **🔵 Pro-Code** (VS Code + Azure AI Projects SDK) track — pick your lane per challenge.
+Welcome to the **Executive Assistant Agent MicroHack** — a hands-on, challenge-based journey that shows you how to build a production-ready AI agent on **Microsoft Foundry**. In ~4 hours you will build an assistant that summarizes meetings, drafts follow-up emails, searches enterprise knowledge, and triggers business workflows.
 
-📖 **Landing page (GitHub Pages ready):** [docs/index.md](docs/index.md)
-
----
-
-## Why this MicroHack
-
-Contract Lifecycle Management is the perfect Foundry use case: it is document-heavy, workflow-heavy, risk-heavy, and every enterprise has one. In ~5 hours you will move from *"prompt in a Playground"* to a **governed, observable, evaluated, and deployed** agent.
-
-**Expected business impact**
-
-- ~**30–50%** faster contract cycle time
-- **15–30%** less outside-counsel rework
-- **2–5%** reduction in revenue leakage
-- Full auditability of clause deviations
+🌐 **Visual landing page:** open [`index.html`](./index.html) in a browser (or via GitHub Pages).
+📘 **Docs landing page:** [`landing-page.md`](./landing-page.md).
 
 ---
+
+## What you will build
+
+An **Executive Assistant Agent** that can:
+
+- 📝 Summarize meetings and generate action items.
+- ✉️ Draft follow-up emails.
+- 🔎 Search enterprise knowledge (docs, emails, notes).
+- ⚙️ Trigger business workflows (create tasks, book time, send updates).
+- 🧑‍💼 Support executive assistant productivity scenarios end-to-end.
+
+## Challenges
+
+| # | Challenge | Foundry feature | Link |
+| --- | --- | --- | --- |
+| 1 | Build the Agent | Foundry Agent Service (Model + Instructions) | [docs/challenge-1-build-agent.md](docs/challenge-1-build-agent.md) |
+| 2 | Ground the Agent with Knowledge | Foundry IQ + Azure AI Search + File Search | [docs/challenge-2-grounding.md](docs/challenge-2-grounding.md) |
+| 3 | Add Tools and Actions | Tools catalog + Logic Apps + Functions | [docs/challenge-3-tools-actions.md](docs/challenge-3-tools-actions.md) |
+| 4 | Evaluate and Improve the Agent | Foundry Evaluators + Content Safety | [docs/challenge-4-evaluation.md](docs/challenge-4-evaluation.md) |
+| 5 | Deploy and Share the Agent | Web App / Teams / API endpoint | [docs/challenge-5-deploy-share.md](docs/challenge-5-deploy-share.md) |
+
+## User journey
+
+The agent supports a six-step executive workflow:
+
+```mermaid
+journey
+    title Executive Assistant — from prep to approval
+    section Before the meeting
+      Ask the agent to prepare: 5: Executive
+      Search docs, emails, notes: 4: Agent
+      Summarize context and open tasks: 5: Agent
+    section After the meeting
+      Ask for follow-up actions: 5: Executive
+      Draft email + create tasks: 4: Agent
+      Review and approve: 5: Executive
+```
+
+See [assets/user-journey.md](assets/user-journey.md) for the full narrative.
 
 ## Architecture
 
 ```mermaid
 flowchart LR
-    User([👤 Legal / Procurement / Sales]) -->|Request| UI[Web / Teams / API]
-    UI --> Agent[🤖 CLM Agent<br/>Foundry Agent Service]
-
-    subgraph Foundry[Microsoft Foundry Project]
-        Agent --> Model[GPT-4o / GPT-4o-mini]
-        Agent --> IQ[(Foundry IQ<br/>Azure AI Search)]
-        Agent --> Tools[Tools Catalog]
-        Agent --> Guard[Content Safety<br/>+ Prompt Shields]
-        Agent --> Trace[OpenTelemetry Traces]
-    end
-
-    IQ --> Docs[(Templates<br/>Clauses<br/>Policies)]
-    Tools --> Repo[Contract Repo]
-    Tools --> Logic[Logic Apps]
-    Tools --> Fn[Azure Functions]
-    Tools --> CI[Code Interpreter]
-    Tools --> MCP[MCP Servers]
-
-    Trace --> Monitor[Azure Monitor<br/>+ App Insights]
-    Monitor --> Eval[Foundry Evaluators]
-    Eval --> Agent
+    U([👤 Executive]) --> Entry[Copilot / Web App]
+    Entry --> Agent[🤖 Foundry Agent]
+    Agent --> KG[(Knowledge Grounding<br/>Azure AI Search + File Search)]
+    Agent --> Tools[Tools & Actions<br/>Logic Apps · Power Automate · APIs]
+    Agent --> Eval[Evaluation & Monitoring<br/>Foundry Evaluators + App Insights]
+    Agent --> Deploy[Deployment / Sharing<br/>Web · Teams · API]
 ```
 
----
+See [assets/architecture-diagram.md](assets/architecture-diagram.md) for the annotated version.
 
-## Quick start
+## Prerequisites
 
-```bash
-# 1. Clone
-git clone https://github.com/<your-org>/MS-Foundry-Microhack.git
-cd MS-Foundry-Microhack
+- Microsoft Foundry access (project in [ai.azure.com](https://ai.azure.com)).
+- An Azure subscription or a Foundry sandbox.
+- Basic understanding of agents (model + instructions + tools).
+- A few sample documents for grounding (meeting notes, briefs, policies — anything you'd want the assistant to know).
+- **Optional:** VS Code + GitHub Copilot.
 
-# 2. Log in and pick a subscription
-az login
-az account set --subscription "<your-sub-id>"
+## Learning objectives
 
-# 3. Deploy the base infrastructure (Foundry project, model, Search, App Insights)
-az group create -n rg-clm-microhack -l swedencentral
-az deployment group create \
-  -g rg-clm-microhack \
-  -f infra/main.bicep \
-  -p infra/main.parameters.json
+You will learn how to:
 
-# 4. Open Challenge 0 and go
-code challenges/challenge0-setup/README.md
-```
-
-Prefer the **portal**? Skip step 3 — Challenge 0 walks the low-code provisioning path.
-
----
+- 🏗️ **Build** an agent in Microsoft Foundry.
+- 📚 **Ground** the agent with enterprise knowledge.
+- 🔌 **Connect** tools and actions.
+- 📊 **Evaluate** agent quality and safety.
+- 🚀 **Deploy and share** the finished solution.
 
 ## Repository structure
 
 ```
-MS-Foundry-Microhack/
-├── README.md                       ← you are here
+├── README.md                     ← you are here
+├── landing-page.md               ← Markdown landing page (GitHub-friendly)
+├── index.html                    ← Polished HTML landing page (GitHub Pages ready)
 ├── docs/
-│   └── index.md                    ← GitHub Pages landing page
-├── infra/                          ← Bicep IaC (Foundry, model, Search, Storage, App Insights)
-│   ├── main.bicep
-│   ├── main.parameters.json
-│   └── modules/
-│       ├── foundry.bicep
-│       ├── search.bicep
-│       ├── storage.bicep
-│       └── monitoring.bicep
-├── assets/
-│   ├── TOOLS.md                    ← catalog of tools used in Challenge 3
-│   ├── contract-register.md        ← Excel schema for the CLM register
-│   ├── templates/                  ← NDA, MSA, SOW (markdown)
-│   ├── clause-library/             ← approved clauses (liability, indemnity, termination, payment)
-│   └── policies/                   ← legal, procurement, compliance policy docs
-├── challenges/
-│   ├── challenge0-setup/           ← Provision Foundry + model + Search + monitoring
-│   ├── challenge1-build-agent/     ← Contract Intake & Drafting Agent
-│   ├── challenge2-grounding/       ← Foundry IQ / Azure AI Search grounding
-│   ├── challenge3-tools-actions/   ← Search, Logic Apps, Functions, Code Interpreter, MCP
-│   ├── challenge4-guardrails/      ← PII, prompt-injection, task adherence
-│   ├── challenge5-observability/   ← OTel + App Insights + Foundry traces
-│   ├── challenge6-evaluation/      ← Built-in evaluators, 85% task-adherence gate
-│   ├── challenge7-optimization/    ← Model + prompt + retrieval + cost
-│   └── challenge8-publish/         ← Web App / Teams / API endpoint
-├── coach-guide/README.md           ← facilitator notes, timings, common pitfalls
-├── student-guide/README.md         ← participant survival guide
-└── solution-guide/README.md        ← reference answers + multi-agent stretch goal
+│   ├── challenge-1-build-agent.md
+│   ├── challenge-2-grounding.md
+│   ├── challenge-3-tools-actions.md
+│   ├── challenge-4-evaluation.md
+│   └── challenge-5-deploy-share.md
+└── assets/
+    ├── architecture-diagram.md   ← annotated architecture
+    └── user-journey.md           ← full user story
 ```
 
----
+## How to use this repo
 
-## Challenge index
+1. **Start with this README** to understand the theme.
+2. Open [`landing-page.md`](./landing-page.md) for the documentation-based landing page.
+3. Open [`index.html`](./index.html) in a browser (or publish to GitHub Pages) for the visual landing page.
+4. Work through the challenges in order:
+   1. [Build the Agent](docs/challenge-1-build-agent.md)
+   2. [Ground the Agent](docs/challenge-2-grounding.md)
+   3. [Add Tools and Actions](docs/challenge-3-tools-actions.md)
+   4. [Evaluate and Improve](docs/challenge-4-evaluation.md)
+   5. [Deploy and Share](docs/challenge-5-deploy-share.md)
 
-| # | Title | Duration | Link |
-| --- | --- | --- | --- |
-| 0 | Setup | 30 min | [challenges/challenge0-setup](challenges/challenge0-setup/README.md) |
-| 1 | Build Agent | 40 min | [challenges/challenge1-build-agent](challenges/challenge1-build-agent/README.md) |
-| 2 | Knowledge Grounding | 45 min | [challenges/challenge2-grounding](challenges/challenge2-grounding/README.md) |
-| 3 | Tools & Actions | 50 min | [challenges/challenge3-tools-actions](challenges/challenge3-tools-actions/README.md) |
-| 4 | Guardrails | 30 min | [challenges/challenge4-guardrails](challenges/challenge4-guardrails/README.md) |
-| 5 | Observability | 30 min | [challenges/challenge5-observability](challenges/challenge5-observability/README.md) |
-| 6 | Evaluation | 40 min | [challenges/challenge6-evaluation](challenges/challenge6-evaluation/README.md) |
-| 7 | Optimization | 30 min | [challenges/challenge7-optimization](challenges/challenge7-optimization/README.md) |
-| 8 | Publish | 30 min | [challenges/challenge8-publish](challenges/challenge8-publish/README.md) |
+## Getting started
 
----
+```bash
+# Clone
+git clone https://github.com/<your-org>/MS-Foundry-Microhack.git
+cd MS-Foundry-Microhack
 
-## Guides
+# View the visual landing page locally
+start index.html   # Windows
+# open index.html  # macOS
 
-- 🎓 [Student guide](student-guide/README.md) — how to survive the day, common errors, cheat sheet.
-- 🧑‍🏫 [Coach guide](coach-guide/README.md) — timings, checkpoint questions, tips for mixed audiences.
-- ✅ [Solution guide](solution-guide/README.md) — reference implementations + **multi-agent stretch goal** (5 connected specialist agents).
-
----
-
-## Prerequisites
-
-- Azure subscription with Contributor + User Access Administrator on the target resource group.
-- GPT-4o / GPT-4o-mini quota in `eastus2`, `swedencentral`, or `westus3`.
-- VS Code + **Azure AI Foundry** extension (Foundry Toolkit).
-- Python 3.10+ and/or .NET 8 SDK.
-- Azure CLI 2.60+ with Bicep.
-
----
+# Or preview the markdown landing page in VS Code
+code landing-page.md
+```
 
 ## License
 
-MIT. See individual asset files for content-specific attribution.
-
----
-
-## Contributing
-
-Issues and PRs welcome — especially additional evaluators, MCP tool examples, and localized clause libraries.
+MIT.
