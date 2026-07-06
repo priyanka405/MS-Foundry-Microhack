@@ -96,6 +96,39 @@
     sections.forEach(s => obs.observe(s));
   }
 
+  // ----- QR code renderer ---------------------------------------------------
+  // Any element with [data-qr="<url>"] gets a QR canvas drawn into it.
+  // Optional: data-qr-size="200" (default 180).
+  function drawQrCodes() {
+    const mounts = document.querySelectorAll("[data-qr]");
+    if (!mounts.length) return true;
+    if (typeof window.QRCode === "undefined") return false;
+    mounts.forEach((mount) => {
+      if (mount.dataset.qrRendered === "1") return;
+      const url = mount.getAttribute("data-qr");
+      const size = parseInt(mount.getAttribute("data-qr-size") || "180", 10);
+      mount.innerHTML = "";
+      const canvas = document.createElement("canvas");
+      mount.appendChild(canvas);
+      window.QRCode.toCanvas(canvas, url, {
+        width: size,
+        margin: 1,
+        color: { dark: "#201F1E", light: "#FFFFFF" },
+        errorCorrectionLevel: "M",
+      }, (err) => {
+        if (err) mount.textContent = "QR unavailable";
+        else mount.dataset.qrRendered = "1";
+      });
+    });
+    return true;
+  }
+  if (!drawQrCodes()) {
+    // qrcode.min.js loads from CDN; retry after it lands.
+    setTimeout(drawQrCodes, 400);
+    setTimeout(drawQrCodes, 1500);
+    window.addEventListener("load", drawQrCodes);
+  }
+
   // ----- Copy-to-clipboard for <pre> ---------------------------------------
   document.querySelectorAll("pre").forEach((pre) => {
     if (pre.querySelector(".copy-btn")) return;

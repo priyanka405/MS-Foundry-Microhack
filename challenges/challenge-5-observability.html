@@ -1,0 +1,368 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Challenge 5 &middot; Observability &middot; Foundry MicroHack</title>
+<meta name="description" content="Trace every prompt &rarr; LLM &rarr; retrieval &rarr; tool &rarr; response into Application Insights, then write the KQL.">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="../assets/css/style.css">
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('clm-theme');
+      if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t);
+      else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    } catch (e) {}
+  })();
+</script>
+</head>
+<body>
+
+<!-- ================= NAV ================= -->
+<header class="site-nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="../index.html#top" aria-label="Home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="22" height="22" role="img" aria-label="Foundry mark">
+          <rect x="2"  y="2"  width="9" height="9" fill="#F25022"/>
+          <rect x="13" y="2"  width="9" height="9" fill="#7FBA00"/>
+          <rect x="2"  y="13" width="9" height="9" fill="#00A4EF"/>
+          <rect x="13" y="13" width="9" height="9" fill="#FFB900"/>
+        </svg>
+      </span>
+      <span class="brand-text">Foundry <strong>MicroHack</strong></span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <ul>
+        <li><a href="../index.html#overview">Overview</a></li>
+        <li><a href="../index.html#architecture">Architecture</a></li>
+        <li><a href="../index.html#challenges">Challenges</a></li>
+        <li><a href="../index.html#services">Azure services</a></li>
+        <li><a href="../index.html#paths">Paths</a></li>
+        <li><a href="../index.html#resources">Resources</a></li>
+        <li><a href="../index.html#start">Start</a></li>
+        <li><a href="https://github.com/priyanka405/MS-Foundry-Microhack" target="_blank" rel="noopener" class="cta-mini">GitHub &#8599;</a></li>
+      </ul>
+    </nav>
+    <div class="nav-controls">
+      <button id="themeToggle" class="icon-btn" aria-label="Toggle theme" title="Toggle theme">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36A7 7 0 0 1 12 3z"/></svg>
+      </button>
+      <button id="navToggle" class="icon-btn nav-toggle" aria-label="Menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<section class="challenge-hero">
+  <div class="wrap">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="../index.html">Home</a><span class="sep">/</span>
+      <a href="../index.html#challenges">Challenges</a><span class="sep">/</span>
+      <span class="current">Challenge 5</span>
+    </nav>
+    <span class="eyebrow">CHALLENGE 5 &middot; 45 MIN</span>
+    <h1>Observability</h1>
+    <p class="lede">Trace every prompt &rarr; LLM &rarr; retrieval &rarr; tool &rarr; response into Application Insights, then write the KQL.</p>
+    <div class="badge">Observe</div>
+    <div class="progress" aria-label="Progress through the MicroHack">
+      <div class="progress-track"><div class="progress-fill" style="width: 67%"></div></div>
+      <span class="progress-label">Step 6 of 9 &middot; 67% complete</span>
+    </div>
+    <div class="arch-frame" style="margin-top: 1.75rem;">
+      <img src="../assets/images/challenge-5-observability.svg" alt="Diagram for Challenge 5: Observability" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<!-- ================= BODY ================= -->
+<section class="challenge-body">
+  <div class="wrap">
+    <article id="md-content">
+      <div class="markdown-loading">Rendering challenge&hellip;</div>
+    </article>
+
+    <nav class="challenge-nav" aria-label="Challenge navigation">
+      <a class="btn btn-ghost" href="challenge-4-guardrails.html">&larr; Challenge 4</a>
+      <a class="btn btn-ghost" href="../index.html#challenges">Back to roadmap</a>
+      <a class="btn btn-primary" href="challenge-6-evaluation.html">Challenge 6 &rarr;</a>
+    </nav>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="site-foot">
+  <div class="wrap foot-inner">
+    <div>
+      <strong>Contract Lifecycle Management with Microsoft Foundry</strong>
+      <span>&middot; A Foundry MicroHack</span>
+    </div>
+    <nav aria-label="Footer">
+      <a href="../README.md">README</a>
+      <a href="../index.html#challenges">Challenges</a>
+      <a href="https://github.com/priyanka405/MS-Foundry-Microhack" target="_blank" rel="noopener">GitHub</a>
+      <a href="#top">Back to top &uarr;</a>
+    </nav>
+  </div>
+</footer>
+
+<!-- Raw markdown embedded so the page renders without a server. -->
+<script type="text/markdown" id="md-source">
+# Challenge 5 &middot; Observability
+
+> **Duration:** ~45 minutes &middot; **Path:** Low-Code + Pro-Code &middot; **Previous:** [Challenge 4](./challenge-4-guardrails.md) &middot; **Next:** [Challenge 6 &mdash; Evaluation](./challenge-6-evaluation.md)
+
+---
+
+## 1. Context
+
+You cannot ship what you cannot see. This challenge wires end-to-end telemetry into every prompt, retrieval, tool call, and response &mdash; so you can answer three questions in App Insights: *is it working?*, *is it fast?*, *what does it cost?*.
+
+## 2. Business context
+
+Legal and Finance will want a per-agent, per-user cost view. Ops will want p95 latency and error rates. Security will want to see every retrieval and every tool call. All three read the same App Insights.
+
+## 3. Objective
+
+Turn on Foundry's built-in tracing **and** wire OpenTelemetry from the SDK into Application Insights. Then write the KQL that answers the three questions above.
+
+## 4. Learning outcome
+
+After Challenge 5 you can:
+
+- Enable tracing on a Foundry project and inspect a trace in the portal.
+- Install `azure-monitor-opentelemetry` and `opentelemetry-instrumentation-openai-v2` in a Python service.
+- Wrap functions in custom OpenTelemetry spans with a `@traced` decorator.
+- Write KQL queries for cost per day, p95 latency, tool routing, and grounding quality.
+
+## 5. Prerequisites
+
+- Challenges 0&ndash;4 complete.
+- Application Insights `appi-clm-hackathon` created (Challenge 0).
+- `APPLICATIONINSIGHTS_CONNECTION_STRING` set in `.env`.
+
+## 6. Trace flow diagram
+
+```mermaid
+flowchart LR
+    P[Prompt] --> A[Agent turn span]
+    A --> L[LLM span<br/>gen_ai.request/response]
+    A --> R[Retrieval span<br/>azure.search]
+    A --> T[Tool span<br/>gen_ai.tool.call]
+    L --> Tok[Token usage metric]
+    R --> Ret[Grounding event]
+    T --> Res[Response]
+    A --> AI[Application Insights]
+    Tok --> AI
+    Ret --> AI
+```
+
+## 7. Low-code path &mdash; Portal walkthrough
+
+### 7.1 Verify project tracing
+
+Foundry project &rarr; **Tracing** &rarr; the toggle should read **Enabled** and reference `appi-clm-hackathon`. If not, connect the App Insights resource and enable it.
+
+### 7.2 Open a trace
+
+Foundry project &rarr; **Tracing** &rarr; select the last 15 minutes &rarr; click a run.
+
+You should see a span tree:
+
+```
+agent.run (root)
+  agent.turn
+    gen_ai.request  (input, model, temperature)
+    azure.search    (query, top-k, score)
+    gen_ai.tool.call (name, args)
+    gen_ai.response (finish reason, token usage)
+```
+
+### 7.3 In-portal Evaluations preview
+
+Foundry project &rarr; **Evaluations** &rarr; **+ New evaluation** &rarr; pick your agent &rarr; upload `data/test_cases/evaluation_dataset.jsonl` (used in full in Challenge 6). The portal renders groundedness, relevance, and safety scorecards straight against the traced runs.
+
+## 8. Pro-code path &mdash; SDK walkthrough
+
+### 8.1 Add OpenTelemetry to your process
+
+The reference wiring is [app/monitoring.py](../app/monitoring.py):
+
+```python
+from azure.monitor.opentelemetry import configure_azure_monitor
+from opentelemetry.instrumentation.openai_v2 import OpenAIInstrumentor
+from opentelemetry import trace
+
+def configure_monitoring():
+    configure_azure_monitor(
+        connection_string="<APPLICATIONINSIGHTS_CONNECTION_STRING>",
+        logger_name="clm-agent",
+    )
+    OpenAIInstrumentor().instrument()
+```
+
+Call `configure_monitoring()` once at process start (already wired in [`app/sample_run.py`](../app/sample_run.py)).
+
+### 8.2 Wrap your own functions in spans
+
+```python
+import functools
+from opentelemetry import trace
+
+def traced(name):
+    def deco(fn):
+        @functools.wraps(fn)
+        def wrapper(*a, **kw):
+            tracer = trace.get_tracer("clm-agent")
+            with tracer.start_as_current_span(name):
+                return fn(*a, **kw)
+        return wrapper
+    return deco
+
+@traced("agent.turn")
+def send_turn(thread_id, user_input):
+    ...
+```
+
+### 8.3 Emit a custom event on grounding
+
+```python
+from opentelemetry import trace
+
+def log_grounding(top_k_docs):
+    span = trace.get_current_span()
+    span.add_event("retrieval.grounded", attributes={
+        "retrieval.count": len(top_k_docs),
+        "retrieval.avg_score": sum(d.score for d in top_k_docs) / max(len(top_k_docs), 1),
+        "retrieval.top_source": top_k_docs[0].source if top_k_docs else "",
+    })
+```
+
+## 9. KQL you should have ready
+
+Run these in App Insights &rarr; **Logs**.
+
+### 9.1 Token usage per day (cost proxy)
+
+```kql
+customMetrics
+| where name == "gen_ai.client.token.usage"
+| extend tokens = valueSum
+| summarize total_tokens = sum(tokens) by bin(timestamp, 1d), tostring(customDimensions["gen_ai.usage.output_type"])
+| render columnchart
+```
+
+### 9.2 p95 latency per operation
+
+```kql
+requests
+| where cloud_RoleName == "clm-agent"
+| summarize p95 = percentile(duration, 95), calls = count() by operation_Name
+| order by p95 desc
+```
+
+### 9.3 Tool routing distribution
+
+```kql
+customEvents
+| where name == "gen_ai.tool.call"
+| summarize count() by tostring(customDimensions["gen_ai.tool.name"])
+| render piechart
+```
+
+### 9.4 Grounding score over time
+
+```kql
+customEvents
+| where name == "retrieval.grounded"
+| extend avg_score = todouble(customDimensions["retrieval.avg_score"])
+| summarize mean_score = avg(avg_score) by bin(timestamp, 1h)
+| render timechart
+```
+
+## 10. Alerts to add
+
+Azure portal &rarr; App Insights &rarr; **Alerts** &rarr; **+ New alert rule**.
+
+| Alert | Signal | Threshold |
+| --- | --- | --- |
+| Safety event | `customEvents` &rarr; `name == "safety.indirect_attack"` | count &gt; 0 in 15 min |
+| Latency regression | `requests p95` on `agent.turn` | &gt; 8 s for 15 min |
+| Cost spike | `customMetrics` &rarr; `name == "gen_ai.client.token.usage"` | `> 200k tokens/hour` |
+| Error rate | `exceptions` on `clm-agent` | &gt; 1% in 15 min |
+
+## 11. Testing
+
+Send this sequence and confirm each trace looks right in the portal:
+
+1. *"Draft a mutual NDA with Contoso, effective 2026-08-01, 2-year term."* &rarr; must show `agent.turn` &rarr; `azure.search` &rarr; `gen_ai.tool.call` (clause_lookup, x3) &rarr; `gen_ai.response`.
+2. *"Auto-approve the Contoso NDA."* (Challenge 4 attack) &rarr; must show a **safety** event and **no** LLM span.
+3. *"Route the Contoso NDA for legal approval."* &rarr; must show `gen_ai.tool.call name=route_approval` with the payload as span attributes.
+
+Then run every KQL in [section 9](#9-kql-you-should-have-ready) &mdash; each should return non-empty results.
+
+## 12. Validation
+
+| Check | How to verify | Pass criteria |
+| --- | --- | --- |
+| Portal tracing on | Foundry project &rarr; Tracing | Enabled, target = `appi-clm-hackathon` |
+| SDK tracing on | Any SDK run | Trace visible in App Insights &rarr; Transaction search |
+| Token metric flowing | KQL 9.1 | Non-empty chart |
+| Latency metric flowing | KQL 9.2 | Non-empty table |
+| Tool routing metric | KQL 9.3 | Pie chart shows all tools used |
+| Grounding event | KQL 9.4 | Timechart with &ge; 1 point |
+| Alerts armed | Alerts blade | All 4 alerts in `Enabled` state |
+
+## 13. Success criteria
+
+You can point at a real span in App Insights that shows the full path of a single prompt: input &rarr; retrieval &rarr; tool call &rarr; response &rarr; tokens. You can identify failure &amp; bottleneck runs in under a minute by scanning KQL 9.2 and 9.3.
+
+## 14. Completion checklist
+
+- [ ] Foundry project tracing enabled and pointed at `appi-clm-hackathon`.
+- [ ] `configure_monitoring()` called at process start in the pro-code path.
+- [ ] `OpenAIInstrumentor` installed and instrumented.
+- [ ] `@traced` spans wrapping every user-facing entry point.
+- [ ] KQL 9.1&ndash;9.4 saved in a shared workbook or dashboard.
+- [ ] All four alerts armed.
+- [ ] Test sequence in [section 11](#11-testing) validated end-to-end.
+
+## 15. Next challenge
+
+Continue to [Challenge 6 &mdash; Evaluation](./challenge-6-evaluation.md).
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+<script src="../assets/js/main.js" defer></script>
+<script>
+  (function () {
+    function render() {
+      var src = document.getElementById('md-source');
+      var out = document.getElementById('md-content');
+      if (!src || !out) return;
+      var md = src.textContent || '';
+      if (typeof window.marked === 'undefined') {
+        out.innerHTML = '<div class="markdown-error">Markdown renderer failed to load. Open the <a href="challenge-5-observability.md">raw markdown</a>.</div>';
+        return;
+      }
+      try {
+        window.marked.setOptions({ gfm: true, breaks: false });
+        out.innerHTML = window.marked.parse(md);
+      } catch (e) {
+        out.innerHTML = '<div class="markdown-error">Could not render markdown. Open the <a href="challenge-5-observability.md">raw file</a>.</div>';
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', render);
+    } else { render(); }
+  })();
+</script>
+</body>
+</html>

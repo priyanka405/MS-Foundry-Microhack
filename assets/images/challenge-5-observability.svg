@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" role="img" font-family="Segoe UI, Arial, sans-serif">
+  <title>Challenge 5 &middot; Observability</title>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#605E5C"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="520" fill="#F8FAFC"/>
+  <rect x="40" y="80" width="640" height="360" rx="16" fill="#FFF" stroke="#0078D4" stroke-width="2"/>
+  <text x="360" y="110" text-anchor="middle" font-size="14" font-weight="700" fill="#201F1E">One turn &middot; nested spans</text>
+
+  <rect x="70" y="140" width="580" height="42" rx="8" fill="#DEECF9" stroke="#0078D4"/>
+  <text x="90" y="167" font-size="12" font-weight="700" fill="#0078D4">span.turn</text>
+  <text x="640" y="167" text-anchor="end" font-size="10" fill="#605E5C">user.id, agent.id, cost, latency</text>
+
+  <rect x="100" y="195" width="520" height="38" rx="8" fill="#F3EAFF" stroke="#5C2D91"/>
+  <text x="120" y="220" font-size="11" font-weight="700" fill="#5C2D91">span.llm.chat</text>
+  <text x="610" y="220" text-anchor="end" font-size="10" fill="#605E5C">tokens.prompt/comp, model, temperature</text>
+
+  <rect x="130" y="245" width="490" height="38" rx="8" fill="#E6FBF6" stroke="#00B294"/>
+  <text x="150" y="270" font-size="11" font-weight="700" fill="#008A72">span.retrieval.search</text>
+  <text x="610" y="270" text-anchor="end" font-size="10" fill="#605E5C">index, top_k, hit ids, scores</text>
+
+  <rect x="130" y="295" width="240" height="38" rx="8" fill="#FFF7E6" stroke="#FFB900"/>
+  <text x="150" y="320" font-size="11" font-weight="700" fill="#8A6100">span.tool.logic_app</text>
+  <rect x="385" y="295" width="235" height="38" rx="8" fill="#FFF7E6" stroke="#FFB900"/>
+  <text x="405" y="320" font-size="11" font-weight="700" fill="#8A6100">span.tool.function</text>
+
+  <rect x="100" y="345" width="520" height="38" rx="8" fill="#FDECEC" stroke="#D13438"/>
+  <text x="120" y="370" font-size="11" font-weight="700" fill="#A4262C">span.safety</text>
+  <text x="610" y="370" text-anchor="end" font-size="10" fill="#605E5C">shield.jailbreak, content.hate, pii.count</text>
+
+  <rect x="100" y="395" width="520" height="38" rx="8" fill="#F3F5FB" stroke="#605E5C"/>
+  <text x="120" y="420" font-size="11" font-weight="700" fill="#605E5C">span.response</text>
+  <text x="610" y="420" text-anchor="end" font-size="10" fill="#605E5C">length, citations, refusal.flag</text>
+
+  <rect x="720" y="120" width="240" height="150" rx="14" fill="#FFF" stroke="#0078D4"/>
+  <text x="840" y="150" text-anchor="middle" font-size="14" font-weight="700" fill="#0078D4">App Insights</text>
+  <text x="840" y="180" text-anchor="middle" font-size="11" fill="#605E5C">traces / dependencies</text>
+  <text x="840" y="200" text-anchor="middle" font-size="11" fill="#605E5C">customEvents / metrics</text>
+  <text x="840" y="220" text-anchor="middle" font-size="11" fill="#605E5C">exceptions</text>
+  <text x="840" y="248" text-anchor="middle" font-size="10" fill="#605E5C">connection_string in env</text>
+
+  <rect x="720" y="290" width="240" height="150" rx="14" fill="#FFF" stroke="#D13438"/>
+  <text x="840" y="320" text-anchor="middle" font-size="14" font-weight="700" fill="#A4262C">KQL workbooks</text>
+  <text x="840" y="345" text-anchor="middle" font-size="11" fill="#605E5C">p95 latency by user</text>
+  <text x="840" y="362" text-anchor="middle" font-size="11" fill="#605E5C">tokens per day per user</text>
+  <text x="840" y="379" text-anchor="middle" font-size="11" fill="#605E5C">groundedness &lt; 3.0</text>
+  <text x="840" y="396" text-anchor="middle" font-size="11" fill="#605E5C">refusal.flag = true rate</text>
+  <text x="840" y="418" text-anchor="middle" font-size="10" fill="#605E5C">alerts: safety = 1, p95 &gt; 6s</text>
+
+  <g stroke="#605E5C" stroke-width="1.5" fill="none" marker-end="url(#a)">
+    <path d="M680 260 H 720"/>
+    <path d="M840 270 V 290"/>
+  </g>
+  <text x="500" y="480" text-anchor="middle" font-size="11" fill="#605E5C">OpenTelemetry &#8594; App Insights &#8594; KQL &#8594; alerts &#183; every turn, every service</text>
+</svg>

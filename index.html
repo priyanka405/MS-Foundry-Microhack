@@ -42,6 +42,7 @@
         <li><a href="#challenges">Challenges</a></li>
         <li><a href="#services">Services</a></li>
         <li><a href="#resources">Resources</a></li>
+        <li><a href="#start">Start</a></li>
         <li><a href="https://github.com/priyanka405/MS-Foundry-Microhack" target="_blank" rel="noopener" class="cta-mini">GitHub &#8599;</a></li>
       </ul>
     </nav>
@@ -60,7 +61,7 @@
 <!-- ================= HERO ================= -->
 <section id="top" class="hero">
   <div class="hero-bg" aria-hidden="true"></div>
-  <div class="wrap hero-inner">
+  <div class="wrap hero-inner with-qr">
     <div class="hero-copy">
       <span class="eyebrow">Microsoft Foundry &middot; MicroHack</span>
       <h1>Contract Lifecycle Management with Microsoft Foundry</h1>
@@ -70,7 +71,7 @@
         <strong>low-code</strong> portal and the <strong>pro-code</strong> SDK.
       </p>
       <div class="hero-actions">
-        <a class="btn btn-primary" href="challenges/challenge-0-setup.md">Start Hackathon &rarr;</a>
+        <a class="btn btn-primary" href="challenges/challenge-0-setup.html">Start MicroHack &rarr;</a>
         <a class="btn btn-ghost" href="#challenges">See the roadmap</a>
       </div>
       <ul class="hero-meta">
@@ -79,14 +80,11 @@
         <li><strong>Low-code + Pro-code</strong> paths</li>
       </ul>
     </div>
-    <aside class="hero-card" aria-label="At a glance">
-      <h3>At a glance</h3>
-      <dl>
-        <dt>Persona</dt><dd>Legal &middot; Procurement &middot; Sales</dd>
-        <dt>Outcome</dt><dd>Grounded, tool-using, evaluated contract assistant</dd>
-        <dt>Stack</dt><dd>Foundry Agents, Azure AI Search, Logic Apps, Azure Functions, App Insights</dd>
-        <dt>Gate</dt><dd>Groundedness &ge; 4.0 &middot; Task adherence &ge; 4.25 &middot; Zero safety defects</dd>
-      </dl>
+    <aside class="qr-card" aria-label="Scan to open the GitHub repository">
+      <h3>Start on your phone</h3>
+      <p>Scan to open the MicroHack GitHub repository.</p>
+      <div class="qr-frame" data-qr="https://github.com/priyanka405/MS-Foundry-Microhack" data-qr-size="180" aria-hidden="true"></div>
+      <code class="qr-url">github.com/priyanka405/MS-Foundry-Microhack</code>
     </aside>
   </div>
 </section>
@@ -156,60 +154,8 @@
       <p class="section-lede">Rendered live with Mermaid. The exact same block lives in the README so the two never drift.</p>
     </header>
 
-    <div class="architecture">
-      <div class="mermaid">
-        flowchart LR
-          subgraph Users
-            L[Legal]
-            P[Procurement]
-            S[Sales]
-          end
-
-          subgraph Channel[Channel]
-            UI[Web / Teams UI]
-          end
-
-          subgraph Foundry[Microsoft Foundry]
-            A[Contract Intake and Drafting Agent]
-            KG[Knowledge Grounding]
-            T[Function Tools]
-            GR[Guardrails and Safety]
-            EV[Evaluators]
-            OB[Tracing]
-          end
-
-          subgraph Ground[Grounding]
-            AIS[Azure AI Search - idx-clm-contracts]
-            BLOB[Blob - clm-corpus]
-          end
-
-          subgraph Actions[Business Actions]
-            LA[Logic Apps - Approval]
-            FN[Azure Functions - Clause / Status / Risk]
-            CI[Code Interpreter - Summaries and Reports]
-          end
-
-          subgraph Ops[Ops]
-            AI[Application Insights]
-            GH[GitHub Actions - CI Gate]
-          end
-
-          L --> UI
-          P --> UI
-          S --> UI
-          UI --> A
-          A --> KG
-          KG --> AIS
-          KG --> BLOB
-          A --> T
-          T --> LA
-          T --> FN
-          T --> CI
-          A --> GR
-          A --> OB
-          OB --> AI
-          EV --> GH
-      </div>
+    <div class="architecture arch-frame">
+      <img src="assets/images/architecture-overview.svg" alt="End-to-end architecture: users, channel, Foundry agent, knowledge, tools, enterprise systems, tracing, and CI gate." loading="lazy">
     </div>
   </div>
 </section>
@@ -248,7 +194,7 @@
       <li class="timeline-node"><div class="timeline-dot" data-num="0"></div>
         <article class="challenge-card">
           <div class="challenge-head"><span class="chip chip-blue">Setup</span>
-            <h3><a href="challenges/challenge-0-setup.md">Challenge 0 &middot; Setup</a></h3></div>
+            <h3><a href="challenges/challenge-0-setup.html">Challenge 0 &middot; Setup</a></h3></div>
           <p>Create the Foundry project, deploy the model, connect Azure AI Search, enable tracing, and upload the corpus.</p>
           <ul class="chip-row"><li class="chip">Foundry portal</li><li class="chip">Azure CLI</li><li class="chip">Blob upload</li></ul>
         </article></li>
@@ -256,7 +202,7 @@
       <li class="timeline-node"><div class="timeline-dot" data-num="1"></div>
         <article class="challenge-card">
           <div class="challenge-head"><span class="chip chip-blue">Build</span>
-            <h3><a href="challenges/challenge-1-build-agent.md">Challenge 1 &middot; Build the Contract Intake &amp; Drafting Agent</a></h3></div>
+            <h3><a href="challenges/challenge-1-build-agent.html">Challenge 1 &middot; Build the Contract Intake &amp; Drafting Agent</a></h3></div>
           <p>Write the persona and instructions, prove the first round-trip, and lock in the refusal behavior.</p>
           <ul class="chip-row"><li class="chip">Agent Builder</li><li class="chip">Python SDK</li><li class="chip">gpt-4o</li></ul>
         </article></li>
@@ -264,7 +210,7 @@
       <li class="timeline-node"><div class="timeline-dot" data-num="2"></div>
         <article class="challenge-card">
           <div class="challenge-head"><span class="chip chip-purple">Ground</span>
-            <h3><a href="challenges/challenge-2-knowledge-grounding.md">Challenge 2 &middot; Knowledge Grounding</a></h3></div>
+            <h3><a href="challenges/challenge-2-knowledge-grounding.html">Challenge 2 &middot; Knowledge Grounding</a></h3></div>
           <p>Index NDAs, MSAs, policies, and the clause library into Azure AI Search. Add citations to every answer.</p>
           <ul class="chip-row"><li class="chip">Azure AI Search</li><li class="chip">Blob</li><li class="chip">File Search</li></ul>
         </article></li>
@@ -272,7 +218,7 @@
       <li class="timeline-node"><div class="timeline-dot" data-num="3"></div>
         <article class="challenge-card">
           <div class="challenge-head"><span class="chip chip-teal">Tools</span>
-            <h3><a href="challenges/challenge-3-tools-actions.md">Challenge 3 &middot; Tools &amp; Actions</a></h3></div>
+            <h3><a href="challenges/challenge-3-tools-actions.html">Challenge 3 &middot; Tools &amp; Actions</a></h3></div>
           <p>Five tools: AI Search, File Search, Logic Apps (approval), Azure Functions (status/risk), Code Interpreter (reports).</p>
           <ul class="chip-row"><li class="chip">Function calling</li><li class="chip">Logic Apps</li><li class="chip">Functions</li></ul>
         </article></li>
@@ -280,7 +226,7 @@
       <li class="timeline-node"><div class="timeline-dot" data-num="4"></div>
         <article class="challenge-card">
           <div class="challenge-head"><span class="chip chip-orange">Protect</span>
-            <h3><a href="challenges/challenge-4-guardrails.md">Challenge 4 &middot; Guardrails</a></h3></div>
+            <h3><a href="challenges/challenge-4-guardrails.html">Challenge 4 &middot; Guardrails</a></h3></div>
           <p>Prompt Shields, PII detection, approved-template enforcement, restricted clause modification.</p>
           <ul class="chip-row"><li class="chip">Content Safety</li><li class="chip">Prompt Shields</li><li class="chip">Blocklists</li></ul>
         </article></li>
@@ -288,7 +234,7 @@
       <li class="timeline-node"><div class="timeline-dot" data-num="5"></div>
         <article class="challenge-card">
           <div class="challenge-head"><span class="chip chip-pink">Observe</span>
-            <h3><a href="challenges/challenge-5-observability.md">Challenge 5 &middot; Observability</a></h3></div>
+            <h3><a href="challenges/challenge-5-observability.html">Challenge 5 &middot; Observability</a></h3></div>
           <p>Trace every prompt &rarr; LLM &rarr; retrieval &rarr; tool &rarr; response into Application Insights. Write the KQL.</p>
           <ul class="chip-row"><li class="chip">OpenTelemetry</li><li class="chip">App Insights</li><li class="chip">KQL</li></ul>
         </article></li>
@@ -296,7 +242,7 @@
       <li class="timeline-node"><div class="timeline-dot" data-num="6"></div>
         <article class="challenge-card">
           <div class="challenge-head"><span class="chip chip-green">Evaluate</span>
-            <h3><a href="challenges/challenge-6-evaluation.md">Challenge 6 &middot; Evaluation</a></h3></div>
+            <h3><a href="challenges/challenge-6-evaluation.html">Challenge 6 &middot; Evaluation</a></h3></div>
           <p>Score groundedness, relevance, task adherence, safety, tool accuracy on a 15-row dataset. Turn the gate green.</p>
           <ul class="chip-row"><li class="chip">Evaluators</li><li class="chip">Scorecards</li><li class="chip">CI gate</li></ul>
         </article></li>
@@ -304,7 +250,7 @@
       <li class="timeline-node"><div class="timeline-dot" data-num="7"></div>
         <article class="challenge-card">
           <div class="challenge-head"><span class="chip chip-teal">Optimize</span>
-            <h3><a href="challenges/challenge-7-optimization.md">Challenge 7 &middot; Optimization</a></h3></div>
+            <h3><a href="challenges/challenge-7-optimization.html">Challenge 7 &middot; Optimization</a></h3></div>
           <p>Sweep model, prompt, retrieval, and tools. Show the before/after and the cost delta.</p>
           <ul class="chip-row"><li class="chip">Model swap</li><li class="chip">Retrieval tuning</li><li class="chip">Cost</li></ul>
         </article></li>
@@ -312,7 +258,7 @@
       <li class="timeline-node"><div class="timeline-dot" data-num="8"></div>
         <article class="challenge-card">
           <div class="challenge-head"><span class="chip chip-navy">Ship</span>
-            <h3><a href="challenges/challenge-8-publish.md">Challenge 8 &middot; Publish</a></h3></div>
+            <h3><a href="challenges/challenge-8-publish.html">Challenge 8 &middot; Publish</a></h3></div>
           <p>Ship as a Web App with Easy Auth, a Teams app, or an authenticated API endpoint.</p>
           <ul class="chip-row"><li class="chip">Web App</li><li class="chip">Teams</li><li class="chip">API</li></ul>
         </article></li>
@@ -391,6 +337,27 @@
   </div>
 </section>
 
+<!-- ================= START MICROHACK CTA ================= -->
+<section id="start" class="section">
+  <div class="wrap">
+    <header class="section-head">
+      <span class="section-eyebrow">Start the MicroHack</span>
+      <h2>Ready to build?</h2>
+    </header>
+    <div class="start-cta">
+      <div>
+        <h2>Kick off Challenge 0</h2>
+        <p>Scan the QR code to open the MicroHack GitHub repository on your phone, or jump straight into the first challenge on your laptop.</p>
+        <div class="cta-actions">
+          <a class="btn btn-primary" href="challenges/challenge-0-setup.html">Start Challenge 0 &rarr;</a>
+          <a class="btn btn-ghost" href="https://github.com/priyanka405/MS-Foundry-Microhack" target="_blank" rel="noopener">Open GitHub &#8599;</a>
+        </div>
+      </div>
+      <div class="qr-inline" data-qr="https://github.com/priyanka405/MS-Foundry-Microhack" data-qr-size="200" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+
 <!-- ================= FOOTER ================= -->
 <footer class="site-foot">
   <div class="wrap foot-inner">
@@ -400,7 +367,7 @@
     </div>
     <nav aria-label="Footer">
       <a href="README.md">README</a>
-      <a href="challenges/challenge-0-setup.md">Challenges</a>
+      <a href="challenges/challenge-0-setup.html">Challenges</a>
       <a href="https://github.com/priyanka405/MS-Foundry-Microhack" target="_blank" rel="noopener">GitHub</a>
       <a href="#top">Back to top &uarr;</a>
     </nav>
@@ -408,6 +375,7 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 <script src="assets/js/main.js" defer></script>
 </body>
 </html>

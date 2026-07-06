@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" role="img" font-family="Segoe UI, Arial, sans-serif">
+  <title>Challenge 0 &middot; Foundry environment setup</title>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#605E5C"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="520" fill="#F8FAFC"/>
+  <rect x="30" y="220" width="150" height="80" rx="10" fill="#FFF" stroke="#E1DFDD"/>
+  <text x="105" y="250" text-anchor="middle" font-size="13" font-weight="700" fill="#201F1E">You</text>
+  <text x="105" y="270" text-anchor="middle" font-size="11" fill="#605E5C">az login &#183; VS Code</text>
+
+  <rect x="220" y="60" width="740" height="410" rx="16" fill="#FFF" stroke="#0078D4" stroke-width="2"/>
+  <text x="590" y="90" text-anchor="middle" font-size="14" font-weight="700" fill="#201F1E">rg-clm-hackathon &#183; East US 2</text>
+
+  <rect x="250" y="120" width="220" height="90" rx="10" fill="#DEECF9" stroke="#0078D4"/>
+  <text x="360" y="150" text-anchor="middle" font-size="13" font-weight="700" fill="#0078D4">Foundry project</text>
+  <text x="360" y="170" text-anchor="middle" font-size="11" fill="#605E5C">prj-clm-hackathon</text>
+  <text x="360" y="188" text-anchor="middle" font-size="11" fill="#605E5C">hub-clm-hackathon</text>
+
+  <rect x="500" y="120" width="220" height="90" rx="10" fill="#F3EAFF" stroke="#5C2D91"/>
+  <text x="610" y="150" text-anchor="middle" font-size="13" font-weight="700" fill="#5C2D91">Model deployment</text>
+  <text x="610" y="170" text-anchor="middle" font-size="11" fill="#605E5C">gpt-4o (or gpt-4o-mini)</text>
+  <text x="610" y="188" text-anchor="middle" font-size="11" fill="#605E5C">30k TPM</text>
+
+  <rect x="750" y="120" width="180" height="90" rx="10" fill="#FDECEC" stroke="#D13438"/>
+  <text x="840" y="150" text-anchor="middle" font-size="13" font-weight="700" fill="#A4262C">App Insights</text>
+  <text x="840" y="170" text-anchor="middle" font-size="11" fill="#605E5C">appi-clm-hackathon</text>
+  <text x="840" y="188" text-anchor="middle" font-size="11" fill="#605E5C">tracing on</text>
+
+  <rect x="250" y="240" width="220" height="90" rx="10" fill="#E6FBF6" stroke="#00B294"/>
+  <text x="360" y="270" text-anchor="middle" font-size="13" font-weight="700" fill="#008A72">Azure AI Search</text>
+  <text x="360" y="290" text-anchor="middle" font-size="11" fill="#605E5C">srch-clm-alias &#183; basic</text>
+  <text x="360" y="308" text-anchor="middle" font-size="11" fill="#605E5C">semantic ranker: free</text>
+
+  <rect x="500" y="240" width="220" height="90" rx="10" fill="#FFF7E6" stroke="#FFB900"/>
+  <text x="610" y="270" text-anchor="middle" font-size="13" font-weight="700" fill="#8A6100">Storage account</text>
+  <text x="610" y="290" text-anchor="middle" font-size="11" fill="#605E5C">stclmhackathon...</text>
+  <text x="610" y="308" text-anchor="middle" font-size="11" fill="#605E5C">container: clm-corpus</text>
+
+  <rect x="750" y="240" width="180" height="90" rx="10" fill="#DEECF9" stroke="#0078D4"/>
+  <text x="840" y="270" text-anchor="middle" font-size="13" font-weight="700" fill="#0078D4">Log Analytics</text>
+  <text x="840" y="290" text-anchor="middle" font-size="11" fill="#605E5C">law-clm-hackathon</text>
+
+  <rect x="250" y="360" width="680" height="90" rx="10" fill="#F3F5FB" stroke="#0078D4"/>
+  <text x="590" y="390" text-anchor="middle" font-size="13" font-weight="700" fill="#201F1E">Foundry connections</text>
+  <text x="590" y="408" text-anchor="middle" font-size="11" fill="#605E5C">Azure AI Search &#183; Application Insights &#183; Storage account</text>
+  <text x="590" y="425" text-anchor="middle" font-size="11" fill="#605E5C">Tracing target = appi-clm-hackathon</text>
+
+  <g stroke="#605E5C" stroke-width="1.5" fill="none" marker-end="url(#a)">
+    <path d="M180 260 H 220"/>
+    <path d="M470 165 H 500"/>
+    <path d="M720 165 H 750"/>
+    <path d="M470 285 H 500"/>
+    <path d="M720 285 H 750"/>
+  </g>
+  <text x="500" y="495" text-anchor="middle" font-size="11" fill="#605E5C">Smoke test: <tspan font-family="Cascadia Code, monospace">python -m app.sample_run --smoke</tspan></text>
+</svg>
