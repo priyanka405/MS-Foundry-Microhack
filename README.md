@@ -4,8 +4,28 @@
 
 [![Foundry](https://img.shields.io/badge/Microsoft-Foundry-0078D4?logo=microsoft&logoColor=white)](https://ai.azure.com)
 [![Language](https://img.shields.io/badge/Language-Python%203.11+-3776AB?logo=python&logoColor=white)](https://www.python.org)
-[![Docs](https://img.shields.io/badge/Docs-GitHub%20Pages-181717?logo=github&logoColor=white)](./index.html)
+[![Docs](https://img.shields.io/badge/Landing%20Page-Live-0078D4?logo=github&logoColor=white)](https://priyanka405.github.io/MS-Foundry-Microhack/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
+
+---
+
+## Landing page
+
+> **Open the interactive landing page &rarr; <https://priyanka405.github.io/MS-Foundry-Microhack/>**
+
+[![Open the Contract Lifecycle Management MicroHack landing page](./assets/images/architecture-overview.svg)](https://priyanka405.github.io/MS-Foundry-Microhack/)
+
+<p align="center">
+  <a href="https://priyanka405.github.io/MS-Foundry-Microhack/">
+    <img alt="Open the landing page" src="https://img.shields.io/badge/%E2%86%92%20Open%20the%20landing%20page-0078D4?style=for-the-badge&logo=github&logoColor=white">
+  </a>
+  &nbsp;
+  <a href="./index.html">
+    <img alt="View HTML source in the repo" src="https://img.shields.io/badge/View%20HTML%20source-5C2D91?style=for-the-badge&logo=html5&logoColor=white">
+  </a>
+</p>
+
+Click the image or the button above to launch the full-page site (dark mode, Mermaid diagrams, individual challenge pages, and a QR code that opens the microhack on your phone).
 
 ---
 
@@ -17,6 +37,7 @@ Every challenge is fully documented for both the **Foundry portal (low-code)** a
 
 ## Table of contents
 
+- [Landing page](#landing-page)
 - [Hackathon overview](#hackathon-overview)
 - [Business scenario](#business-scenario)
 - [Learning objectives](#learning-objectives)
