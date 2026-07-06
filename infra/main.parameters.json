@@ -1,0 +1,33 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "baseName": {
+      "value": "clm-microhack"
+    },
+    "location": {
+      "value": "swedencentral"
+    },
+    "chatModelName": {
+      "value": "gpt-4o-mini"
+    },
+    "chatModelVersion": {
+      "value": "2024-07-18"
+    },
+    "chatModelTpm": {
+      "value": 30
+    },
+    "embeddingModelName": {
+      "value": "text-embedding-3-large"
+    },
+    "embeddingModelVersion": {
+      "value": "1"
+    },
+    "embeddingModelTpm": {
+      "value": 30
+    },
+    "principalId": {
+      "value": "<YOUR-USER-OR-GROUP-OBJECT-ID>"
+    }
+  }
+}
