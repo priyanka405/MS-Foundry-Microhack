@@ -11,14 +11,14 @@ $challengeDir = Join-Path $root 'challenges'
 
 $challenges = @(
   [pscustomobject]@{ n=0; slug='setup';                title='Setup';                                  lede='Create the Foundry project, deploy the model, connect Azure AI Search, enable tracing, and upload the corpus.'; mins='45 min';  chip='Setup' }
-  [pscustomobject]@{ n=1; slug='build-agent';          title='Build the Contract Intake &amp; Drafting Agent'; lede='Write the persona and instructions, prove the first round-trip, and lock in the refusal behavior.';       mins='45 min';  chip='Build' }
-  [pscustomobject]@{ n=2; slug='knowledge-grounding';  title='Knowledge Grounding';                    lede='Index NDAs, MSAs, policies, and the clause library into Azure AI Search. Add citations to every answer.';   mins='60 min';  chip='Ground' }
-  [pscustomobject]@{ n=3; slug='tools-actions';        title='Tools &amp; Actions';                    lede='Attach the three canonical CLM tools: Foundry IQ (Azure AI Search + SharePoint), WebIQ (Bing Search), and Azure SQL (structured contract data).'; mins='75 min'; chip='Tools' }
-  [pscustomobject]@{ n=4; slug='guardrails';           title='Guardrails';                             lede='Prompt Shields, PII detection, approved-template enforcement, and restricted-clause modification.';         mins='45 min';  chip='Protect' }
-  [pscustomobject]@{ n=5; slug='observability';        title='Observability';                          lede='Trace every prompt &rarr; LLM &rarr; retrieval &rarr; tool &rarr; response into Application Insights, then write the KQL.'; mins='45 min'; chip='Observe' }
-  [pscustomobject]@{ n=6; slug='evaluation';           title='Evaluation';                             lede='Score groundedness, relevance, task adherence, safety, and tool accuracy on a 15-row dataset. Turn the gate green.'; mins='60 min'; chip='Evaluate' }
-  [pscustomobject]@{ n=7; slug='optimization';         title='Optimization';                           lede='Sweep model, prompt, retrieval, and tools. Show the before/after with a cost delta.';                       mins='45 min';  chip='Optimize' }
-  [pscustomobject]@{ n=8; slug='publish';              title='Publish';                                lede='Ship as a Web App with Easy Auth, a Teams app, or an authenticated API endpoint.';                          mins='60 min';  chip='Ship' }
+  [pscustomobject]@{ n=1; slug='build-agent';          title='Build the Contract Intake &amp; Drafting Agent'; lede='Write the persona and instructions, prove the first round-trip, and lock in the system prompt.'; mins='60 min'; chip='Agent Design' }
+  [pscustomobject]@{ n=2; slug='knowledge-grounding';  title='Knowledge Grounding';                    lede='Index NDAs, MSAs, policies, and the clause library into Azure AI Search. Add citations and retrieval validation.'; mins='50 min'; chip='Retrieval' }
+  [pscustomobject]@{ n=3; slug='tools-actions';        title='Tools &amp; Actions';                    lede='Attach the three canonical CLM tools: Foundry IQ (Azure AI Search + SharePoint), WebIQ (SharePoint Search), and ClauseIQ (custom REST).'; mins='70 min'; chip='Tools' }
+  [pscustomobject]@{ n=4; slug='guardrails';           title='Guardrails';                             lede='Prompt Shields, PII detection, approved-template enforcement, and restricted-clause moderation at decision points.'; mins='55 min'; chip='Safety' }
+  [pscustomobject]@{ n=5; slug='observability';        title='Observability';                          lede='Trace every prompt → LLM → retrieval → tool → response into Application Insights. Collect cost and performance deltas.'; mins='40 min'; chip='Monitoring' }
+  [pscustomobject]@{ n=6; slug='evaluation';           title='Evaluation';                             lede='Score groundedness, relevance, task adherence, safety, and tool accuracy on a 15-row dataset.'; mins='65 min'; chip='Eval' }
+  [pscustomobject]@{ n=7; slug='optimization';         title='Optimization';                           lede='Sweep model, prompt, retrieval, and tools. Show the before/after with a cost delta.'; mins='90 min'; chip='Tuning' }
+  [pscustomobject]@{ n=8; slug='publish';              title='Publish';                                lede='Ship as a Web App with Easy Auth, a Teams app, or an authenticated API endpoint.'; mins='45 min'; chip='Deploy' }
 )
 
 $total = $challenges.Count  # 9
@@ -33,7 +33,6 @@ for ($i=0; $i -lt $total; $i++) {
   $md = Get-Content -Raw -Path $mdPath
 
   $progress = [math]::Round((($c.n + 1) / $total) * 100)
-  $svgName = "challenge-$($c.n)-$($c.slug).svg"
 
   # Prev / next
   if ($c.n -eq 0) {
@@ -127,9 +126,6 @@ for ($i=0; $i -lt $total; $i++) {
     <div class="progress" aria-label="Progress through the MicroHack">
       <div class="progress-track"><div class="progress-fill" style="width: $progress%"></div></div>
       <span class="progress-label">Step $($c.n + 1) of $total &middot; $progress% complete</span>
-    </div>
-    <div class="arch-frame" style="margin-top: 1.75rem;">
-      <img src="../assets/images/$svgName" alt="Diagram for Challenge $($c.n): $($c.title)" loading="lazy">
     </div>
   </div>
 </section>
