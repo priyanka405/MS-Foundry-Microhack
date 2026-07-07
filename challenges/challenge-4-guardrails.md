@@ -6,7 +6,7 @@
 
 ## 1. Context
 
-Your agent now drafts contracts, quotes clauses, and touches Logic Apps and Functions. That is exactly the surface an attacker or a well-meaning employee can misuse &mdash; asking the agent to auto-approve, to leak restricted data, or to swap out a controlled clause for something custom. This challenge closes those doors.
+Your agent now drafts contracts, quotes clauses, and touches Power Automate and Azure Functions. That is exactly the surface an attacker or a well-meaning employee can misuse &mdash; asking the agent to auto-approve, to leak restricted data, or to swap out a controlled clause for something custom. This challenge closes those doors.
 
 ## 2. Business context
 
@@ -21,6 +21,13 @@ Layer five defenses onto the CLM assistant:
 3. **Restricted clause modification** &mdash; payment / liability / termination clauses may only be inserted from `clause_lookup`.
 4. **Approval bypass blocklist** &mdash; explicit refusal of "auto-approve", "skip legal", "self-sign" phrasings.
 5. **Compliance verification** &mdash; drafts touching restricted data types force a compliance-policy check.
+
+### Challenge map
+
+- **Agent Capability:** Enforce policy-safe behavior under adversarial and high-risk prompts.
+- **Tool Integration:** Guardrails over retrieval, Power Automate approval routing, and Azure Functions-backed actions.
+- **Azure Services Used:** Prompt Shields, Content Safety, Microsoft Foundry Agent instructions, app-layer controls.
+- **Expected Outcome:** Policy-compliant responses with blocked bypass attempts and protected sensitive data.
 
 ## 4. Learning outcome
 

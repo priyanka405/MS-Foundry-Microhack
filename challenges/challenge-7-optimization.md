@@ -16,6 +16,13 @@ CLM traffic is spiky: 20&ndash;50 requests per hour during Legal review windows,
 
 Run a **controlled sweep** of five configurations against the Challenge 6 dataset and produce a before/after table showing quality, latency, and cost.
 
+### Challenge map
+
+- **Agent Capability:** Cost/performance tuning without breaking expected behavior.
+- **Tool Integration:** Compare configurations while preserving required tool-routing quality.
+- **Azure Services Used:** Microsoft Foundry models, Azure AI Search tuning, Application Insights metrics.
+- **Expected Outcome:** A justified winning configuration with measurable quality-per-dollar gains.
+
 ## 4. Learning outcome
 
 After Challenge 7 you can:

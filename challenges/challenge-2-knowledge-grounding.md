@@ -21,6 +21,13 @@ Ground the Contract Intake &amp; Drafting Agent so that:
 - Users can attach a PDF to a thread and get comparative answers via **File Search**.
 - If the top-k passages don't contain the answer, it says so.
 
+### Challenge map
+
+- **Agent Capability:** Grounded retrieval and citation-first responses.
+- **Tool Integration:** AzureAISearchTool + FileSearchTool for corpus and thread attachments.
+- **Azure Services Used:** Azure AI Search, Azure Blob Storage, Microsoft Foundry Agent tools.
+- **Expected Outcome:** Verbatim, cited answers from enterprise content and attached files.
+
 ## 4. Learning outcome
 
 After Challenge 2 you can:

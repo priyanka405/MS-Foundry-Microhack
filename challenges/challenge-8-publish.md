@@ -22,6 +22,13 @@ Ship the CLM assistant to at least one of:
 
 Deployment must go through the Challenge 6 gate first.
 
+### Challenge map
+
+- **Agent Capability:** Production delivery to authenticated user channels.
+- **Tool Integration:** Preserve tool behavior (Search, Power Automate, Azure Functions, Code Interpreter) in deployed channels.
+- **Azure Services Used:** Azure Web App, Microsoft Teams/Bot Service, Managed Identity, Microsoft Foundry.
+- **Expected Outcome:** A secured pilot deployment with consistent agent behavior across channels.
+
 ## 4. Learning outcome
 
 After Challenge 8 you can:

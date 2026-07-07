@@ -3,7 +3,7 @@
 These are the Python-side representations of the tools the agent will call:
 - clause_lookup      -> Azure Function returning approved clause text
 - generate_document  -> Power Automate flow producing a filled document
-- route_approval     -> Logic App sending an approval email
+- route_approval     -> Power Automate flow sending an approval email
 - contract_status    -> Azure Function reading/updating contract state
 
 Also includes the app-layer approval-bypass blocklist (Challenge 4).
@@ -106,7 +106,7 @@ def route_approval(
     doc_uri: str,
     risk_band: Literal["Low", "Medium", "High"] = "Medium",
 ) -> str:
-    """Send an approval request to Legal / Procurement via the Logic App.
+    """Send an approval request to Legal / Procurement via Power Automate.
 
     Returns a JSON string with the approval id and initial status. The final
     decision arrives asynchronously via a callback the agent handles later.
