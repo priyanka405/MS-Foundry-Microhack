@@ -136,7 +136,7 @@ Everything is grounded on the enterprise corpus, guarded by content safety, and 
 
 <div align="center">
   <img src="./assets/images/customer-journey.png" alt="Contract Lifecycle Management Customer Journey on Microsoft Foundry showing the six-step flow from Ask to Handoff." width="100%" />
-  <p><em>Customer journey: the six-step process from Ask to Handoff.</em></p>
+  <p><em>Customer journey: the six-step flow from Ask to Handoff.</em></p>
 </div>
 
 <div align="center">

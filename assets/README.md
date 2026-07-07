@@ -13,7 +13,7 @@ Static assets for the GitHub Pages landing (`../index.html`) and the challenge d
 ## Naming conventions
 
 - Use kebab-case: `challenge-3-tool-registered.png`.
-- Prefer PNG for portal screenshots and provided diagram images; keep source diagrams optimized before committing.
+- Prefer PNG for portal screenshots and provided diagram images. Keep source diagrams optimized before committing.
 - Keep images under 400 KB where possible; use `pngquant` / `svgo` before committing.
 
 ## Diagram assets
