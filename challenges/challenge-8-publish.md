@@ -52,6 +52,14 @@ After Challenge 8 you can:
 
 ## 6. Architecture &mdash; end-to-end
 
+![Customer journey diagram (Ask → Ground → Compare → Draft & Explain → Track → Hand off)](../assets/images/customer-journey.png)
+
+*Customer journey context: Ask &rarr; Ground &rarr; Compare &rarr; Draft &amp; Explain &rarr; Track &rarr; Hand off.*
+
+![Target architecture diagram (User Layer, Agent Layer, Data Layer, Governance)](../assets/images/architecture-target.png)
+
+*Target architecture reference: User Layer, Agent Layer, Data Layer, and Governance.*
+
 ```mermaid
 flowchart LR
     subgraph Users
@@ -284,4 +292,3 @@ Congratulations &mdash; you shipped a grounded, tool-using, evaluated, traced CL
 - Grow the dataset every time you find a real-world regression: add the failing prompt to `evaluation_dataset.jsonl`.
 
 Submit your fork URL and a 3&ndash;5 minute walkthrough on the [issues page](https://github.com/priyanka405/MS-Foundry-Microhack/issues) with the label `submission` to claim the **Foundry CLM Champion** badge.
-

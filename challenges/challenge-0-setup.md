@@ -1,4 +1,4 @@
-﻿# Challenge 0 &middot; Setup
+# Challenge 0 &middot; Setup
 
 > **Duration:** ~45 minutes &middot; **Path:** Low-Code + Pro-Code &middot; **Next:** [Challenge 1 &mdash; Build Agent](./challenge-1-build-agent.md)
 
@@ -51,6 +51,14 @@ After Challenge 0 you can:
 - Python 3.11+ and `pip install -r ../requirements.txt`.
 
 ## 5. Architecture diagram
+
+![Customer journey diagram (Ask → Ground → Compare → Draft & Explain → Track → Hand off)](../assets/images/customer-journey.png)
+
+*Customer journey context: Ask &rarr; Ground &rarr; Compare &rarr; Draft &amp; Explain &rarr; Track &rarr; Hand off.*
+
+![Target architecture diagram (User Layer, Agent Layer, Data Layer, Governance)](../assets/images/architecture-target.png)
+
+*Target architecture reference: User Layer, Agent Layer, Data Layer, and Governance.*
 
 ```mermaid
 flowchart LR

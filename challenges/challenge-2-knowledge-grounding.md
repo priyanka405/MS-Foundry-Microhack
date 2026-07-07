@@ -1,4 +1,4 @@
-﻿# Challenge 2 &middot; Knowledge Grounding
+# Challenge 2 &middot; Knowledge Grounding
 
 > **Duration:** ~60 minutes &middot; **Path:** Low-Code + Pro-Code &middot; **Previous:** [Challenge 1](./challenge-1-build-agent.md) &middot; **Next:** [Challenge 3 &mdash; Tools &amp; Actions](./challenge-3-tools-actions.md)
 
@@ -49,6 +49,14 @@ After Challenge 2 you can:
 - Sample corpus already in `data/` (10 files) and uploaded to `clm-corpus`.
 
 ## 6. Architecture diagram
+
+![Customer journey diagram (Ask → Ground → Compare → Draft & Explain → Track → Hand off)](../assets/images/customer-journey.png)
+
+*Customer journey context: Ask &rarr; Ground &rarr; Compare &rarr; Draft &amp; Explain &rarr; Track &rarr; Hand off.*
+
+![Target architecture diagram (User Layer, Agent Layer, Data Layer, Governance)](../assets/images/architecture-target.png)
+
+*Target architecture reference: User Layer, Agent Layer, Data Layer, and Governance.*
 
 ```mermaid
 flowchart LR

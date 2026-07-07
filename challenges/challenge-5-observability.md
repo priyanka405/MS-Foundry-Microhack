@@ -1,4 +1,4 @@
-﻿# Challenge 5 &middot; Observability
+# Challenge 5 &middot; Observability
 
 > **Duration:** ~45 minutes &middot; **Path:** Low-Code + Pro-Code &middot; **Previous:** [Challenge 4](./challenge-4-guardrails.md) &middot; **Next:** [Challenge 6 &mdash; Evaluation](./challenge-6-evaluation.md)
 
@@ -44,6 +44,14 @@ After Challenge 5 you can:
 - `APPLICATIONINSIGHTS_CONNECTION_STRING` set in `.env`.
 
 ## 6. Trace flow diagram
+
+![Customer journey diagram (Ask → Ground → Compare → Draft & Explain → Track → Hand off)](../assets/images/customer-journey.png)
+
+*Customer journey context: Ask &rarr; Ground &rarr; Compare &rarr; Draft &amp; Explain &rarr; Track &rarr; Hand off.*
+
+![Target architecture diagram (User Layer, Agent Layer, Data Layer, Governance)](../assets/images/architecture-target.png)
+
+*Target architecture reference: User Layer, Agent Layer, Data Layer, and Governance.*
 
 ```mermaid
 flowchart LR
