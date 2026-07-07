@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
@@ -390,6 +390,7 @@ Submit your fork URL and a 3&ndash;5 minute walkthrough on the [issues page](htt
 
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 <script src="../assets/js/main.js" defer></script>
@@ -407,6 +408,21 @@ Submit your fork URL and a 3&ndash;5 minute walkthrough on the [issues page](htt
       try {
         window.marked.setOptions({ gfm: true, breaks: false });
         out.innerHTML = window.marked.parse(md);
+        // Convert mermaid fenced code blocks to .mermaid divs for rendering.
+        out.querySelectorAll('pre code.language-mermaid').forEach(function(code) {
+          var pre = code.parentElement;
+          var div = document.createElement('div');
+          div.className = 'mermaid';
+          div.textContent = code.textContent;
+          pre.parentNode.replaceChild(div, pre);
+        });
+        // Initialize Mermaid and copy buttons after content is ready.
+        if (typeof window.initMermaid === 'function') {
+          window.initMermaid(document.documentElement.getAttribute('data-theme') || 'light');
+        }
+        if (typeof window.addCopyButtons === 'function') {
+          window.addCopyButtons(out);
+        }
       } catch (e) {
         out.innerHTML = '<div class="markdown-error">Could not render markdown. Open the <a href="challenge-8-publish.md">raw file</a>.</div>';
       }

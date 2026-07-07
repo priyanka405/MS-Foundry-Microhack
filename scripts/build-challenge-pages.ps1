@@ -170,6 +170,7 @@ for ($i=0; $i -lt $total; $i++) {
 __MARKDOWN__
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 <script src="../assets/js/main.js" defer></script>
@@ -187,6 +188,21 @@ __MARKDOWN__
       try {
         window.marked.setOptions({ gfm: true, breaks: false });
         out.innerHTML = window.marked.parse(md);
+        // Convert mermaid fenced code blocks to .mermaid divs for rendering.
+        out.querySelectorAll('pre code.language-mermaid').forEach(function(code) {
+          var pre = code.parentElement;
+          var div = document.createElement('div');
+          div.className = 'mermaid';
+          div.textContent = code.textContent;
+          pre.parentNode.replaceChild(div, pre);
+        });
+        // Initialize Mermaid and copy buttons after content is ready.
+        if (typeof window.initMermaid === 'function') {
+          window.initMermaid(document.documentElement.getAttribute('data-theme') || 'light');
+        }
+        if (typeof window.addCopyButtons === 'function') {
+          window.addCopyButtons(out);
+        }
       } catch (e) {
         out.innerHTML = '<div class="markdown-error">Could not render markdown. Open the <a href="$mdName">raw file</a>.</div>';
       }
