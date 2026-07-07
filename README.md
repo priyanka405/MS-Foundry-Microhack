@@ -11,7 +11,7 @@
 
 ## Landing page
 
-> **Open the interactive landing page → <https://github.com/priyanka405/MS-Foundry-Microhack>**
+> **Open the interactive landing page → <[https://github.com/priyanka405/MS-Foundry-Microhack](https://github.com/priyanka405/MS-Foundry-Microhack)>**
 
 [![Open the Contract Lifecycle Management MicroHack landing page](./assets/images/architecture-overview.svg)](https://github.com/priyanka405/MS-Foundry-Microhack)
 
