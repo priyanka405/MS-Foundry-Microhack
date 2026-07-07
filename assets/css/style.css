@@ -672,7 +672,6 @@ pre code { background: transparent; color: inherit; padding: 0; }
 .arch-frame img,
 .arch-frame svg {
   width: 100%;
-  max-width: 100%;
   height: auto;
   display: block;
   aspect-ratio: 1200 / 680;
