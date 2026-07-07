@@ -1,4 +1,4 @@
-﻿# Challenge 1 &middot; Build the Contract Intake &amp; Drafting Agent
+# Challenge 1 &middot; Build the Contract Intake &amp; Drafting Agent
 
 > **Duration:** ~45 minutes &middot; **Path:** Low-Code + Pro-Code &middot; **Previous:** [Challenge 0 &mdash; Setup](./challenge-0-setup.md) &middot; **Next:** [Challenge 2 &mdash; Knowledge Grounding](./challenge-2-knowledge-grounding.md)
 
@@ -51,6 +51,14 @@ After Challenge 1 you can:
 - `python -m app.sample_run --smoke` still prints the three success lines.
 
 ## 6. Architecture diagram
+
+![Customer journey diagram (Ask → Ground → Compare → Draft & Explain → Track → Hand off)](../assets/images/customer-journey.png)
+
+*Customer journey context: Ask &rarr; Ground &rarr; Compare &rarr; Draft &amp; Explain &rarr; Track &rarr; Hand off.*
+
+![Target architecture diagram (User Layer, Agent Layer, Data Layer, Governance)](../assets/images/architecture-target.png)
+
+*Target architecture reference: User Layer, Agent Layer, Data Layer, and Governance.*
 
 ```mermaid
 flowchart LR

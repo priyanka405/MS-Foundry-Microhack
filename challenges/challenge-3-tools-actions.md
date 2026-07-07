@@ -1,4 +1,4 @@
-﻿# Challenge 3 &middot; Tools &amp; Actions
+# Challenge 3 &middot; Tools &amp; Actions
 
 > **Duration:** ~75 minutes &middot; **Path:** Low-Code + Pro-Code &middot; **Previous:** [Challenge 2](./challenge-2-knowledge-grounding.md) &middot; **Next:** [Challenge 4 &mdash; Guardrails](./challenge-4-guardrails.md)
 
@@ -62,6 +62,14 @@ After Challenge 3 you can:
 - An **Azure SQL** database with a `clm_contracts` table &mdash; or a stubbed local equivalent.
 
 ## 6. Architecture diagram
+
+![Customer journey diagram (Ask → Ground → Compare → Draft & Explain → Track → Hand off)](../assets/images/customer-journey.png)
+
+*Customer journey context: Ask &rarr; Ground &rarr; Compare &rarr; Draft &amp; Explain &rarr; Track &rarr; Hand off.*
+
+![Target architecture diagram (User Layer, Agent Layer, Data Layer, Governance)](../assets/images/architecture-target.png)
+
+*Target architecture reference: User Layer, Agent Layer, Data Layer, and Governance.*
 
 ```mermaid
 flowchart TD

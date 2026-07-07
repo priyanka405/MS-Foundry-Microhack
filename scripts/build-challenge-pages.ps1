@@ -33,8 +33,6 @@ for ($i=0; $i -lt $total; $i++) {
   $md = Get-Content -Raw -Path $mdPath
 
   $progress = [math]::Round((($c.n + 1) / $total) * 100)
-  $svgName = "challenge-$($c.n)-$($c.slug).svg"
-
   # Prev / next
   if ($c.n -eq 0) {
     $prevHtml = '<span class="btn btn-ghost disabled" aria-disabled="true">&larr; Prev</span>'
@@ -128,8 +126,15 @@ for ($i=0; $i -lt $total; $i++) {
       <div class="progress-track"><div class="progress-fill" style="width: $progress%"></div></div>
       <span class="progress-label">Step $($c.n + 1) of $total &middot; $progress% complete</span>
     </div>
-    <div class="arch-frame" style="margin-top: 1.75rem;">
-      <img src="../assets/images/$svgName" alt="Diagram for Challenge $($c.n): $($c.title)" loading="lazy">
+    <div class="grid grid-2" style="margin-top: 1.75rem;">
+      <figure class="arch-frame" style="margin-top: 0;">
+        <img src="../assets/images/customer-journey.png" alt="Customer journey showing six steps: Ask, Ground, Compare, Draft and Explain, Track, and Hand off." loading="lazy">
+        <p class="muted small" style="margin: .75rem 0 0;">Customer journey context for Challenge $($c.n): Ask &rarr; Ground &rarr; Compare &rarr; Draft &amp; Explain &rarr; Track &rarr; Hand off.</p>
+      </figure>
+      <figure class="arch-frame" style="margin-top: 0;">
+        <img src="../assets/images/architecture-target.png" alt="Target architecture with User Layer, Agent Layer, Data Layer, and Governance controls." loading="lazy">
+        <p class="muted small" style="margin: .75rem 0 0;">Target architecture reference for Challenge $($c.n): User Layer, Agent Layer, Data Layer, and Governance.</p>
+      </figure>
     </div>
   </div>
 </section>

@@ -1,4 +1,4 @@
-﻿# Challenge 4 &middot; Guardrails
+# Challenge 4 &middot; Guardrails
 
 > **Duration:** ~45 minutes &middot; **Path:** Low-Code + Pro-Code &middot; **Previous:** [Challenge 3](./challenge-3-tools-actions.md) &middot; **Next:** [Challenge 5 &mdash; Observability](./challenge-5-observability.md)
 
@@ -49,6 +49,14 @@ After Challenge 4 you can:
 - Access to enable Content Safety on your Foundry hub (Contributor role on the hub).
 
 ## 6. Architecture diagram
+
+![Customer journey diagram (Ask → Ground → Compare → Draft & Explain → Track → Hand off)](../assets/images/customer-journey.png)
+
+*Customer journey context: Ask &rarr; Ground &rarr; Compare &rarr; Draft &amp; Explain &rarr; Track &rarr; Hand off.*
+
+![Target architecture diagram (User Layer, Agent Layer, Data Layer, Governance)](../assets/images/architecture-target.png)
+
+*Target architecture reference: User Layer, Agent Layer, Data Layer, and Governance.*
 
 ```mermaid
 flowchart LR

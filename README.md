@@ -13,7 +13,9 @@
 
 > **Open the interactive landing page → <https://priyanka405.github.io/MS-Foundry-Microhack/>**
 
-[![Open the Contract Lifecycle Management MicroHack landing page](./assets/images/architecture-overview.svg)](https://priyanka405.github.io/MS-Foundry-Microhack/)
+[![Customer journey diagram for the Contract Lifecycle Management MicroHack](./assets/images/customer-journey.png)](https://priyanka405.github.io/MS-Foundry-Microhack/)
+
+[![Target architecture diagram for the Contract Lifecycle Management MicroHack](./assets/images/architecture-target.png)](https://priyanka405.github.io/MS-Foundry-Microhack/)
 
 <p align="center">
   <a href="https://priyanka405.github.io/MS-Foundry-Microhack/">
@@ -106,7 +108,14 @@ By the end of this hackathon you will be able to:
 
 ## Solution architecture
 
-The solution is described at two complementary levels. The diagram is unchanged; the two lenses below explain **what the agent does for the business** and **which Azure services power it**.
+The solution is described at two complementary visuals:
+
+- **Customer Journey Diagram** (`./assets/images/customer-journey.png`) for the 6-step operating flow: Ask &rarr; Ground &rarr; Compare &rarr; Draft &amp; Explain &rarr; Track &rarr; Hand off.
+- **Target Architecture Diagram** (`./assets/images/architecture-target.png`) for the layered technical reference: User Layer, Agent Layer, Data Layer, and Governance.
+
+![Customer journey diagram (Ask → Ground → Compare → Draft & Explain → Track → Hand off)](./assets/images/customer-journey.png)
+
+![Target architecture diagram (User Layer, Agent Layer, Data Layer, Governance)](./assets/images/architecture-target.png)
 
 ### Functional architecture (business capabilities)
 

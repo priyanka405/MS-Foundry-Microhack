@@ -45,6 +45,14 @@ After Challenge 7 you can:
 
 ## 6. Continuous improvement loop
 
+![Customer journey diagram (Ask → Ground → Compare → Draft & Explain → Track → Hand off)](../assets/images/customer-journey.png)
+
+*Customer journey context: Ask &rarr; Ground &rarr; Compare &rarr; Draft &amp; Explain &rarr; Track &rarr; Hand off.*
+
+![Target architecture diagram (User Layer, Agent Layer, Data Layer, Governance)](../assets/images/architecture-target.png)
+
+*Target architecture reference: User Layer, Agent Layer, Data Layer, and Governance.*
+
 ```mermaid
 flowchart LR
     Baseline[Baseline metrics] --> Hyp[Hypothesis<br/>one lever]
@@ -182,4 +190,3 @@ You can defend the winning config in one sentence: *"We chose X because it moves
 ## 17. Next challenge
 
 Continue to [Challenge 8 &mdash; Publish](./challenge-8-publish.md).
-

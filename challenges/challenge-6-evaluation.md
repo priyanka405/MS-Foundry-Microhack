@@ -1,4 +1,4 @@
-﻿# Challenge 6 &middot; Evaluation
+# Challenge 6 &middot; Evaluation
 
 > **Duration:** ~45 minutes &middot; **Path:** Low-Code + Pro-Code &middot; **Previous:** [Challenge 5](./challenge-5-observability.md) &middot; **Next:** [Challenge 7 &mdash; Optimization](./challenge-7-optimization.md)
 
@@ -46,6 +46,14 @@ After Challenge 6 you can:
 - Env vars: `AZURE_SUBSCRIPTION_ID`, `AZURE_RESOURCE_GROUP`, `AZURE_AI_PROJECT_NAME`, `AZURE_OPENAI_ENDPOINT`.
 
 ## 6. Architecture diagram
+
+![Customer journey diagram (Ask → Ground → Compare → Draft & Explain → Track → Hand off)](../assets/images/customer-journey.png)
+
+*Customer journey context: Ask &rarr; Ground &rarr; Compare &rarr; Draft &amp; Explain &rarr; Track &rarr; Hand off.*
+
+![Target architecture diagram (User Layer, Agent Layer, Data Layer, Governance)](../assets/images/architecture-target.png)
+
+*Target architecture reference: User Layer, Agent Layer, Data Layer, and Governance.*
 
 ```mermaid
 flowchart LR
