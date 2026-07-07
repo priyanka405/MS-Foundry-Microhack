@@ -13,7 +13,7 @@
 
 > **Open the interactive landing page → <https://priyanka405.github.io/MS-Foundry-Microhack/>**
 
-[![Open the Contract Lifecycle Management MicroHack landing page](./assets/images/architecture-overview.svg)](https://priyanka405.github.io/MS-Foundry-Microhack/)
+[![Open the Contract Lifecycle Management MicroHack landing page](./assets/images/architecture-target.png)](https://priyanka405.github.io/MS-Foundry-Microhack/)
 
 <p align="center">
   <a href="https://priyanka405.github.io/MS-Foundry-Microhack/">
@@ -106,7 +106,7 @@ By the end of this hackathon you will be able to:
 
 ## Solution architecture
 
-The solution is described at two complementary levels. The diagram is unchanged; the two lenses below explain **what the agent does for the business** and **which Azure services power it**.
+The solution is described at two complementary levels. The two diagrams below show **what the agent does for the business** and **which Azure services power it**.
 
 ### Functional architecture (business capabilities)
 
@@ -134,50 +134,15 @@ Everything is grounded on the enterprise corpus, guarded by content safety, and 
 | Observability | **Application Insights** + OpenTelemetry | Traces, KQL, cost + latency dashboards |
 | CI gate | **GitHub Actions** + **Azure AI Evaluation SDK** | Groundedness / safety / tool accuracy gate |
 
-```mermaid
-flowchart LR
-    subgraph Users
-        L[Legal]
-        P[Procurement]
-        S[Sales]
-    end
+<div align="center">
+  <img src="./assets/images/customer-journey.png" alt="Contract Lifecycle Management Customer Journey on Microsoft Foundry showing the six-step flow from Ask to Hand off." width="100%" />
+  <p><em>Customer journey &mdash; the six-step process from Ask to Hand off.</em></p>
+</div>
 
-    subgraph Channel[Channel]
-        UI[Web / Teams UI]
-    end
-
-    subgraph Foundry[Microsoft Foundry]
-        A[Contract Intake and Drafting Agent]
-        KG[Knowledge Grounding]
-        T[Function Tools]
-        GR[Guardrails and Safety]
-        EV[Evaluators]
-        OB[Tracing]
-    end
-
-    subgraph Ground[Grounding]
-        AIS[Azure AI Search - idx-clm-contracts]
-        BLOB[Blob - clm-corpus]
-    end
-
-    subgraph Actions[Agent tools]
-        FIQ[Foundry IQ - Azure AI Search + SharePoint]
-        WIQ[WebIQ - Bing Search]
-        SQL[Azure SQL - contract data]
-    end
-
-    subgraph Ops[Ops]
-        AI[Application Insights]
-        GH[GitHub Actions - CI Gate]
-    end
-
-    L & P & S --> UI --> A
-    A --> KG --> AIS & BLOB
-    A --> T --> FIQ & WIQ & SQL
-    A --> GR
-    A --> OB --> AI
-    EV --> GH
-```
+<div align="center">
+  <img src="./assets/images/architecture-target.png" alt="Contract Lifecycle Management Target Architecture on Microsoft Foundry showing the user layer, agent layer, data layer, and governance." width="100%" />
+  <p><em>Target architecture &mdash; user layer, agent layer, data layer, and governance.</em></p>
+</div>
 
 Every challenge builds one slice of this picture. By the end, the whole diagram is real.
 

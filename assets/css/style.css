@@ -676,6 +676,19 @@ pre code { background: transparent; color: inherit; padding: 0; }
   display: block;
   aspect-ratio: 1200 / 680;
 }
+.architecture-gallery {
+  margin-top: 1.5rem;
+  align-items: start;
+}
+.arch-figure {
+  margin: 0;
+}
+.arch-figure figcaption {
+  margin-top: .85rem;
+  color: var(--c-ink-mute);
+  font-size: .92rem;
+  text-align: center;
+}
 
 /* Hero QR mini-card layout */
 .hero-inner.with-qr {
