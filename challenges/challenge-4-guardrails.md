@@ -1,12 +1,24 @@
-# Challenge 4 &middot; Guardrails
+﻿# Challenge 4 &middot; Guardrails
 
 > **Duration:** ~45 minutes &middot; **Path:** Low-Code + Pro-Code &middot; **Previous:** [Challenge 3](./challenge-3-tools-actions.md) &middot; **Next:** [Challenge 5 &mdash; Observability](./challenge-5-observability.md)
 
 ---
 
+<!-- CHALLENGE-SUMMARY:v1 -->
+## Challenge summary
+
+| Field | Value |
+| --- | --- |
+| **Objective** | Wrap every tool with Prompt Shields, Content Safety, PII detection, approved-template enforcement, and restricted-clause protection. |
+| **Agent capability** | Safety-first CLM &mdash; the agent refuses restricted actions, redacts PII, and only edits approved templates. |
+| **Tool integration** | Guardrails sit between the user and all five tools. No unsafe fast path exists. |
+| **Azure services used** | Azure AI Content Safety, Prompt Shields, PII detection. |
+| **Expected outcome** | All red-team prompts are refused; zero safety defects on the evaluation dataset. |
+
+---
 ## 1. Context
 
-Your agent now drafts contracts, quotes clauses, and touches Logic Apps and Functions. That is exactly the surface an attacker or a well-meaning employee can misuse &mdash; asking the agent to auto-approve, to leak restricted data, or to swap out a controlled clause for something custom. This challenge closes those doors.
+Your agent now drafts contracts, quotes clauses, routes approvals through Power Automate, and reads or writes contract state in Dataverse. That is exactly the surface an attacker or a well-meaning employee can misuse &mdash; asking the agent to auto-approve, to leak restricted data, or to swap out a controlled clause for something custom. This challenge closes those doors.
 
 ## 2. Business context
 
@@ -70,7 +82,7 @@ Append this to your agent instructions after TOOL ROUTING:
 
 4. Approval bypass. If the request contains any of: "auto-approve",
    "bypass approval", "skip legal review", "approve without review",
-   "force sign", "self-sign" — refuse in one paragraph and cite this rule.
+   "force sign", "self-sign" â€” refuse in one paragraph and cite this rule.
 
 5. Compliance verification. If the intake mentions personal data, health
    data, payment card data, or a government counterparty, retrieve
@@ -195,3 +207,4 @@ Every one of A&ndash;E behaves as described. The app-layer blocklist short-circu
 ## 15. Next challenge
 
 Continue to [Challenge 5 &mdash; Observability](./challenge-5-observability.md).
+

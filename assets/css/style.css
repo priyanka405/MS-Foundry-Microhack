@@ -1037,3 +1037,9 @@ pre code { background: transparent; color: inherit; padding: 0; }
   .challenge-nav { grid-template-columns: 1fr; }
   .challenge-nav .btn.prev, .challenge-nav .btn.next { justify-self: stretch; }
 }
+
+/* --- utility helpers (added for functional/technical architecture panels) --- */
+.muted { color: var(--c-ink-mute); }
+.small { font-size: .85rem; }
+.panel h3 { margin: 0 0 .5rem; }
+.panel .check-list { margin: .25rem 0 .5rem; padding-left: 1.15rem; }

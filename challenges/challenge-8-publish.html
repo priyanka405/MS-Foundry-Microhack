@@ -119,6 +119,18 @@
 
 ---
 
+<!-- CHALLENGE-SUMMARY:v1 -->
+## Challenge summary
+
+| Field | Value |
+| --- | --- |
+| **Objective** | Publish the agent as a Web App with Easy Auth, a Teams app, or an authenticated API endpoint. |
+| **Agent capability** | End-user access &mdash; pilot users complete real Contract Lifecycle Management tasks from a real channel. |
+| **Tool integration** | All five tools reachable via the shipped channel. A scheduled Azure Function is added *only* for the batch renewal-reminder job (a non-conversational workload the agent should not own). |
+| **Azure services used** | Azure App Service (Easy Auth), Microsoft Teams, Managed Identity, Azure Storage Queue + Azure Functions (for the renewal reminder batch only). |
+| **Expected outcome** | A pilot user completes an end-to-end scenario from Teams or the Web App and every action is traced. |
+
+---
 ## 1. Context
 
 Time to put the assistant in front of real users. You will pick one deployment target (or all three) and ship a working, authenticated, traced version to a pilot group of Legal + Procurement.
@@ -297,7 +309,7 @@ If you completed Track A, the API is already live at `POST /api/turn` behind Eas
 2. Grant it access to the Web App: portal &rarr; Web App &rarr; **Access control (IAM)** &rarr; role `Reader` on the app.
 3. On the calling side, get a token with the Web App's audience and POST as in [7.5](#75-test).
 
-For higher scale, host a separate Function App that reads from a Storage Queue and posts to the CLM API on a schedule &mdash; useful for the renewal reminder job.
+For higher scale, host a separate **Azure Function** on a timer trigger that reads from a Storage Queue and posts to the CLM API on a schedule &mdash; useful for the **renewal reminder job**. This is the one place Azure Functions genuinely earn their keep: it is a scheduled, queue-driven batch process, not a conversational action, so the agent should not own it. The Function reads upcoming renewals from Dataverse and calls Power Automate to send reminders.
 
 ## 10. Governance checklist (before opening the pilot)
 
@@ -387,6 +399,7 @@ Congratulations &mdash; you shipped a grounded, tool-using, evaluated, traced CL
 - Grow the dataset every time you find a real-world regression: add the failing prompt to `evaluation_dataset.jsonl`.
 
 Submit your fork URL and a 3&ndash;5 minute walkthrough on the [issues page](https://github.com/priyanka405/MS-Foundry-Microhack/issues) with the label `submission` to claim the **Foundry CLM Champion** badge.
+
 
 </script>
 

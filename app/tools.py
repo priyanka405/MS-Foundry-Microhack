@@ -1,10 +1,13 @@
 """Function tools for the Contract Intake & Drafting Agent (Challenge 3).
 
-These are the Python-side representations of the tools the agent will call:
-- clause_lookup      -> Azure Function returning approved clause text
-- generate_document  -> Power Automate flow producing a filled document
-- route_approval     -> Logic App sending an approval email
-- contract_status    -> Azure Function reading/updating contract state
+These are the Python-side representations of the tools the agent will call.
+They mirror the five canonical Contract Lifecycle Management tools:
+
+- clause_lookup       -> read approved clause text from the clause library
+                         (used by the Clause Analysis Tool alongside the model)
+- generate_document   -> Power Automate flow producing a filled document
+- route_approval      -> Power Automate approval flow (Approval Routing Tool)
+- contract_status     -> Dataverse / Azure SQL read+write (Contract Status Tool)
 
 Also includes the app-layer approval-bypass blocklist (Challenge 4).
 """
@@ -106,7 +109,7 @@ def route_approval(
     doc_uri: str,
     risk_band: Literal["Low", "Medium", "High"] = "Medium",
 ) -> str:
-    """Send an approval request to Legal / Procurement via the Logic App.
+    """Send an approval request to Legal / Procurement via a Power Automate flow.
 
     Returns a JSON string with the approval id and initial status. The final
     decision arrives asynchronously via a callback the agent handles later.

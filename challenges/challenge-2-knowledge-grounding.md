@@ -1,9 +1,21 @@
-# Challenge 2 &middot; Knowledge Grounding
+﻿# Challenge 2 &middot; Knowledge Grounding
 
 > **Duration:** ~60 minutes &middot; **Path:** Low-Code + Pro-Code &middot; **Previous:** [Challenge 1](./challenge-1-build-agent.md) &middot; **Next:** [Challenge 3 &mdash; Tools &amp; Actions](./challenge-3-tools-actions.md)
 
 ---
 
+<!-- CHALLENGE-SUMMARY:v1 -->
+## Challenge summary
+
+| Field | Value |
+| --- | --- |
+| **Objective** | Ground the agent on the enterprise contract corpus (templates, clauses, policies) with citations on every answer. |
+| **Agent capability** | Contract search &amp; review &mdash; the agent retrieves from Azure AI Search and cites the exact document, clause, or paragraph. |
+| **Tool integration** | **Contract Search Tool** (Azure AI Search) attached. Prepares the ground the Contract Repository (SharePoint) reads on top of. |
+| **Azure services used** | Azure AI Search (hybrid vector + semantic), Azure Blob Storage, Azure AI Foundry Models (embeddings). |
+| **Expected outcome** | Every corpus answer includes a traceable citation. Fabricated content is refused and re-grounded. |
+
+---
 ## 1. Context
 
 Your agent is fluent but ignorant. Ask it to quote your standard payment-terms clause and it will happily invent one. In this challenge you attach **enterprise knowledge**: templates, approved clauses, policies, and historical contracts &mdash; indexed in **Azure AI Search** &mdash; plus a **File Search** channel for documents users attach mid-conversation.
@@ -98,9 +110,9 @@ Open the agent instructions and append the following block after the existing NE
 ```text
 # KNOWLEDGE
 You have TWO grounding sources:
-1. AzureAISearchTool -> index `idx-clm-contracts` — the enterprise
+1. AzureAISearchTool -> index `idx-clm-contracts` â€” the enterprise
    corpus of templates, approved clauses, and policies.
-2. FileSearch — for documents attached by the user in this session.
+2. FileSearch â€” for documents attached by the user in this session.
 
 # RETRIEVAL RULES
 - Always ground factual claims about a template / clause / policy in a
@@ -229,3 +241,4 @@ You have finished Challenge 2 when the agent **never** produces an ungrounded cl
 ## 16. Next challenge
 
 Continue to [Challenge 3 &mdash; Tools &amp; Actions](./challenge-3-tools-actions.md).
+

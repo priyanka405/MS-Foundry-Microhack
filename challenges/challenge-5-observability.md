@@ -1,9 +1,21 @@
-# Challenge 5 &middot; Observability
+﻿# Challenge 5 &middot; Observability
 
 > **Duration:** ~45 minutes &middot; **Path:** Low-Code + Pro-Code &middot; **Previous:** [Challenge 4](./challenge-4-guardrails.md) &middot; **Next:** [Challenge 6 &mdash; Evaluation](./challenge-6-evaluation.md)
 
 ---
 
+<!-- CHALLENGE-SUMMARY:v1 -->
+## Challenge summary
+
+| Field | Value |
+| --- | --- |
+| **Objective** | Trace every prompt, retrieval, tool call, and response into Application Insights, and query them with KQL. |
+| **Agent capability** | Full audit trail &mdash; end-to-end tracing for every conversation, including latency, cost, and grounding signals. |
+| **Tool integration** | Tracing wraps all five agent tools (Contract Search, Clause Analysis, Contract Repository, Approval Routing, Contract Status). |
+| **Azure services used** | OpenTelemetry, Application Insights, Log Analytics. |
+| **Expected outcome** | Reusable KQL queries return per-thread telemetry including tool-call accuracy, latency, and cost per session. |
+
+---
 ## 1. Context
 
 You cannot ship what you cannot see. This challenge wires end-to-end telemetry into every prompt, retrieval, tool call, and response &mdash; so you can answer three questions in App Insights: *is it working?*, *is it fast?*, *what does it cost?*.
@@ -220,3 +232,4 @@ You can point at a real span in App Insights that shows the full path of a singl
 ## 15. Next challenge
 
 Continue to [Challenge 6 &mdash; Evaluation](./challenge-6-evaluation.md).
+

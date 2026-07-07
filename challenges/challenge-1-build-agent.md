@@ -1,9 +1,21 @@
-# Challenge 1 &middot; Build the Contract Intake &amp; Drafting Agent
+﻿# Challenge 1 &middot; Build the Contract Intake &amp; Drafting Agent
 
 > **Duration:** ~45 minutes &middot; **Path:** Low-Code + Pro-Code &middot; **Previous:** [Challenge 0 &mdash; Setup](./challenge-0-setup.md) &middot; **Next:** [Challenge 2 &mdash; Knowledge Grounding](./challenge-2-knowledge-grounding.md)
 
 ---
 
+<!-- CHALLENGE-SUMMARY:v1 -->
+## Challenge summary
+
+| Field | Value |
+| --- | --- |
+| **Objective** | Author the Contract Intake &amp; Drafting Agent: persona, instructions, refusal behavior, and the first grounded round-trip. |
+| **Agent capability** | Contract intake &amp; drafting &mdash; the agent gathers the required inputs, drafts from approved templates, and refuses legal advice or self-approval. |
+| **Tool integration** | Agent runtime only (no external tools attached yet). Sets up the instruction slots that later tools plug into. |
+| **Azure services used** | Azure AI Foundry Agents, Azure AI Foundry Models (gpt-4o / gpt-4o-mini). |
+| **Expected outcome** | The agent replies with the correct persona, gathers a full contract intake, refuses out-of-scope prompts, and always includes the standard disclaimer. |
+
+---
 ## 1. Context
 
 You have an empty Foundry project with a deployed model. Time to give it a job. In this challenge you build the first version of the **Contract Intake &amp; Drafting Agent** &mdash; the front door of the whole CLM assistant.
@@ -196,3 +208,4 @@ You have finished Challenge 1 when **all seven** validation rows pass. If any pr
 ## 15. Next challenge
 
 Continue to [Challenge 2 &mdash; Knowledge Grounding](./challenge-2-knowledge-grounding.md).
+

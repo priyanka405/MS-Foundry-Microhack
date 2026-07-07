@@ -119,6 +119,18 @@
 
 ---
 
+<!-- CHALLENGE-SUMMARY:v1 -->
+## Challenge summary
+
+| Field | Value |
+| --- | --- |
+| **Objective** | Provision the Azure AI Foundry project, deploy the model, connect Azure AI Search, upload the contract corpus, and enable tracing. |
+| **Agent capability** | Foundation only &mdash; no agent behavior yet. This challenge lays the runtime the Contract Lifecycle Management Agent will live on. |
+| **Tool integration** | None yet. Prepares the substrate for every tool that follows. |
+| **Azure services used** | Azure AI Foundry, Azure AI Foundry Models (gpt-4o / gpt-4o-mini), Azure AI Search, Azure Blob Storage, Application Insights. |
+| **Expected outcome** | A working Foundry project with a deployed model, an indexed corpus, and end-to-end tracing enabled &mdash; ready for Challenge 1. |
+
+---
 ## 1. Context
 
 Every downstream challenge assumes a working **Microsoft Foundry** project with a deployed model, a private search index over the contract corpus, tracing enabled, and the sample data uploaded. This challenge sets up all of that.
@@ -348,6 +360,7 @@ You have finished Challenge 0 when **all seven** validation rows above pass **an
 ## 14. Next challenge
 
 Continue to [Challenge 1 &mdash; Build the Contract Intake &amp; Drafting Agent](./challenge-1-build-agent.md).
+
 
 </script>
 

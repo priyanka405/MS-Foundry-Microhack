@@ -1,9 +1,21 @@
-# Challenge 6 &middot; Evaluation
+﻿# Challenge 6 &middot; Evaluation
 
 > **Duration:** ~45 minutes &middot; **Path:** Low-Code + Pro-Code &middot; **Previous:** [Challenge 5](./challenge-5-observability.md) &middot; **Next:** [Challenge 7 &mdash; Optimization](./challenge-7-optimization.md)
 
 ---
 
+<!-- CHALLENGE-SUMMARY:v1 -->
+## Challenge summary
+
+| Field | Value |
+| --- | --- |
+| **Objective** | Evaluate the agent on a 15-row dataset: groundedness, relevance, task adherence, safety, and tool-call accuracy. |
+| **Agent capability** | Provable quality &mdash; the agent hits published thresholds before it can ship. |
+| **Tool integration** | Evaluators score every tool invocation (Contract Search, Clause Analysis, Contract Repository, Approval Routing, Contract Status). |
+| **Azure services used** | Azure AI Evaluation SDK, Azure AI Foundry evaluators. |
+| **Expected outcome** | All gate metrics green; scorecard published; failing runs block the CI pipeline. |
+
+---
 ## 1. Context
 
 Quality gates are what separate a demo from a product. This challenge turns the agent's behavior into **numbers** &mdash; scored by Foundry evaluators on a fixed dataset &mdash; and encodes those numbers as a **deployment gate** you can call from CI.
@@ -221,3 +233,4 @@ The pro-code run of `python -m app.evaluation` prints `Contract Lifecycle Manage
 ## 17. Next challenge
 
 Continue to [Challenge 7 &mdash; Optimization](./challenge-7-optimization.md).
+

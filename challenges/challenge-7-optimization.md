@@ -1,9 +1,21 @@
-# Challenge 7 &middot; Optimization
+﻿# Challenge 7 &middot; Optimization
 
 > **Duration:** ~45 minutes &middot; **Path:** Low-Code + Pro-Code &middot; **Previous:** [Challenge 6](./challenge-6-evaluation.md) &middot; **Next:** [Challenge 8 &mdash; Publish](./challenge-8-publish.md)
 
 ---
 
+<!-- CHALLENGE-SUMMARY:v1 -->
+## Challenge summary
+
+| Field | Value |
+| --- | --- |
+| **Objective** | Optimize across model, prompt, retrieval, and tool selection to hold or improve quality at lower cost and latency. |
+| **Agent capability** | Same quality, cheaper and faster &mdash; a repeatable sweep the team can run every quarter. |
+| **Tool integration** | Tunes retrieval parameters and tool-selection heuristics without changing the five-tool contract. |
+| **Azure services used** | Azure AI Evaluation SDK, Azure AI Foundry Models. |
+| **Expected outcome** | Cost per session reduced with quality maintained or improved. Before/after scorecards recorded. |
+
+---
 ## 1. Context
 
 The gate is green &mdash; but the assistant is still using the biggest model, a generous retrieval budget, and a verbose prompt. In this challenge you sweep the levers, measure with the evaluator you just built, and pick the config with the best quality-per-dollar.
@@ -170,3 +182,4 @@ You can defend the winning config in one sentence: *"We chose X because it moves
 ## 17. Next challenge
 
 Continue to [Challenge 8 &mdash; Publish](./challenge-8-publish.md).
+

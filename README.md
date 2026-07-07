@@ -43,6 +43,10 @@ Every challenge is fully documented for both the **Foundry portal (low-code)** a
 - [Learning objectives](#learning-objectives)
 - [Business value](#business-value)
 - [Solution architecture](#solution-architecture)
+  - [Functional architecture (business capabilities)](#functional-architecture-business-capabilities)
+  - [Technical architecture (Azure services)](#technical-architecture-azure-services)
+  - [Agent tools](#agent-tools)
+  - [Architecture design decisions](#architecture-design-decisions)
 - [Challenge roadmap](#challenge-roadmap)
 - [Prerequisites](#prerequisites)
 - [Estimated duration](#estimated-duration)
@@ -63,7 +67,7 @@ Organizations process hundreds of contracts every month. Legal and Procurement n
 - Contract tracking, renewals, and expirations
 - Risk identification
 
-You will build a single **Contract Lifecycle Management Assistant** on Microsoft Foundry that owns all of the above — grounded on your organization's own templates, clause library, and policies, protected by safety guardrails, and proven by evaluation gates.
+You will build a single **Contract Lifecycle Management Assistant** on Microsoft Foundry that owns all of the above &mdash; grounded on your organization's own templates, clause library, and policies, wired to real business systems via **Power Automate**, **SharePoint**, and **Dataverse / SQL**, protected by Prompt Shields and Content Safety, evaluated on a fixed dataset, and deployed to a Web App, Teams, or a plain API endpoint.
 
 ## Business scenario
 
@@ -82,8 +86,8 @@ By the end of this hackathon you will be able to:
 
 1. Stand up an Azure AI Foundry project with a deployed model, indexed corpus, and enabled tracing.
 2. Build a grounded agent with a strong persona and refusal behavior.
-3. Ground the agent on enterprise content using Azure AI Search and File Search — with citations.
-4. Extend the agent with 4 tools: Azure AI Search, File Search, Azure Functions, and Code Interpreter.
+3. Ground the agent on enterprise content using Azure AI Search and File Search &mdash; with citations.
+4. Extend the agent with five tools: **Contract Search** (Azure AI Search), **Clause Analysis** (Azure AI Foundry Models), **Contract Repository** (SharePoint), **Approval Routing** (Power Automate), and **Contract Status** (Dataverse / SQL).
 5. Protect the agent with Prompt Shields, PII detection, and app-layer blocklists.
 6. Trace every prompt, retrieval, tool call, and response into Application Insights.
 7. Evaluate on a fixed dataset and enforce a deployment gate.
@@ -101,6 +105,35 @@ By the end of this hackathon you will be able to:
 | Audit trail for AI-assisted actions | Ad hoc | 100% traced in App Insights |
 
 ## Solution architecture
+
+The solution is described at two complementary levels. The diagram is unchanged; the two lenses below explain **what the agent does for the business** and **which Azure services power it**.
+
+### Functional architecture (business capabilities)
+
+Legal, Procurement, and Sales users interact with **one Contract Lifecycle Management Agent**. The agent exposes five business capabilities:
+
+1. **Intake & drafting** &mdash; turn a plain-English request into a first draft using approved templates.
+2. **Contract search & review** &mdash; find contracts, quote clauses, compare against the enterprise standard.
+3. **Clause analysis** &mdash; explain, rewrite, flag risk on any clause using the underlying Foundry model.
+4. **Approval routing** &mdash; kick off the correct approval flow (Legal / Procurement / Finance) and track it to closure.
+5. **Contract status & renewals** &mdash; report on any contract's lifecycle stage and surface upcoming renewal / expiration events.
+
+Everything is grounded on the enterprise corpus, guarded by content safety, and audited end-to-end. The agent **never** advises on legal strategy and **never** self-approves.
+
+### Technical architecture (Azure services)
+
+| Layer | Azure service | Purpose |
+| --- | --- | --- |
+| Channel | Web App (Easy Auth) / Teams / API | User surface |
+| Agent runtime | **Azure AI Foundry** (Agents + Models) | Instructions, tool orchestration, model calls |
+| Model | **Azure AI Foundry Models** (gpt-4o / gpt-4o-mini) | Reasoning, drafting, clause analysis |
+| Grounding | **Azure AI Search** + **Azure Blob Storage** | Vector + semantic hybrid retrieval over the corpus |
+| Business system | **SharePoint** | Approved templates, executed contracts, DMS |
+| Workflow | **Power Automate** | Approval routing, notifications, renewal reminders |
+| System of record | **Dataverse** (or Azure SQL) | Contract status, owner, stage, renewal date |
+| Safety | **Azure AI Content Safety** + **Prompt Shields** | Jailbreak, PII, restricted-clause enforcement |
+| Observability | **Application Insights** + OpenTelemetry | Traces, KQL, cost + latency dashboards |
+| CI gate | **GitHub Actions** + **Azure AI Evaluation SDK** | Groundedness / safety / tool accuracy gate |
 
 ```mermaid
 flowchart LR
@@ -148,6 +181,31 @@ flowchart LR
 
 Every challenge builds one slice of this picture. By the end, the whole diagram is real.
 
+### Agent tools
+
+The Contract Lifecycle Management Agent is powered by five explicit tools. Every user request is answered by orchestrating one or more of them.
+
+| # | Tool | Connected service | Purpose | Expected outcome |
+| --- | --- | --- | --- | --- |
+| 1 | **Contract Search Tool** | Azure AI Search | Hybrid (vector + semantic) retrieval across the contract corpus | Grounded answers with citations to the exact clause or paragraph |
+| 2 | **Clause Analysis Tool** | Azure AI Foundry Models | LLM-driven clause explanation, rewrite, and risk flagging against the approved-clause library | Plain-language explanations and risk callouts with source-clause references |
+| 3 | **Contract Repository Tool** | SharePoint | Read approved templates, executed contracts, and policy documents from the enterprise DMS | Correct template pulled by contract type; executed contract retrieved by ID |
+| 4 | **Approval Routing Tool** | Power Automate | Kick off Legal / Procurement / Finance approval flows and return the approval id | Approval routed to the correct role; status is tracked to closure |
+| 5 | **Contract Status Tool** | Dataverse (or Azure SQL) | Read / update contract lifecycle state: stage, owner, renewal date, expiry | Deterministic status answers; renewal reminders never missed |
+
+Every tool call is traced end-to-end into Application Insights (Challenge 5) and scored by the evaluation gate for **tool call accuracy** (Challenge 6).
+
+### Architecture design decisions
+
+- **One agent, many tools.** A single agent owns the CLM domain. Multiple agents would fragment the audit trail and duplicate policy plumbing.
+- **Power Automate over Logic Apps for approvals.** Approval flows already live in Microsoft 365 (SharePoint, Teams, Outlook approvals). Power Automate matches those primitives and is the native Foundry Agent Action integration.
+- **SharePoint as the contract repository.** Contracts, templates, and policies are already there. Adding a second repository would create drift.
+- **Dataverse (or Azure SQL) for contract status.** Contract state is structured, queryable, and mutated by workflows &mdash; Dataverse gives a low-code CRUD surface without hand-rolled APIs.
+- **Foundry Models for clause analysis, not a custom API.** Clause analysis is a language task. Pushing it into an external service would add a hop, cost, and drift from prompt engineering.
+- **Azure Functions are used only where a language model genuinely cannot do the job** &mdash; specifically, the *scheduled* renewal-reminder job in Challenge 8, which is a queue-driven batch process, not a conversational action.
+- **Grounding first, tools second.** Retrieval (Azure AI Search + Blob) fires before any action-taking tool, so every approval, status change, or draft is anchored to real content.
+- **Safety wraps every tool.** Prompt Shields, Content Safety, and PII detection sit between the user and every tool call &mdash; there is no "unsafe fast path".
+
 ## Challenge roadmap
 
 | # | Challenge | Focus | Path |
@@ -155,7 +213,7 @@ Every challenge builds one slice of this picture. By the end, the whole diagram 
 | 0 | [Setup](./challenges/challenge-0-setup.md) | Foundry project, model, Search, tracing, corpus | Low-code + Pro-code |
 | 1 | [Build Agent — Contract Intake & Drafting](./challenges/challenge-1-build-agent.md) | Persona, instructions, refusal behavior | Low-code + Pro-code |
 | 2 | [Knowledge Grounding](./challenges/challenge-2-knowledge-grounding.md) | Azure AI Search + File Search with citations | Low-code + Pro-code |
-| 3 | [Tools & Actions](./challenges/challenge-3-tools-actions.md) | Search, File Search, Azure Functions, Code Interpreter | Low-code + Pro-code |
+| 3 | [Tools &amp; Actions](./challenges/challenge-3-tools-actions.md) | Contract Search, Clause Analysis, Contract Repository, Approval Routing, Contract Status | Low-code + Pro-code |
 | 4 | [Guardrails](./challenges/challenge-4-guardrails.md) | Prompt Shields, PII, template enforcement | Low-code + Pro-code |
 | 5 | [Observability](./challenges/challenge-5-observability.md) | Tracing, monitoring, tool telemetry | Low-code + Pro-code |
 | 6 | [Evaluation](./challenges/challenge-6-evaluation.md) | Groundedness, safety, tool accuracy | Low-code + Pro-code |
@@ -174,6 +232,7 @@ Before you start Challenge 0, make sure you have:
 - **Python 3.11+**, **Git**, and **VS Code** with the Python + Azure extensions.
 - **Azure CLI** (`az login` works).
 - (For pro-code path) `pip install -r requirements.txt`.
+- (For Challenge 3 &amp; 5) A Microsoft 365 tenant with **Power Automate**, **SharePoint**, and **Dataverse** (or a stub SQL database) enabled &mdash; or the ability to stub the equivalent HTTP endpoints.
 
 ## Estimated duration
 
@@ -194,15 +253,15 @@ An "Explorer" (low-code only) team can finish Challenges 0–5 in about 4 hours.
 
 ## Skills you will learn
 
-- **Foundry project management** — creating projects, model deployments, connections, and role assignments.
-- **Agent design** — instructions, personas, refusal behavior, tool routing.
-- **Retrieval-Augmented Generation** — vector + semantic hybrid, chunking, top-k tuning, citations.
-- **Function calling** — wiring Azure Functions and Code Interpreter as tools.
-- **Guardrails** — Prompt Shields, Content Safety, PII detection, app-layer blocklists.
-- **Observability** — OpenTelemetry, Application Insights, KQL, cost tracking.
-- **Evaluation** — groundedness, task adherence, safety, tool call accuracy, gate design.
-- **Optimization** — model + prompt + retrieval + cost sweeps with reproducible runs.
-- **Deployment** — Web App with Easy Auth, Teams manifest, API endpoint with Managed Identity.
+- **Foundry project management** &mdash; creating projects, model deployments, connections, and role assignments.
+- **Agent design** &mdash; instructions, personas, refusal behavior, tool routing.
+- **Retrieval-Augmented Generation** &mdash; vector + semantic hybrid, chunking, top-k tuning, citations.
+- **Function calling** &mdash; wiring Power Automate flows, SharePoint / Dataverse connectors, and Foundry built-in tools into an agent.
+- **Guardrails** &mdash; Prompt Shields, Content Safety, PII detection, app-layer blocklists.
+- **Observability** &mdash; OpenTelemetry, Application Insights, KQL, cost tracking.
+- **Evaluation** &mdash; groundedness, task adherence, safety, tool call accuracy, gate design.
+- **Optimization** &mdash; model + prompt + retrieval + cost sweeps with reproducible runs.
+- **Deployment** &mdash; Web App with Easy Auth, Teams manifest, API endpoint with Managed Identity.
 
 ## Success outcomes
 
