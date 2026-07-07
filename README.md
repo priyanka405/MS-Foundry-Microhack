@@ -1,22 +1,22 @@
 # Contract Lifecycle Management with Microsoft Foundry
 
-> A production-style **Microsoft Foundry MicroHack** that walks you through building an enterprise-grade **Contract Lifecycle Management (CLM) Assistant** — from an empty Foundry project to a shipped Web App / Teams app / API.
+> A production-style **Microsoft Foundry MicroHack** that walks you through building an enterprise-grade **Contract Lifecycle Management (CLM) Assistant** — from an empty Foundry project to a shipped agent.
 
 [![Foundry](https://img.shields.io/badge/Microsoft-Foundry-0078D4?logo=microsoft&logoColor=white)](https://ai.azure.com)
 [![Language](https://img.shields.io/badge/Language-Python%203.11+-3776AB?logo=python&logoColor=white)](https://www.python.org)
-[![Docs](https://img.shields.io/badge/Landing%20Page-Live-0078D4?logo=github&logoColor=white)](https://github.com/priyanka405/MS-Foundry-Microhack)
+[![Docs](https://img.shields.io/badge/Landing%20Page-Live-0078D4?logo=github&logoColor=white)](https://priyanka405.github.io/MS-Foundry-Microhack/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
 
 ---
 
 ## Landing page
 
-> **Open the interactive landing page → <[https://github.com/priyanka405/MS-Foundry-Microhack](https://github.com/priyanka405/MS-Foundry-Microhack)>**
+> **Open the interactive landing page → <https://priyanka405.github.io/MS-Foundry-Microhack/>**
 
-[![Open the Contract Lifecycle Management MicroHack landing page](./assets/images/architecture-overview.svg)](https://github.com/priyanka405/MS-Foundry-Microhack)
+[![Open the Contract Lifecycle Management MicroHack landing page](./assets/images/architecture-overview.svg)](https://priyanka405.github.io/MS-Foundry-Microhack/)
 
 <p align="center">
-  <a href="https://github.com/priyanka405/MS-Foundry-Microhack">
+  <a href="https://priyanka405.github.io/MS-Foundry-Microhack/">
     <img alt="Open the landing page" src="https://img.shields.io/badge/%E2%86%92%20Open%20the%20landing%20page-0078D4?style=for-the-badge&logo=github&logoColor=white">
   </a>
   &nbsp;
@@ -31,7 +31,7 @@ Click the image or the button above to launch the full-page site (dark mode, Mer
 
 ## Hero
 
-Build the **Contract Intake & Drafting Agent** — the AI copilot Legal and Procurement wish they already had. Nine hands-on challenges take you from *"I have an Azure subscription"* all the way to a shipped, audited, governed AI assistant.
+Build the **Contract Intake & Drafting Agent** — the AI copilot Legal and Procurement wish they already had. Nine hands-on challenges take you from *"I have an Azure subscription"* all the way to a shipped assistant serving Legal, Procurement, and Sales users on the web, in Teams, or as an API.
 
 Every challenge is fully documented for both the **Foundry portal (low-code)** and the **Foundry SDK in Python (pro-code)**, so architects, engineers, and product folks can all follow along.
 
@@ -71,14 +71,14 @@ You will build a single **Contract Lifecycle Management Assistant** on Microsoft
 
 ## Business scenario
 
-**Contoso Global** is a multinational with 40,000 employees, 12,000 active contracts, and 400+ new agreements per month. Their current CLM process is scattered across SharePoint, email, and three different spreadsheets. The pain points:
+**Contoso Global** is a multinational with 40,000 employees, 12,000 active contracts, and 400+ new agreements per month. Their current CLM process is scattered across SharePoint, email, and three different vendor systems. The pain is real:
 
 - Legal spends **~35%** of its time answering "what does clause X in contract Y say?".
 - Procurement misses **~11%** of auto-renewals every year, costing millions.
 - Average new-contract turnaround is **17 business days**.
 - No consistent way to compare an incoming counterparty draft against the enterprise standard.
 
-Your job: ship a **Contract Lifecycle Management Assistant** that turns this into a same-day, self-service, auditable workflow — while never crossing the line into legal advice or unilateral approvals.
+Your job: ship a **Contract Lifecycle Management Assistant** that turns this into a same-day, self-service, auditable workflow — while never crossing the line into legal advice or unilateral approval.
 
 ## Learning objectives
 
@@ -87,7 +87,7 @@ By the end of this hackathon you will be able to:
 1. Stand up an Azure AI Foundry project with a deployed model, indexed corpus, and enabled tracing.
 2. Build a grounded agent with a strong persona and refusal behavior.
 3. Ground the agent on enterprise content using Azure AI Search and File Search — with citations.
-4. Extend the agent with five tools: **Contract Search** (Azure AI Search), **Clause Analysis** (Azure AI Foundry Models), **Contract Repository** (SharePoint), **Approval Routing** (Power Automate), **Contract Status** (Dataverse / SQL).
+4. Extend the agent with five tools: **Contract Search** (Azure AI Search), **Clause Analysis** (Azure AI Foundry Models), **Contract Repository** (SharePoint), **Approval Routing** (Power Automate), **Contract Status** (Dataverse).
 5. Protect the agent with Prompt Shields, PII detection, and app-layer blocklists.
 6. Trace every prompt, retrieval, tool call, and response into Application Insights.
 7. Evaluate on a fixed dataset and enforce a deployment gate.
@@ -189,7 +189,7 @@ The Contract Lifecycle Management Agent is powered by five explicit tools. Every
 | --- | --- | --- | --- | --- |
 | 1 | **Contract Search Tool** | Azure AI Search | Hybrid (vector + semantic) retrieval across the contract corpus | Grounded answers with citations to the exact clause or paragraph |
 | 2 | **Clause Analysis Tool** | Azure AI Foundry Models | LLM-driven clause explanation, rewrite, and risk flagging against the approved-clause library | Plain-language explanations and risk callouts |
-| 3 | **Contract Repository Tool** | SharePoint | Read approved templates, executed contracts, and policy documents from the enterprise DMS | Correct template pulled by contract type; executed contracts retrieved for review |
+| 3 | **Contract Repository Tool** | SharePoint | Read approved templates, executed contracts, and policy documents from the enterprise DMS | Correct template pulled by contract type; executed contracts retrieved |
 | 4 | **Approval Routing Tool** | Power Automate | Kick off Legal / Procurement / Finance approval flows and return the approval id | Approval routed to the correct role; status is tracked to closure |
 | 5 | **Contract Status Tool** | Dataverse (or Azure SQL) | Read / update contract lifecycle state: stage, owner, renewal date, expiry | Deterministic status answers; renewal reminders never miss |
 
@@ -220,7 +220,7 @@ Every tool call is traced end-to-end into Application Insights (Challenge 5) and
 | 7 | [Optimization](./challenges/challenge-7-optimization.md) | Model, prompt, retrieval, cost, latency | Low-code + Pro-code |
 | 8 | [Publish](./challenges/challenge-8-publish.md) | Web App, Teams, API endpoint | Low-code + Pro-code |
 
-Every challenge follows the same anatomy: **Context → Objective → Learning Outcome → Prerequisites → Architecture Diagram → Low-Code Path → Pro-Code Path → Portal Walkthrough & Deployment Checklist**.
+Every challenge follows the same anatomy: **Context → Objective → Learning Outcome → Prerequisites → Architecture Diagram → Low-Code Path → Pro-Code Path → Portal Walkthrough & Deployment**.
 
 ## Prerequisites
 
