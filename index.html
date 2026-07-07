@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Contract Lifecycle Management &middot; Microsoft Foundry MicroHack</title>
   <meta name="description" content="A 9-challenge Microsoft Foundry MicroHack that walks you from empty Azure subscription to a shipped, evaluated Contract Lifecycle Management assistant." />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%230078D4'/%3E%3Cpath d='M28 26h32l14 14v32H28V26z' fill='%23FFF'/%3E%3C/svg%3E" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%230078D4'/%3E%3Cpath d='M28 26h32l14 14v48H32V26z' fill='%23FFF'/%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600;700&family=Cascadia+Code&display=swap" rel="stylesheet" />
@@ -38,6 +38,7 @@
       <ul class="nav-links">
         <li><a href="#overview">Overview</a></li>
         <li><a href="#scenario">Scenario</a></li>
+        <li><a href="#journey">User Journey</a></li>
         <li><a href="#architecture">Architecture</a></li>
         <li><a href="#challenges">Challenges</a></li>
         <li><a href="#services">Services</a></li>
@@ -147,8 +148,22 @@
   </div>
 </section>
 
+<!-- ================= USER JOURNEY ================= -->
+<section id="journey" class="section">
+  <div class="wrap">
+    <header class="section-head">
+      <span class="section-eyebrow">User Journey</span>
+      <h2>How teams interact with the CLM Assistant</h2>
+      <p class="section-lede">The workflow from contract intake to renewal tracking across Legal, Procurement, and Sales.</p>
+    </header>
+    <div class="architecture arch-frame">
+      <img src="assets/images/clm-user-journey.png" alt="Contract Lifecycle Management user journey showing intake, drafting, review, and renewal workflows" loading="lazy">
+    </div>
+  </div>
+</section>
+
 <!-- ================= ARCHITECTURE ================= -->
-<section id="architecture" class="section">
+<section id="architecture" class="section section-alt">
   <div class="wrap">
     <header class="section-head">
       <span class="section-eyebrow">Solution architecture</span>
@@ -183,7 +198,7 @@
     </div>
 
     <div class="architecture arch-frame">
-      <img src="assets/images/architecture-overview.png" alt="End-to-end architecture: users, channel, Foundry agent, knowledge, tools, enterprise systems, tracing, and CI gate." loading="lazy">
+      <img src="assets/images/clm-architecture-overview.png" alt="End-to-end architecture: users, channel, Foundry agent, knowledge, tools, enterprise systems, tracing, and CI gate." loading="lazy">
     </div>
 
     <header class="section-head" style="margin-top: 2.75rem;">
@@ -209,14 +224,14 @@
       </article>
       <article class="svc-card">
         <h4>Design decisions</h4>
-        <p class="muted small">Foundry IQ collapses AI Search + SharePoint into one internal-knowledge tool &middot; WebIQ handles anything not in the corpus &middot; Azure SQL is a direct data connector.</p>
+        <p class="muted small">Foundry IQ collapses AI Search + SharePoint into one internal-knowledge tool &middot; WebIQ handles anything not in the corpus &middot; Azure SQL is a direct data connector &middot; Safety wraps every tool.</p>
       </article>
     </div>
   </div>
 </section>
 
 <!-- ================= LEARNING OBJECTIVES ================= -->
-<section id="objectives" class="section section-alt">
+<section id="objectives" class="section">
   <div class="wrap">
     <header class="section-head">
       <span class="section-eyebrow">Learning objectives</span>
@@ -237,7 +252,7 @@
 </section>
 
 <!-- ================= CHALLENGES ================= -->
-<section id="challenges" class="section">
+<section id="challenges" class="section section-alt">
   <div class="wrap">
     <header class="section-head">
       <span class="section-eyebrow">Challenge timeline</span>
@@ -322,7 +337,7 @@
 </section>
 
 <!-- ================= SERVICES ================= -->
-<section id="services" class="section section-alt">
+<section id="services" class="section">
   <div class="wrap">
     <header class="section-head">
       <span class="section-eyebrow">Foundry services used</span>
@@ -344,7 +359,7 @@
 </section>
 
 <!-- ================= PATHS ================= -->
-<section id="paths" class="section">
+<section id="paths" class="section section-alt">
   <div class="wrap">
     <header class="section-head">
       <span class="section-eyebrow">Two paths, one outcome</span>
@@ -385,7 +400,7 @@
     <div class="grid grid-3">
       <a class="link-card" href="https://ai.azure.com" target="_blank" rel="noopener"><h4>Microsoft Foundry &#8599;</h4><p>The product surface for building, evaluating, and shipping agents.</p></a>
       <a class="link-card" href="https://learn.microsoft.com/azure/ai-foundry/" target="_blank" rel="noopener"><h4>Foundry docs &#8599;</h4><p>Concepts, quickstarts, and REST/SDK references.</p></a>
-      <a class="link-card" href="https://learn.microsoft.com/python/api/overview/azure/ai-agents-readme" target="_blank" rel="noopener"><h4>Agents SDK (Python) &#8599;</h4><p>Reference for <code>azure-ai-agents</code> and the contract agent implementation.</p></a>
+      <a class="link-card" href="https://learn.microsoft.com/python/api/overview/azure/ai-agents-readme" target="_blank" rel="noopener"><h4>Agents SDK (Python) &#8599;</h4><p>Reference for <code>azure-ai-agents</code> and the agent runtime.</p></a>
       <a class="link-card" href="https://learn.microsoft.com/azure/search/" target="_blank" rel="noopener"><h4>Azure AI Search &#8599;</h4><p>Vector + semantic hybrid retrieval used in Challenge 2.</p></a>
       <a class="link-card" href="https://learn.microsoft.com/azure/ai-foundry/how-to/develop/evaluate-sdk" target="_blank" rel="noopener"><h4>Evaluation SDK &#8599;</h4><p>The evaluators used in Challenge 6 and the CI gate.</p></a>
       <a class="link-card" href="https://learn.microsoft.com/azure/ai-services/content-safety/" target="_blank" rel="noopener"><h4>Content Safety + Prompt Shields &#8599;</h4><p>Guardrails enabled in Challenge 4.</p></a>
