@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 680" role="img" aria-labelledby="t d" font-family="Segoe UI, Arial, sans-serif">
   <title id="t">Contract Lifecycle Management architecture</title>
-  <desc id="d">Users interact with Web or Teams. The channel routes to a Contract Intake and Drafting Agent hosted in Microsoft Foundry. The agent uses Azure OpenAI, grounds on Azure AI Search + Blob, calls Logic Apps, Azure Functions and Code Interpreter, and traces to Application Insights. GitHub Actions runs the evaluation gate.</desc>
+  <desc id="d">Users interact with Web or Teams. The channel routes to a Contract Intake and Drafting Agent hosted in Microsoft Foundry. The agent uses Azure OpenAI, grounds on Azure AI Search + Blob, calls Power Automate approval flows, SharePoint, and Dataverse, and traces to Application Insights. GitHub Actions runs the evaluation gate.</desc>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#F3F9FF"/><stop offset="1" stop-color="#F6EEF9"/>
@@ -96,8 +96,8 @@
   <text x="1025" y="170" text-anchor="middle" class="lbl">idx-clm-contracts &#183; vector + semantic</text>
 
   <rect x="900" y="210" width="250" height="70" rx="10" fill="#F3EAFF" stroke="#5C2D91"/>
-  <text x="1025" y="240" text-anchor="middle" class="b" fill="#5C2D91">Logic Apps</text>
-  <text x="1025" y="260" text-anchor="middle" class="lbl">la-clm-approval &#183; adaptive cards</text>
+  <text x="1025" y="240" text-anchor="middle" class="b" fill="#5C2D91">Power Automate</text>
+  <text x="1025" y="260" text-anchor="middle" class="lbl">approval flows &#183; adaptive cards</text>
 
   <rect x="900" y="300" width="250" height="70" rx="10" fill="#E6FBF6" stroke="#00B294"/>
   <text x="1025" y="330" text-anchor="middle" class="b" fill="#008A72">Azure Functions</text>

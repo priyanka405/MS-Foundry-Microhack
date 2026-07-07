@@ -198,7 +198,7 @@ Every tool call is traced end-to-end into Application Insights (Challenge 5) and
 ### Architecture design decisions
 
 - **One agent, many tools.** A single agent owns the CLM domain. Multiple agents would fragment the audit trail and duplicate policy plumbing.
-- **Power Automate over Logic Apps for approvals.** Approval flows already live in Microsoft 365 (SharePoint, Teams, Outlook approvals). Power Automate matches those primitives and is the native Foundry Agent Action integration.
+- **Power Automate for approval routing.** Approval flows live in Microsoft 365 (SharePoint, Teams, Outlook approvals). Power Automate matches those primitives natively and is the native Foundry Agent Action integration.
 - **SharePoint as the contract repository.** Contracts, templates, and policies are already there. Adding a second repository would create drift.
 - **Dataverse (or Azure SQL) for contract status.** Contract state is structured, queryable, and mutated by workflows &mdash; Dataverse gives a low-code CRUD surface without hand-rolled APIs.
 - **Foundry Models for clause analysis, not a custom API.** Clause analysis is a language task. Pushing it into an external service would add a hop, cost, and drift from prompt engineering.

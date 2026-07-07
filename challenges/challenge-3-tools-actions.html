@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
@@ -153,7 +153,7 @@ Register the five canonical Contract Lifecycle Management tools with the Contrac
 | 4 | **Approval Routing Tool** | Power Automate | Kick off Legal / Procurement / Finance approval flows and return the approval id | Approval routed to the correct role and tracked to closure |
 | 5 | **Contract Status Tool** | Dataverse (or Azure SQL) | Read / update contract lifecycle state: stage, owner, renewal date, expiry | Deterministic status answers; renewals never missed |
 
-> **Design note.** Approval routing runs on Power Automate (native Microsoft 365 approval primitives, not a bespoke Logic App). Contract status lives in Dataverse (or Azure SQL) &mdash; a data connector, not a hand-rolled Azure Function &mdash; so the agent reads and writes structured lifecycle state deterministically. Clause analysis is a language task the Foundry model performs directly; there is no external microservice.
+> **Design note.** Approval routing runs on Power Automate, using native Microsoft 365 approval primitives (SharePoint, Teams, Outlook). Contract status lives in Dataverse (or Azure SQL) as a data connector, so the agent reads and writes structured lifecycle state deterministically. Clause analysis is a language task the Foundry model performs directly; there is no external microservice.
 
 ## 4. Learning outcome
 
@@ -251,7 +251,7 @@ The SharePoint action appears as a named tool. Set the display name to `get_cont
 Route contract drafts to the correct approver (Legal / Procurement / Finance) for sign-off. Send renewal reminders. Escalate stale approvals.
 
 ### Connected service
-**Power Automate** &mdash; approval flows are already the standard in Microsoft 365 (SharePoint approvals, Teams approvals, Outlook approvals). Power Automate is the native Foundry Agent Actions integration for those primitives, so we use it instead of hand-rolling a Logic App.
+**Power Automate** &mdash; approval flows are the standard in Microsoft 365 (SharePoint approvals, Teams approvals, Outlook approvals). Power Automate is the native Foundry Agent Actions integration for those primitives.
 
 ### Expected outcome
 Every AI-suggested contract action produces an auditable approval trail. The tool returns an `approval_id` the agent can quote back.

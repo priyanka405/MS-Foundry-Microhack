@@ -114,7 +114,7 @@ def route_approval(
     Returns a JSON string with the approval id and initial status. The final
     decision arrives asynchronously via a callback the agent handles later.
     """
-    if not settings.logic_app_approval_url:
+    if not settings.power_automate_approval_url:
         return json.dumps(
             {"approval_id": "local-1", "status": "pending", "stubbed": True}
         )
@@ -125,7 +125,7 @@ def route_approval(
         "doc_uri": doc_uri,
         "risk_band": risk_band,
     }
-    resp = requests.post(settings.logic_app_approval_url, json=payload, timeout=30)
+    resp = requests.post(settings.power_automate_approval_url, json=payload, timeout=30)
     resp.raise_for_status()
     return json.dumps(resp.json())
 

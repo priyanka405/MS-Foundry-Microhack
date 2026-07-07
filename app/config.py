@@ -26,7 +26,7 @@ class Settings:
     search_index: str
     search_api_key: str | None
 
-    logic_app_approval_url: str | None
+    power_automate_approval_url: str | None
     function_app_endpoint: str | None
 
     appinsights_connection_string: str | None
@@ -41,7 +41,7 @@ def _load() -> Settings:
         search_endpoint=os.getenv("AZURE_SEARCH_ENDPOINT"),
         search_index=os.getenv("AZURE_SEARCH_INDEX", "idx-clm-contracts"),
         search_api_key=os.getenv("AZURE_SEARCH_API_KEY"),
-        logic_app_approval_url=os.getenv("LOGIC_APP_APPROVAL_URL"),
+        power_automate_approval_url=os.getenv("POWER_AUTOMATE_APPROVAL_URL"),
         function_app_endpoint=os.getenv("FUNCTION_APP_ENDPOINT"),
         appinsights_connection_string=os.getenv("APPLICATIONINSIGHTS_CONNECTION_STRING"),
         log_level=os.getenv("LOG_LEVEL", "INFO"),

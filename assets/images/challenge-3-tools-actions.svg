@@ -25,7 +25,7 @@
   <text x="690" y="186" text-anchor="middle" font-size="10" fill="#605E5C">per-thread uploads</text>
 
   <rect x="600" y="220" width="180" height="70" rx="10" fill="#F3EAFF" stroke="#5C2D91"/>
-  <text x="690" y="248" text-anchor="middle" font-size="12" font-weight="700" fill="#5C2D91">3. Logic Apps</text>
+  <text x="690" y="248" text-anchor="middle" font-size="12" font-weight="700" fill="#5C2D91">3. Power Automate</text>
   <text x="690" y="266" text-anchor="middle" font-size="10" fill="#605E5C">approval routing</text>
 
   <rect x="600" y="300" width="180" height="70" rx="10" fill="#FFF7E6" stroke="#FFB900"/>
