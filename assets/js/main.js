@@ -27,7 +27,8 @@
   }
 
   // ----- Theme toggle -------------------------------------------------------
-  const themeBtn = document.querySelector(".theme-toggle");
+  // Supports .theme-toggle (landing page) and #themeToggle (challenge pages).
+  const themeBtn = document.querySelector(".theme-toggle") || document.getElementById("themeToggle");
   function applyTheme(next) {
     root.setAttribute("data-theme", next);
     try { localStorage.setItem(STORAGE_KEY, next); } catch (_) {}
@@ -68,6 +69,8 @@
     });
     try { window.mermaid.run(); } catch (_) {}
   }
+  // Expose for challenge pages that render markdown dynamically.
+  window.initMermaid = initMermaid;
 
   if (window.mermaid) initMermaid(root.getAttribute("data-theme") || "light");
   else window.addEventListener("load", () => initMermaid(root.getAttribute("data-theme") || "light"));
@@ -130,38 +133,43 @@
   }
 
   // ----- Copy-to-clipboard for <pre> ---------------------------------------
-  document.querySelectorAll("pre").forEach((pre) => {
-    if (pre.querySelector(".copy-btn")) return;
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "copy-btn";
-    btn.textContent = "Copy";
-    btn.setAttribute("aria-label", "Copy code to clipboard");
-    Object.assign(btn.style, {
-      position: "absolute",
-      top: "8px",
-      right: "8px",
-      padding: "4px 10px",
-      fontSize: "0.75rem",
-      border: "1px solid rgba(255,255,255,0.2)",
-      borderRadius: "6px",
-      background: "rgba(255,255,255,0.08)",
-      color: "#E5E7EB",
-      cursor: "pointer",
-    });
-    pre.style.position = "relative";
-    pre.appendChild(btn);
+  function addCopyButtons(root) {
+    (root || document).querySelectorAll("pre").forEach((pre) => {
+      if (pre.querySelector(".copy-btn")) return;
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "copy-btn";
+      btn.textContent = "Copy";
+      btn.setAttribute("aria-label", "Copy code to clipboard");
+      Object.assign(btn.style, {
+        position: "absolute",
+        top: "8px",
+        right: "8px",
+        padding: "4px 10px",
+        fontSize: "0.75rem",
+        border: "1px solid rgba(255,255,255,0.2)",
+        borderRadius: "6px",
+        background: "rgba(255,255,255,0.08)",
+        color: "#E5E7EB",
+        cursor: "pointer",
+      });
+      pre.style.position = "relative";
+      pre.appendChild(btn);
 
-    btn.addEventListener("click", async () => {
-      const code = pre.querySelector("code")?.innerText ?? pre.innerText;
-      try {
-        await navigator.clipboard.writeText(code);
-        btn.textContent = "Copied";
-        setTimeout(() => (btn.textContent = "Copy"), 1400);
-      } catch {
-        btn.textContent = "Press Ctrl+C";
-        setTimeout(() => (btn.textContent = "Copy"), 1800);
-      }
+      btn.addEventListener("click", async () => {
+        const code = pre.querySelector("code")?.innerText ?? pre.innerText;
+        try {
+          await navigator.clipboard.writeText(code);
+          btn.textContent = "Copied";
+          setTimeout(() => (btn.textContent = "Copy"), 1400);
+        } catch {
+          btn.textContent = "Press Ctrl+C";
+          setTimeout(() => (btn.textContent = "Copy"), 1800);
+        }
+      });
     });
-  });
+  }
+  // Expose for challenge pages that render markdown dynamically.
+  window.addCopyButtons = addCopyButtons;
+  addCopyButtons();
 })();
