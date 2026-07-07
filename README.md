@@ -1,6 +1,6 @@
 # Contract Lifecycle Management with Microsoft Foundry
 
-> A production-style **Microsoft Foundry MicroHack** that walks you through building an enterprise-grade **Contract Lifecycle Management (CLM) Assistant** — from an empty Foundry project to a shipped Web App, Teams assistant, or API endpoint.
+> A production-style **Microsoft Foundry MicroHack** that walks you through building an enterprise-grade **Contract Lifecycle Management (CLM) Assistant** — from an empty Foundry project to a shipped, evaluated, and observable AI solution.
 
 [![Foundry](https://img.shields.io/badge/Microsoft-Foundry-0078D4?logo=microsoft&logoColor=white)](https://ai.azure.com)
 [![Language](https://img.shields.io/badge/Language-Python%203.11+-3776AB?logo=python&logoColor=white)](https://www.python.org)
@@ -31,7 +31,7 @@ Click the image or the button above to launch the full-page site (dark mode, Mer
 
 ## Hero
 
-Build the **Contract Intake & Drafting Agent** — the AI copilot Legal and Procurement wish they already had. Nine hands-on challenges take you from *"I have an Azure subscription"* all the way to *"the assistant is live in Teams, traced in App Insights, and gated by CI"*.
+Build the **Contract Intake & Drafting Agent** — the AI copilot Legal and Procurement wish they already had. Nine hands-on challenges take you from *"I have an Azure subscription"* all the way to *"it's live and measurable."*
 
 Every challenge is fully documented for both the **Foundry portal (low-code)** and the **Foundry SDK in Python (pro-code)**, so architects, engineers, and product folks can all follow along.
 
@@ -63,18 +63,18 @@ Organizations process hundreds of contracts every month. Legal and Procurement n
 - Contract tracking, renewals, and expirations
 - Risk identification
 
-You will build a single **Contract Lifecycle Management Assistant** on Microsoft Foundry that owns all of the above — grounded on your organization's own templates, clause library, and policies, protected by guardrails, evaluated on a fixed dataset, and published to a live channel.
+You will build a single **Contract Lifecycle Management Assistant** on Microsoft Foundry that owns all of the above — grounded on your organization's own templates, clause library, and policies, protected by safety guardrails, and proven by evaluation gates.
 
 ## Business scenario
 
-**Contoso Global** is a multinational with 40,000 employees, 12,000 active contracts, and 400+ new agreements per month. Their current CLM process is scattered across SharePoint, email, and three legacy contract management systems. The result:
+**Contoso Global** is a multinational with 40,000 employees, 12,000 active contracts, and 400+ new agreements per month. Their current CLM process is scattered across SharePoint, email, and three legacy DMS systems. Here's where the pain lives:
 
 - Legal spends **~35%** of its time answering "what does clause X in contract Y say?".
 - Procurement misses **~11%** of auto-renewals every year, costing millions.
 - Average new-contract turnaround is **17 business days**.
 - No consistent way to compare an incoming counterparty draft against the enterprise standard.
 
-Your job: ship a **Contract Lifecycle Management Assistant** that turns this into a same-day, self-service, auditable workflow — while never crossing the line into legal advice or unilateral approval authority.
+Your job: ship a **Contract Lifecycle Management Assistant** that turns this into a same-day, self-service, auditable workflow — while never crossing the line into legal advice or unilateral approval.
 
 ## Learning objectives
 
@@ -83,7 +83,7 @@ By the end of this hackathon you will be able to:
 1. Stand up an Azure AI Foundry project with a deployed model, indexed corpus, and enabled tracing.
 2. Build a grounded agent with a strong persona and refusal behavior.
 3. Ground the agent on enterprise content using Azure AI Search and File Search — with citations.
-4. Extend the agent with five tools: Azure AI Search, File Search, Logic Apps, Azure Functions, and Code Interpreter.
+4. Extend the agent with 4 tools: Azure AI Search, File Search, Azure Functions, and Code Interpreter.
 5. Protect the agent with Prompt Shields, PII detection, and app-layer blocklists.
 6. Trace every prompt, retrieval, tool call, and response into Application Insights.
 7. Evaluate on a fixed dataset and enforce a deployment gate.
@@ -129,7 +129,6 @@ flowchart LR
     end
 
     subgraph Actions[Business Actions]
-        LA[Logic Apps - Approval]
         FN[Azure Functions - Clause / Status / Risk]
         CI[Code Interpreter - Summaries and Reports]
     end
@@ -141,7 +140,7 @@ flowchart LR
 
     L & P & S --> UI --> A
     A --> KG --> AIS & BLOB
-    A --> T --> LA & FN & CI
+    A --> T --> FN & CI
     A --> GR
     A --> OB --> AI
     EV --> GH
@@ -156,14 +155,14 @@ Every challenge builds one slice of this picture. By the end, the whole diagram 
 | 0 | [Setup](./challenges/challenge-0-setup.md) | Foundry project, model, Search, tracing, corpus | Low-code + Pro-code |
 | 1 | [Build Agent — Contract Intake & Drafting](./challenges/challenge-1-build-agent.md) | Persona, instructions, refusal behavior | Low-code + Pro-code |
 | 2 | [Knowledge Grounding](./challenges/challenge-2-knowledge-grounding.md) | Azure AI Search + File Search with citations | Low-code + Pro-code |
-| 3 | [Tools & Actions](./challenges/challenge-3-tools-actions.md) | Search, File Search, Logic Apps, Functions, Code Interpreter | Low-code + Pro-code |
+| 3 | [Tools & Actions](./challenges/challenge-3-tools-actions.md) | Search, File Search, Azure Functions, Code Interpreter | Low-code + Pro-code |
 | 4 | [Guardrails](./challenges/challenge-4-guardrails.md) | Prompt Shields, PII, template enforcement | Low-code + Pro-code |
 | 5 | [Observability](./challenges/challenge-5-observability.md) | Tracing, monitoring, tool telemetry | Low-code + Pro-code |
 | 6 | [Evaluation](./challenges/challenge-6-evaluation.md) | Groundedness, safety, tool accuracy | Low-code + Pro-code |
 | 7 | [Optimization](./challenges/challenge-7-optimization.md) | Model, prompt, retrieval, cost, latency | Low-code + Pro-code |
 | 8 | [Publish](./challenges/challenge-8-publish.md) | Web App, Teams, API endpoint | Low-code + Pro-code |
 
-Every challenge follows the same anatomy: **Context → Objective → Learning Outcome → Prerequisites → Architecture Diagram → Low-Code Path → Pro-Code Path → Portal Walkthrough & Deployment Gate**.
+Every challenge follows the same anatomy: **Context → Objective → Learning Outcome → Prerequisites → Architecture Diagram → Low-Code Path → Pro-Code Path → Portal Walkthrough & Deployment**.
 
 ## Prerequisites
 
@@ -175,7 +174,6 @@ Before you start Challenge 0, make sure you have:
 - **Python 3.11+**, **Git**, and **VS Code** with the Python + Azure extensions.
 - **Azure CLI** (`az login` works).
 - (For pro-code path) `pip install -r requirements.txt`.
-- (For Challenge 3 & 5) A Microsoft 365 tenant with Power Automate and Office 365 approvals enabled — or the ability to stub the equivalent HTTP endpoints.
 
 ## Estimated duration
 
@@ -199,7 +197,7 @@ An "Explorer" (low-code only) team can finish Challenges 0–5 in about 4 hours.
 - **Foundry project management** — creating projects, model deployments, connections, and role assignments.
 - **Agent design** — instructions, personas, refusal behavior, tool routing.
 - **Retrieval-Augmented Generation** — vector + semantic hybrid, chunking, top-k tuning, citations.
-- **Function calling** — wiring Azure Functions, Logic Apps, and Code Interpreter as tools.
+- **Function calling** — wiring Azure Functions and Code Interpreter as tools.
 - **Guardrails** — Prompt Shields, Content Safety, PII detection, app-layer blocklists.
 - **Observability** — OpenTelemetry, Application Insights, KQL, cost tracking.
 - **Evaluation** — groundedness, task adherence, safety, tool call accuracy, gate design.
