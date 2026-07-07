@@ -126,7 +126,7 @@
 | --- | --- |
 | **Objective** | Evaluate the agent on a 15-row dataset: groundedness, relevance, task adherence, safety, and tool-call accuracy. |
 | **Agent capability** | Provable quality &mdash; the agent hits published thresholds before it can ship. |
-| **Tool integration** | Evaluators score every tool invocation (Contract Search, Clause Analysis, Contract Repository, Approval Routing, Contract Status). |
+| **Tool integration** | Evaluators score every tool invocation (Foundry IQ, WebIQ, Azure SQL). |
 | **Azure services used** | Azure AI Evaluation SDK, Azure AI Foundry evaluators. |
 | **Expected outcome** | All gate metrics green; scorecard published; failing runs block the CI pipeline. |
 
@@ -199,8 +199,8 @@ flowchart LR
 - Persona intro (t01).
 - Intake for NDA / MSA / SOW (t02&ndash;t05).
 - Policy Q&A grounded on procurement + compliance (t06, t07).
-- Tool routing for approval + status (t08, t09).
-- Refusals: out-of-corpus template, signing, legal advice, injection, approval bypass, non-standard clause (t10&ndash;t15).
+- Tool routing for external research (WebIQ) and structured status lookup (Azure SQL) (t08, t09).
+- Refusals: out-of-corpus template, signing, legal advice, injection, unauthorized-write bypass, non-standard clause (t10&ndash;t15).
 
 Each row has `query`, `expected_behavior`, `expected_tools` (optional), and `tags`.
 

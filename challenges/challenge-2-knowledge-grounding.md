@@ -11,7 +11,7 @@
 | --- | --- |
 | **Objective** | Ground the agent on the enterprise contract corpus (templates, clauses, policies) with citations on every answer. |
 | **Agent capability** | Contract search &amp; review &mdash; the agent retrieves from Azure AI Search and cites the exact document, clause, or paragraph. |
-| **Tool integration** | **Contract Search Tool** (Azure AI Search) attached. Prepares the ground the Contract Repository (SharePoint) reads on top of. |
+| **Tool integration** | **Foundry IQ** (Azure AI Search) attached &mdash; the internal knowledge tool. SharePoint access via Foundry IQ is enabled in Challenge 3. |
 | **Azure services used** | Azure AI Search (hybrid vector + semantic), Azure Blob Storage, Azure AI Foundry Models (embeddings). |
 | **Expected outcome** | Every corpus answer includes a traceable citation. Fabricated content is refused and re-grounded. |
 

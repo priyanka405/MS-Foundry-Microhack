@@ -21,7 +21,7 @@ $summaries = @{
   }
   '1' = @{
     objective   = 'Author the Contract Intake &amp; Drafting Agent: persona, instructions, refusal behavior, and the first grounded round-trip.'
-    capability  = 'Contract intake &amp; drafting &mdash; the agent gathers the required inputs, drafts from approved templates, and refuses legal advice or self-approval.'
+    capability  = 'Contract intake &amp; drafting &mdash; the agent gathers the required inputs, drafts from approved templates, and refuses legal advice or unauthorized writes.'
     integration = 'Agent runtime only (no external tools attached yet). Sets up the instruction slots that later tools plug into.'
     services    = 'Azure AI Foundry Agents, Azure AI Foundry Models (gpt-4o / gpt-4o-mini).'
     outcome     = 'The agent replies with the correct persona, gathers a full contract intake, refuses out-of-scope prompts, and always includes the standard disclaimer.'
@@ -29,49 +29,49 @@ $summaries = @{
   '2' = @{
     objective   = 'Ground the agent on the enterprise contract corpus (templates, clauses, policies) with citations on every answer.'
     capability  = 'Contract search &amp; review &mdash; the agent retrieves from Azure AI Search and cites the exact document, clause, or paragraph.'
-    integration = '**Contract Search Tool** (Azure AI Search) attached. Prepares the ground the Contract Repository (SharePoint) reads on top of.'
+    integration = '**Foundry IQ** (Azure AI Search) attached &mdash; the internal knowledge tool. SharePoint access via Foundry IQ is enabled in Challenge 3.'
     services    = 'Azure AI Search (hybrid vector + semantic), Azure Blob Storage, Azure AI Foundry Models (embeddings).'
     outcome     = 'Every corpus answer includes a traceable citation. Fabricated content is refused and re-grounded.'
   }
   '3' = @{
-    objective   = 'Attach the five canonical Contract Lifecycle Management tools to the agent and prove end-to-end orchestration.'
-    capability  = 'Full CLM workflow &mdash; search, clause analysis, repository pull, approval routing, and status read/write in one conversation.'
-    integration = '**Contract Search** (Azure AI Search) &middot; **Clause Analysis** (Azure AI Foundry Models) &middot; **Contract Repository** (SharePoint) &middot; **Approval Routing** (Power Automate) &middot; **Contract Status** (Dataverse / Azure SQL).'
-    services    = 'Azure AI Search, Azure AI Foundry Models, SharePoint, Power Automate, Dataverse (or Azure SQL).'
-    outcome     = 'The agent runs the scripted scenario in a single thread, routes approvals, updates status, and every tool call is visible in App Insights.'
+    objective   = 'Attach the three canonical Contract Lifecycle Management tools to the agent and prove end-to-end orchestration.'
+    capability  = 'Full CLM workflow &mdash; internal search &amp; grounding, external research, and structured contract-data lookup in one conversation.'
+    integration = '**Foundry IQ** (Azure AI Search + SharePoint) &middot; **WebIQ** (Bing Search) &middot; **Azure SQL** (structured contract data).'
+    services    = 'Azure AI Foundry, Foundry IQ, Azure AI Search, SharePoint, Bing Search, Azure SQL.'
+    outcome     = 'The agent runs the scripted scenario in a single thread, pulls internal knowledge, enriches with external research, reads structured contract data, and every tool call is visible in App Insights.'
   }
   '4' = @{
     objective   = 'Wrap every tool with Prompt Shields, Content Safety, PII detection, approved-template enforcement, and restricted-clause protection.'
     capability  = 'Safety-first CLM &mdash; the agent refuses restricted actions, redacts PII, and only edits approved templates.'
-    integration = 'Guardrails sit between the user and all five tools. No unsafe fast path exists.'
+    integration = 'Guardrails sit between the user and all three tools. No unsafe fast path exists.'
     services    = 'Azure AI Content Safety, Prompt Shields, PII detection.'
     outcome     = 'All red-team prompts are refused; zero safety defects on the evaluation dataset.'
   }
   '5' = @{
     objective   = 'Trace every prompt, retrieval, tool call, and response into Application Insights, and query them with KQL.'
     capability  = 'Full audit trail &mdash; end-to-end tracing for every conversation, including latency, cost, and grounding signals.'
-    integration = 'Tracing wraps all five agent tools (Contract Search, Clause Analysis, Contract Repository, Approval Routing, Contract Status).'
+    integration = 'Tracing wraps all three agent tools (Foundry IQ, WebIQ, Azure SQL).'
     services    = 'OpenTelemetry, Application Insights, Log Analytics.'
     outcome     = 'Reusable KQL queries return per-thread telemetry including tool-call accuracy, latency, and cost per session.'
   }
   '6' = @{
     objective   = 'Evaluate the agent on a 15-row dataset: groundedness, relevance, task adherence, safety, and tool-call accuracy.'
     capability  = 'Provable quality &mdash; the agent hits published thresholds before it can ship.'
-    integration = 'Evaluators score every tool invocation (Contract Search, Clause Analysis, Contract Repository, Approval Routing, Contract Status).'
+    integration = 'Evaluators score every tool invocation (Foundry IQ, WebIQ, Azure SQL).'
     services    = 'Azure AI Evaluation SDK, Azure AI Foundry evaluators.'
     outcome     = 'All gate metrics green; scorecard published; failing runs block the CI pipeline.'
   }
   '7' = @{
     objective   = 'Optimize across model, prompt, retrieval, and tool selection to hold or improve quality at lower cost and latency.'
     capability  = 'Same quality, cheaper and faster &mdash; a repeatable sweep the team can run every quarter.'
-    integration = 'Tunes retrieval parameters and tool-selection heuristics without changing the five-tool contract.'
+    integration = 'Tunes retrieval parameters and tool-selection heuristics without changing the three-tool contract.'
     services    = 'Azure AI Evaluation SDK, Azure AI Foundry Models.'
     outcome     = 'Cost per session reduced with quality maintained or improved. Before/after scorecards recorded.'
   }
   '8' = @{
     objective   = 'Publish the agent as a Web App with Easy Auth, a Teams app, or an authenticated API endpoint.'
     capability  = 'End-user access &mdash; pilot users complete real Contract Lifecycle Management tasks from a real channel.'
-    integration = 'All five tools reachable via the shipped channel. A scheduled Azure Function is added *only* for the batch renewal-reminder job (a non-conversational workload the agent should not own).'
+    integration = 'All three tools reachable via the shipped channel. A scheduled Azure Function is added *only* for the batch renewal-reminder job (a non-conversational workload the agent should not own).'
     services    = 'Azure App Service (Easy Auth), Microsoft Teams, Managed Identity, Azure Storage Queue + Azure Functions (for the renewal reminder batch only).'
     outcome     = 'A pilot user completes an end-to-end scenario from Teams or the Web App and every action is traced.'
   }

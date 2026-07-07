@@ -126,7 +126,7 @@
 | --- | --- |
 | **Objective** | Publish the agent as a Web App with Easy Auth, a Teams app, or an authenticated API endpoint. |
 | **Agent capability** | End-user access &mdash; pilot users complete real Contract Lifecycle Management tasks from a real channel. |
-| **Tool integration** | All five tools reachable via the shipped channel. A scheduled Azure Function is added *only* for the batch renewal-reminder job (a non-conversational workload the agent should not own). |
+| **Tool integration** | All three tools reachable via the shipped channel. A scheduled Azure Function is added *only* for the batch renewal-reminder job (a non-conversational workload the agent should not own). |
 | **Azure services used** | Azure App Service (Easy Auth), Microsoft Teams, Managed Identity, Azure Storage Queue + Azure Functions (for the renewal reminder batch only). |
 | **Expected outcome** | A pilot user completes an end-to-end scenario from Teams or the Web App and every action is traced. |
 
@@ -309,7 +309,7 @@ If you completed Track A, the API is already live at `POST /api/turn` behind Eas
 2. Grant it access to the Web App: portal &rarr; Web App &rarr; **Access control (IAM)** &rarr; role `Reader` on the app.
 3. On the calling side, get a token with the Web App's audience and POST as in [7.5](#75-test).
 
-For higher scale, host a separate **Azure Function** on a timer trigger that reads from a Storage Queue and posts to the CLM API on a schedule &mdash; useful for the **renewal reminder job**. This is the one place Azure Functions genuinely earn their keep: it is a scheduled, queue-driven batch process, not a conversational action, so the agent should not own it. The Function reads upcoming renewals from Dataverse and calls Power Automate to send reminders.
+For higher scale, host a separate **Azure Function** on a timer trigger that reads from a Storage Queue and posts to the CLM API on a schedule &mdash; useful for the **renewal reminder job**. This is the one place Azure Functions genuinely earn their keep: it is a scheduled, queue-driven batch process, not a conversational action, so the agent should not own it. The Function queries **Azure SQL** for contracts with `renewal_date` inside the reminder window and sends notifications via **Microsoft Graph** (email / Teams messages).
 
 ## 10. Governance checklist (before opening the pilot)
 
@@ -360,7 +360,7 @@ Ask any authenticated user to run this in Web + Teams + API and confirm the outp
 
 1. *"I need a mutual NDA with Contoso, effective 2026-08-01, 2-year term."*
 2. *"Use our standard liability clause."*
-3. *"Route this for legal approval."*
+3. *"What is the current status of the Contoso NDA?"*
 
 Then check App Insights &mdash; you should see three `agent.turn` spans for that user's identity.
 

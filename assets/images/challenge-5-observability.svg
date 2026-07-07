@@ -22,7 +22,7 @@
   <text x="610" y="270" text-anchor="end" font-size="10" fill="#605E5C">index, top_k, hit ids, scores</text>
 
   <rect x="130" y="295" width="240" height="38" rx="8" fill="#FFF7E6" stroke="#FFB900"/>
-  <text x="150" y="320" font-size="11" font-weight="700" fill="#8A6100">span.tool.approval</text>
+  <text x="150" y="320" font-size="11" font-weight="700" fill="#8A6100">span.tool.foundry_iq</text>
   <rect x="385" y="295" width="235" height="38" rx="8" fill="#FFF7E6" stroke="#FFB900"/>
   <text x="405" y="320" font-size="11" font-weight="700" fill="#8A6100">span.tool.function</text>
 

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 680" role="img" aria-labelledby="t d" font-family="Segoe UI, Arial, sans-serif">
   <title id="t">Contract Lifecycle Management architecture</title>
-  <desc id="d">Users interact with Web or Teams. The channel routes to a Contract Intake and Drafting Agent hosted in Microsoft Foundry. The agent uses Azure OpenAI, grounds on Azure AI Search + Blob, calls Power Automate approval flows, SharePoint, and Dataverse, and traces to Application Insights. GitHub Actions runs the evaluation gate.</desc>
+  <desc id="d">Users interact with Web or Teams. The channel routes to a Contract Intake and Drafting Agent hosted in Microsoft Foundry. The agent uses Azure OpenAI, grounds on Azure AI Search + Blob via Foundry IQ (which also reads SharePoint), runs external research via WebIQ (Bing Search), and looks up structured contract data in Azure SQL. Every call is traced to Application Insights. GitHub Actions runs the evaluation gate.</desc>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#F3F9FF"/><stop offset="1" stop-color="#F6EEF9"/>
@@ -63,8 +63,8 @@
 
   <rect x="650" y="250" width="140" height="90" rx="10" fill="#F3EAFF" stroke="#5C2D91"/>
   <text x="720" y="278" text-anchor="middle" class="b" fill="#5C2D91">Tools</text>
-  <text x="720" y="298" text-anchor="middle" class="lbl">5 functions</text>
-  <text x="720" y="315" text-anchor="middle" class="lbl">Code Interpreter</text>
+  <text x="720" y="298" text-anchor="middle" class="lbl">Foundry IQ &#183; WebIQ</text>
+  <text x="720" y="315" text-anchor="middle" class="lbl">Azure SQL</text>
 
   <!-- Safety -->
   <rect x="330" y="360" width="460" height="60" rx="10" fill="#FFF7E6" stroke="#FFB900"/>
@@ -96,12 +96,12 @@
   <text x="1025" y="170" text-anchor="middle" class="lbl">idx-clm-contracts &#183; vector + semantic</text>
 
   <rect x="900" y="210" width="250" height="70" rx="10" fill="#F3EAFF" stroke="#5C2D91"/>
-  <text x="1025" y="240" text-anchor="middle" class="b" fill="#5C2D91">Power Automate</text>
-  <text x="1025" y="260" text-anchor="middle" class="lbl">approval flows &#183; adaptive cards</text>
+  <text x="1025" y="240" text-anchor="middle" class="b" fill="#5C2D91">WebIQ</text>
+  <text x="1025" y="260" text-anchor="middle" class="lbl">Bing Search &#183; market intel</text>
 
   <rect x="900" y="300" width="250" height="70" rx="10" fill="#E6FBF6" stroke="#00B294"/>
-  <text x="1025" y="330" text-anchor="middle" class="b" fill="#008A72">Azure Functions</text>
-  <text x="1025" y="350" text-anchor="middle" class="lbl">clause_lookup &#183; status &#183; risk</text>
+  <text x="1025" y="330" text-anchor="middle" class="b" fill="#008A72">Azure SQL</text>
+  <text x="1025" y="350" text-anchor="middle" class="lbl">contract metadata &#183; status &#183; KPIs</text>
 
   <rect x="900" y="390" width="250" height="70" rx="10" fill="#FFF7E6" stroke="#FFB900"/>
   <text x="1025" y="420" text-anchor="middle" class="b" fill="#8A6100">Blob Storage</text>

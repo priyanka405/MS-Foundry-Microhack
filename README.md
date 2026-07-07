@@ -13,7 +13,7 @@
 
 > **Open the interactive landing page → <https://priyanka405.github.io/MS-Foundry-Microhack/>**
 
-[![Open the Contract Lifecycle Management MicroHack landing page](./assets/architecture.png)](https://priyanka405.github.io/MS-Foundry-Microhack/)
+[![Open the Contract Lifecycle Management MicroHack landing page](./assets/images/architecture-overview.svg)](https://priyanka405.github.io/MS-Foundry-Microhack/)
 
 <p align="center">
   <a href="https://priyanka405.github.io/MS-Foundry-Microhack/">
@@ -61,13 +61,13 @@ Every challenge is fully documented for both the **Foundry portal (low-code)** a
 Organizations process hundreds of contracts every month. Legal and Procurement need help with:
 
 - Contract creation and drafting
-- Contract review and clause analysis
+- Contract search and clause review
 - Compliance verification
-- Approval routing
+- Market and regulatory research
 - Contract tracking, renewals, and expirations
 - Risk identification
 
-You will build a single **Contract Lifecycle Management Assistant** on Microsoft Foundry that owns all of the above — grounded on your organization's own templates, clause library, and policies.
+You will build a single **Contract Lifecycle Management Assistant** on Microsoft Foundry that owns all of the above — grounded on your organization's own templates, clause library, and policies via **Foundry IQ** (Azure AI Search + SharePoint), enriched with external context via **WebIQ** (Bing Search), and tracked in **Azure SQL**, protected by Prompt Shields and Content Safety, evaluated on a fixed dataset, and deployed to a Web App, Teams, or a plain API endpoint.
 
 ## Business scenario
 
@@ -87,7 +87,7 @@ By the end of this hackathon you will be able to:
 1. Stand up an Azure AI Foundry project with a deployed model, indexed corpus, and enabled tracing.
 2. Build a grounded agent with a strong persona and refusal behavior.
 3. Ground the agent on enterprise content using Azure AI Search and File Search — with citations.
-4. Extend the agent with five tools: **Contract Search** (Azure AI Search), **Clause Analysis** (Azure AI Foundry Models), **Contract Repository** (SharePoint), **Approval Routing** (Power Automate), and **Contract Status** (Dataverse).
+4. Extend the agent with three tools: **Foundry IQ** (Azure AI Search + SharePoint), **WebIQ** (Bing Search), and **Azure SQL** (structured contract data lookup).
 5. Protect the agent with Prompt Shields, PII detection, and app-layer blocklists.
 6. Trace every prompt, retrieval, tool call, and response into Application Insights.
 7. Evaluate on a fixed dataset and enforce a deployment gate.
@@ -113,12 +113,11 @@ The solution is described at two complementary levels. The diagram is unchanged;
 Legal, Procurement, and Sales users interact with **one Contract Lifecycle Management Agent**. The agent exposes five business capabilities:
 
 1. **Intake & drafting** — turn a plain-English request into a first draft using approved templates.
-2. **Contract search & review** — find contracts, quote clauses, compare against the enterprise standard.
-3. **Clause analysis** — explain, rewrite, flag risk on any clause using the underlying Foundry model.
-4. **Approval routing** — kick off the correct approval flow (Legal / Procurement / Finance) and track it to closure.
-5. **Contract status & renewals** — report on any contract's lifecycle stage and surface upcoming renewal / expiration events.
+2. **Contract search & review** — find contracts, quote clauses, and pull templates from the enterprise repository.
+3. **Market & regulatory research** — enrich answers with external context from the open web.
+4. **Contract status & renewals** — report on any contract's lifecycle stage and surface upcoming renewal / expiration events from structured data.
 
-Everything is grounded on the enterprise corpus, guarded by content safety, and audited end-to-end. The agent **never** advises on legal strategy and **never** self-approves.
+Everything is grounded on the enterprise corpus, guarded by content safety, and audited end-to-end. The agent **never** advises on legal strategy.
 
 ### Technical architecture (Azure services)
 
@@ -126,11 +125,11 @@ Everything is grounded on the enterprise corpus, guarded by content safety, and 
 | --- | --- | --- |
 | Channel | Web App (Easy Auth) / Teams / API | User surface |
 | Agent runtime | **Azure AI Foundry** (Agents + Models) | Instructions, tool orchestration, model calls |
-| Model | **Azure AI Foundry Models** (gpt-4o / gpt-4o-mini) | Reasoning, drafting, clause analysis |
-| Grounding | **Azure AI Search** + **Azure Blob Storage** | Vector + semantic hybrid retrieval over the corpus |
-| Business system | **SharePoint** | Approved templates, executed contracts, DMS |
-| Workflow | **Power Automate** | Approval routing, notifications, renewal reminders |
-| System of record | **Dataverse** (or Azure SQL) | Contract status, owner, stage, renewal date |
+| Model | **Azure AI Foundry Models** (gpt-4o / gpt-4o-mini) | Reasoning, drafting, and language tasks |
+| Grounding (Foundry IQ) | **Azure AI Search** + **Azure Blob Storage** | Vector + semantic hybrid retrieval over the contract corpus |
+| Business system (Foundry IQ) | **SharePoint** | Approved templates, executed contracts, and policies |
+| External research (WebIQ) | **Bing Search** | Market intelligence, counterparty and regulatory context |
+| System of record | **Azure SQL** | Contract status, owner, stage, renewal date, KPIs |
 | Safety | **Azure AI Content Safety** + **Prompt Shields** | Jailbreak, PII, restricted-clause enforcement |
 | Observability | **Application Insights** + OpenTelemetry | Traces, KQL, cost + latency dashboards |
 | CI gate | **GitHub Actions** + **Azure AI Evaluation SDK** | Groundedness / safety / tool accuracy gate |
@@ -161,9 +160,10 @@ flowchart LR
         BLOB[Blob - clm-corpus]
     end
 
-    subgraph Actions[Business Actions]
-        FN[Azure Functions - Clause / Status / Risk]
-        CI[Code Interpreter - Summaries and Reports]
+    subgraph Actions[Agent tools]
+        FIQ[Foundry IQ - Azure AI Search + SharePoint]
+        WIQ[WebIQ - Bing Search]
+        SQL[Azure SQL - contract data]
     end
 
     subgraph Ops[Ops]
@@ -173,7 +173,7 @@ flowchart LR
 
     L & P & S --> UI --> A
     A --> KG --> AIS & BLOB
-    A --> T --> FN & CI
+    A --> T --> FIQ & WIQ & SQL
     A --> GR
     A --> OB --> AI
     EV --> GH
@@ -183,27 +183,30 @@ Every challenge builds one slice of this picture. By the end, the whole diagram 
 
 ### Agent tools
 
-The Contract Lifecycle Management Agent is powered by five explicit tools. Every user request is answered by orchestrating one or more of them.
+The Contract Lifecycle Management Agent is powered by **three** explicit tools. Every user request is answered by orchestrating one or more of them.
 
-| # | Tool | Connected service | Purpose | Expected outcome |
+| # | Tool | Connected service(s) | Purpose | Expected outcome |
 | --- | --- | --- | --- | --- |
-| 1 | **Contract Search Tool** | Azure AI Search | Hybrid (vector + semantic) retrieval across the contract corpus | Grounded answers with citations to the exact clause or paragraph |
-| 2 | **Clause Analysis Tool** | Azure AI Foundry Models | LLM-driven clause explanation, rewrite, and risk flagging against the approved-clause library | Plain-language explanations and risk callouts |
-| 3 | **Contract Repository Tool** | SharePoint | Read approved templates, executed contracts, and policy documents from the enterprise DMS | Correct template pulled by contract type; executed contracts retrieved by parties |
-| 4 | **Approval Routing Tool** | Power Automate | Kick off Legal / Procurement / Finance approval flows and return the approval id | Approval routed to the correct role; status is tracked to closure |
-| 5 | **Contract Status Tool** | Dataverse (or Azure SQL) | Read / update contract lifecycle state: stage, owner, renewal date, expiry | Deterministic status answers; renewal reminders never miss |
+| 1 | **Foundry IQ** | Azure AI Search · SharePoint | Contract search, document grounding, and knowledge retrieval across the contract corpus, templates, executed contracts, and policies | Grounded answers with citations to the exact clause, paragraph, or SharePoint document |
+| 2 | **WebIQ** | Bing Search | External research and market intelligence — counterparty background, regulatory context, and industry benchmarks | Fresh, cited web sources augmenting the internal corpus |
+| 3 | **Azure SQL** | Azure SQL | Structured contract metadata: status, dates, owners, renewal information, KPIs | Deterministic status answers; renewals never missed |
+
+Use-case mapping for the agent:
+
+- **Contract Search (Foundry IQ & Azure AI Search)** — find contracts, clauses, and policies in the corpus.
+- **SharePoint Knowledge Access (Foundry IQ)** — pull templates, executed contracts, and policy documents.
+- **Web Research (WebIQ / Bing Search)** — market intelligence, counterparty background, regulatory news.
+- **Structured Contract Data Lookup (Azure SQL)** — contract status, dates, owners, renewals, KPIs.
 
 Every tool call is traced end-to-end into Application Insights (Challenge 5) and scored by the evaluation gate for **tool call accuracy** (Challenge 6).
 
 ### Architecture design decisions
 
-- **One agent, many tools.** A single agent owns the CLM domain. Multiple agents would fragment the audit trail and duplicate policy plumbing.
-- **Power Automate for approval routing.** Approval flows live in Microsoft 365 (SharePoint, Teams, Outlook approvals). Power Automate matches those primitives natively and is the native Foundry connector.
-- **SharePoint as the contract repository.** Contracts, templates, and policies are already there. Adding a second repository would create drift.
-- **Dataverse (or Azure SQL) for contract status.** Contract state is structured, queryable, and mutated by workflows — Dataverse gives a low-code CRUD surface without hand-rolled APIs.
-- **Foundry Models for clause analysis, not a custom API.** Clause analysis is a language task. Pushing it into an external service would add a hop, cost, and drift from prompt engineering.
-- **Azure Functions are used only where a language model genuinely cannot do the job** — specifically, the *scheduled* renewal-reminder job in Challenge 8, which is a queue-driven batch process.
-- **Grounding first, tools second.** Retrieval (Azure AI Search + Blob) fires before any action-taking tool, so every approval, status change, or draft is anchored to real content.
+- **One agent, three tools.** A single agent owns the CLM domain and orchestrates a small, orthogonal tool set. Fewer tools mean less misrouting and a tighter audit trail.
+- **Foundry IQ for internal knowledge.** One tool wraps both Azure AI Search (contract corpus, hybrid vector + semantic retrieval) and SharePoint (templates, executed contracts, policies). The agent never has to choose which internal source to hit.
+- **WebIQ for external research.** Bing Search plugs the gap for anything not in the corpus — counterparty background, regulatory updates, benchmarks — with fresh, cited web results.
+- **Azure SQL for structured contract data.** Contract state is structured and queryable, so a direct SQL connector beats hand-rolled APIs. Status, owners, renewal dates, and KPIs all live in one relational store.
+- **Grounding first, tools second.** Retrieval (Foundry IQ) fires before any status write, so every answer is anchored to real content.
 - **Safety wraps every tool.** Prompt Shields, Content Safety, and PII detection sit between the user and every tool call — there is no "unsafe fast path".
 
 ## Challenge roadmap
@@ -213,7 +216,7 @@ Every tool call is traced end-to-end into Application Insights (Challenge 5) and
 | 0 | [Setup](./challenges/challenge-0-setup.md) | Foundry project, model, Search, tracing, corpus | Low-code + Pro-code |
 | 1 | [Build Agent — Contract Intake & Drafting](./challenges/challenge-1-build-agent.md) | Persona, instructions, refusal behavior | Low-code + Pro-code |
 | 2 | [Knowledge Grounding](./challenges/challenge-2-knowledge-grounding.md) | Azure AI Search + File Search with citations | Low-code + Pro-code |
-| 3 | [Tools & Actions](./challenges/challenge-3-tools-actions.md) | Contract Search, Clause Analysis, Contract Repository, Approval Routing, Contract Status | Low-code + Pro-code |
+| 3 | [Tools & Actions](./challenges/challenge-3-tools-actions.md) | Foundry IQ (Azure AI Search + SharePoint), WebIQ (Bing), Azure SQL | Low-code + Pro-code |
 | 4 | [Guardrails](./challenges/challenge-4-guardrails.md) | Prompt Shields, PII, template enforcement | Low-code + Pro-code |
 | 5 | [Observability](./challenges/challenge-5-observability.md) | Tracing, monitoring, tool telemetry | Low-code + Pro-code |
 | 6 | [Evaluation](./challenges/challenge-6-evaluation.md) | Groundedness, safety, tool accuracy | Low-code + Pro-code |
@@ -232,7 +235,7 @@ Before you start Challenge 0, make sure you have:
 - **Python 3.11+**, **Git**, and **VS Code** with the Python + Azure extensions.
 - **Azure CLI** (`az login` works).
 - (For pro-code path) `pip install -r requirements.txt`.
-- (For Challenge 3 & 5) A Microsoft 365 tenant with **Power Automate**, **SharePoint**, and **Dataverse** (or a stub SQL database) enabled — or the ability to stub the equivalent HTTP endpoints.
+- (For Challenge 3 & 5) A Microsoft 365 tenant with **SharePoint**, a **Bing Search** resource, and an **Azure SQL** database — or the ability to stub the equivalent HTTP endpoints.
 
 ## Estimated duration
 
@@ -256,7 +259,7 @@ An "Explorer" (low-code only) team can finish Challenges 0–5 in about 4 hours.
 - **Foundry project management** — creating projects, model deployments, connections, and role assignments.
 - **Agent design** — instructions, personas, refusal behavior, tool routing.
 - **Retrieval-Augmented Generation** — vector + semantic hybrid, chunking, top-k tuning, citations.
-- **Function calling** — wiring Power Automate flows, SharePoint / Dataverse connectors, and Foundry built-in tools into an agent.
+- **Function calling** — wiring Foundry IQ (Azure AI Search + SharePoint), WebIQ (Bing), and Azure SQL as function tools on an agent.
 - **Guardrails** — Prompt Shields, Content Safety, PII detection, app-layer blocklists.
 - **Observability** — OpenTelemetry, Application Insights, KQL, cost tracking.
 - **Evaluation** — groundedness, task adherence, safety, tool call accuracy, gate design.
@@ -268,7 +271,7 @@ An "Explorer" (low-code only) team can finish Challenges 0–5 in about 4 hours.
 You have "shipped" this MicroHack when:
 
 - Your CLM agent answers the 15-question evaluation set with citations and hits the deployment gate.
-- The full end-to-end scenario (intake → draft → retrieve clause → route approval → update status) works from a single Foundry thread.
+- The full end-to-end scenario (intake → draft → retrieve clause via Foundry IQ → enrich via WebIQ → lookup contract status in Azure SQL) works from a single Foundry thread.
 - Every prompt, retrieval, tool call, and response is visible in Application Insights.
 - A Web App, Teams app, or authenticated API endpoint serves the assistant to a pilot user.
 - GitHub Actions blocks a deploy if any gate metric regresses.
@@ -282,8 +285,8 @@ MS-Foundry-Microhack/
 ├── assets/
 │   ├── css/style.css                 <- Fluent-inspired styling with light/dark theme
 │   ├── js/main.js                    <- Nav, theme toggle, Mermaid init, copy buttons
-│   ├── architecture.png              <- Architecture and interface overview diagram
-│   └── screenshots/                  <- Portal and challenge walkthrough screenshots
+│   ├── images/                       <- Architecture overview + per-challenge diagrams (SVG)
+│   └── README.md                     <- Where to drop screenshots and architecture PNGs
 ├── challenges/
 │   ├── challenge-0-setup.md
 │   ├── challenge-1-build-agent.md

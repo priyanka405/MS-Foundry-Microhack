@@ -11,7 +11,7 @@
 | --- | --- |
 | **Objective** | Optimize across model, prompt, retrieval, and tool selection to hold or improve quality at lower cost and latency. |
 | **Agent capability** | Same quality, cheaper and faster &mdash; a repeatable sweep the team can run every quarter. |
-| **Tool integration** | Tunes retrieval parameters and tool-selection heuristics without changing the five-tool contract. |
+| **Tool integration** | Tunes retrieval parameters and tool-selection heuristics without changing the three-tool contract. |
 | **Azure services used** | Azure AI Evaluation SDK, Azure AI Foundry Models. |
 | **Expected outcome** | Cost per session reduced with quality maintained or improved. Before/after scorecards recorded. |
 
@@ -61,11 +61,11 @@ flowchart LR
 
 | Run | Model | Prompt | Chunk size / top-k | Tools | Hypothesis |
 | --- | --- | --- | --- | --- | --- |
-| **Baseline** | gpt-4o | v1 (full) | 1024 / 5 | 5 tools | Reference |
-| **A** | **gpt-4o-mini** | v1 | 1024 / 5 | 5 tools | Cheaper model may hold quality on this narrow task |
-| **B** | gpt-4o | **v2 (tight)** | 1024 / 5 | 5 tools | Shorter instructions may reduce prompt tokens without hurting behavior |
-| **C** | gpt-4o | v1 | **512 / 8** | 5 tools | Smaller chunks + wider top-k may improve grounding |
-| **D** | gpt-4o | v1 | 1024 / 5 | **4 tools (drop Code Interpreter)** | Removing the most expensive tool may cut latency without hurting task adherence |
+| **Baseline** | gpt-4o | v1 (full) | 1024 / 5 | 3 tools | Reference |
+| **A** | **gpt-4o-mini** | v1 | 1024 / 5 | 3 tools | Cheaper model may hold quality on this narrow task |
+| **B** | gpt-4o | **v2 (tight)** | 1024 / 5 | 3 tools | Shorter instructions may reduce prompt tokens without hurting behavior |
+| **C** | gpt-4o | v1 | **512 / 8** | 3 tools | Smaller chunks + wider top-k may improve grounding |
+| **D** | gpt-4o | v1 | 1024 / 5 | **2 tools (drop WebIQ)** | Removing external web calls may cut latency for corpus-only workloads |
 
 ## 8. What to record
 
@@ -102,7 +102,7 @@ RUNS = [
     dict(name="A_mini",    model="gpt-4o-mini",             instructions_path=None,  top_k=5, chunk=1024, drop_tools=[]),
     dict(name="B_prompt2", model=settings.model_deployment, instructions_path="prompts/v2.txt", top_k=5, chunk=1024, drop_tools=[]),
     dict(name="C_chunk",   model=settings.model_deployment, instructions_path=None,  top_k=8, chunk=512,  drop_tools=[]),
-    dict(name="D_no_ci",   model=settings.model_deployment, instructions_path=None,  top_k=5, chunk=1024, drop_tools=["code_interpreter"]),
+    dict(name="D_no_webiq",model=settings.model_deployment, instructions_path=None,  top_k=5, chunk=1024, drop_tools=["web_research"]),
 ]
 
 report = {}
@@ -126,9 +126,9 @@ Fill in with your real numbers.
 | A (mini) | 4.05 | 4.21 | 2,110 | 2,410 | $0.72 |
 | B (tight prompt) | 4.40 | 4.33 | 3,720 | 2,140 | $5.34 |
 | C (chunk 512, top-k 8) | 4.51 | 4.30 | 4,120 | 2,880 | $7.20 |
-| D (no Code Interpreter) | 4.42 | 4.31 | 3,290 | 2,410 | $6.02 |
+| D (no WebIQ) | 4.42 | 4.31 | 3,290 | 2,410 | $6.02 |
 
-**Read of the sample:** Run A trades ~7% task adherence for 4x cost saving &mdash; adopt for the pilot with an easy rollback to Baseline for high-stakes traffic. Run B is a free win on prompt cost. Run C improves grounding but crosses the cost threshold. Run D cuts latency without hurting the gate; adopt if you don't need in-conversation charts.
+**Read of the sample:** Run A trades ~7% task adherence for 4x cost saving &mdash; adopt for the pilot with an easy rollback to Baseline for high-stakes traffic. Run B is a free win on prompt cost. Run C improves grounding but crosses the cost threshold. Run D cuts latency without hurting the gate; adopt for tenants that only need corpus + status and don't need external research.
 
 ## 12. Cost KQL
 
@@ -159,7 +159,7 @@ requests
 - [ ] Model swap A run and recorded.
 - [ ] Prompt-tightened B run and recorded (keep v1 archived).
 - [ ] Chunk / top-k C run and recorded.
-- [ ] Tool-drop D run and recorded.
+- [ ] Tool-drop D run and recorded (WebIQ disabled).
 - [ ] Winner identified with a written rationale.
 - [ ] Winner's config applied to `contract-intake-drafting-agent`.
 - [ ] `optimization-report.json` committed.

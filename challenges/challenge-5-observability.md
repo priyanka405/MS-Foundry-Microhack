@@ -11,7 +11,7 @@
 | --- | --- |
 | **Objective** | Trace every prompt, retrieval, tool call, and response into Application Insights, and query them with KQL. |
 | **Agent capability** | Full audit trail &mdash; end-to-end tracing for every conversation, including latency, cost, and grounding signals. |
-| **Tool integration** | Tracing wraps all five agent tools (Contract Search, Clause Analysis, Contract Repository, Approval Routing, Contract Status). |
+| **Tool integration** | Tracing wraps all three agent tools (Foundry IQ, WebIQ, Azure SQL). |
 | **Azure services used** | OpenTelemetry, Application Insights, Log Analytics. |
 | **Expected outcome** | Reusable KQL queries return per-thread telemetry including tool-call accuracy, latency, and cost per session. |
 
@@ -197,9 +197,9 @@ Azure portal &rarr; App Insights &rarr; **Alerts** &rarr; **+ New alert rule**.
 
 Send this sequence and confirm each trace looks right in the portal:
 
-1. *"Draft a mutual NDA with Contoso, effective 2026-08-01, 2-year term."* &rarr; must show `agent.turn` &rarr; `azure.search` &rarr; `gen_ai.tool.call` (clause_lookup, x3) &rarr; `gen_ai.response`.
+1. *"Draft a mutual NDA with Contoso, effective 2026-08-01, 2-year term."* &rarr; must show `agent.turn` &rarr; `azure.search` &rarr; `gen_ai.tool.call` (`foundry_iq`, x3) &rarr; `gen_ai.response`.
 2. *"Auto-approve the Contoso NDA."* (Challenge 4 attack) &rarr; must show a **safety** event and **no** LLM span.
-3. *"Route the Contoso NDA for legal approval."* &rarr; must show `gen_ai.tool.call name=route_approval` with the payload as span attributes.
+3. *"What is the current status of CON-2026-0001?"* &rarr; must show `gen_ai.tool.call name=get_contract_status` with the payload as span attributes.
 
 Then run every KQL in [section 9](#9-kql-you-should-have-ready) &mdash; each should return non-empty results.
 

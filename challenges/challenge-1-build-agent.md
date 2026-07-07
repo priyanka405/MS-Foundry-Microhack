@@ -10,7 +10,7 @@
 | Field | Value |
 | --- | --- |
 | **Objective** | Author the Contract Intake &amp; Drafting Agent: persona, instructions, refusal behavior, and the first grounded round-trip. |
-| **Agent capability** | Contract intake &amp; drafting &mdash; the agent gathers the required inputs, drafts from approved templates, and refuses legal advice or self-approval. |
+| **Agent capability** | Contract intake &amp; drafting &mdash; the agent gathers the required inputs, drafts from approved templates, and refuses legal advice or unauthorized writes. |
 | **Tool integration** | Agent runtime only (no external tools attached yet). Sets up the instruction slots that later tools plug into. |
 | **Azure services used** | Azure AI Foundry Agents, Azure AI Foundry Models (gpt-4o / gpt-4o-mini). |
 | **Expected outcome** | The agent replies with the correct persona, gathers a full contract intake, refuses out-of-scope prompts, and always includes the standard disclaimer. |
