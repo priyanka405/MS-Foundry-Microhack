@@ -114,7 +114,7 @@
       <article class="tile">
         <span class="tile-icon" data-icon="flow"></span>
         <h3>Automate</h3>
-        <p>Route approvals via Logic Apps, generate documents, and track lifecycle state through renewal.</p>
+        <p>Route approvals via Power Automate, generate documents, and track lifecycle state through renewal.</p>
       </article>
       <article class="tile">
         <span class="tile-icon" data-icon="shield"></span>
@@ -151,7 +151,7 @@
     <header class="section-head">
       <span class="section-eyebrow">Solution architecture</span>
       <h2>Every challenge builds one slice of this picture</h2>
-      <p class="section-lede">Rendered live with Mermaid. The exact same block lives in the README so the two never drift.</p>
+      <p class="section-lede">Rendered live with Mermaid. Functional architecture captures business capabilities; technical architecture maps those capabilities to Azure services.</p>
     </header>
 
     <div class="architecture arch-frame">
@@ -171,7 +171,7 @@
       <li>Stand up a Foundry project with a model, indexed corpus, and enabled tracing.</li>
       <li>Build a grounded agent with a strong persona and refusal behavior.</li>
       <li>Ground the agent with Azure AI Search + File Search &mdash; with citations.</li>
-      <li>Extend the agent with 5 tools (Search, File Search, Logic Apps, Functions, Code Interpreter).</li>
+      <li>Extend the agent with 5 tools (Azure AI Search, File Search, Power Automate, Azure Functions, Code Interpreter).</li>
       <li>Protect the agent with Prompt Shields, PII detection, and app-layer blocklists.</li>
       <li>Trace every prompt, retrieval, tool call, and response into App Insights.</li>
       <li>Evaluate on a fixed dataset and enforce a deployment gate.</li>
@@ -219,8 +219,8 @@
         <article class="challenge-card">
           <div class="challenge-head"><span class="chip chip-teal">Tools</span>
             <h3><a href="challenges/challenge-3-tools-actions.html">Challenge 3 &middot; Tools &amp; Actions</a></h3></div>
-          <p>Five tools: AI Search, File Search, Logic Apps (approval), Azure Functions (status/risk), Code Interpreter (reports).</p>
-          <ul class="chip-row"><li class="chip">Function calling</li><li class="chip">Logic Apps</li><li class="chip">Functions</li></ul>
+          <p>Five tools: AI Search, File Search, Power Automate (approval routing), Azure Functions (clause/status/document logic), Code Interpreter (reports).</p>
+          <ul class="chip-row"><li class="chip">Function calling</li><li class="chip">Power Automate</li><li class="chip">Functions</li></ul>
         </article></li>
 
       <li class="timeline-node"><div class="timeline-dot" data-num="4"></div>
@@ -278,8 +278,8 @@
       <article class="svc-card"><h4>Azure OpenAI</h4><p><code>gpt-4o</code> and <code>gpt-4o-mini</code> for chat and function calling.</p></article>
       <article class="svc-card"><h4>Azure AI Search</h4><p>Vector + semantic hybrid over your contract corpus with citations.</p></article>
       <article class="svc-card"><h4>Azure Blob Storage</h4><p>Source-of-truth corpus feeding the Search index.</p></article>
-      <article class="svc-card"><h4>Azure Functions</h4><p>Backing services for clause lookup, status, and risk scoring.</p></article>
-      <article class="svc-card"><h4>Logic Apps</h4><p>Office 365 approval routing for Legal and Procurement.</p></article>
+      <article class="svc-card"><h4>Azure Functions</h4><p>Deterministic, testable business logic for clause_lookup, contract_status, and document generation (<code>generate_document</code>) against system-of-record data.</p></article>
+      <article class="svc-card"><h4>Power Automate</h4><p>Approval routing and notification workflows for Legal and Procurement.</p></article>
       <article class="svc-card"><h4>Code Interpreter</h4><p>On-the-fly summaries, obligation extraction, renewal reports.</p></article>
       <article class="svc-card"><h4>Content Safety + Prompt Shields</h4><p>Guardrails on inputs and outputs at the project level.</p></article>
       <article class="svc-card"><h4>Application Insights</h4><p>Cost, latency, and grounding telemetry with reusable KQL.</p></article>

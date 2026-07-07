@@ -16,22 +16,29 @@ The real workday of a Legal or Procurement analyst is stitched together across s
 
 ## 3. Objective
 
-Register five tools with the Contract Intake &amp; Drafting Agent, teach it when to use each, and prove it end-to-end with a scripted scenario.
+Extend the agent with five tools: Azure AI Search, File Search, Power Automate, Azure Functions, and Code Interpreter.
 
 | # | Tool | Purpose | Business value |
 | --- | --- | --- | --- |
 | 1 | **Azure AI Search** | Find contracts, search clauses, retrieve similar agreements | Cuts "where does it live?" from days to seconds |
 | 2 | **File Search** | Search uploaded PDFs, Word docs, and inline threads | Users can drop a counterparty draft and get a compare-and-contrast |
-| 3 | **Logic Apps** | Approval workflow, email notifications, renewals, escalations | Removes email ping-pong; every approval is auditable |
-| 4 | **Azure Functions** | Risk scoring, contract status APIs, approval logic | Deterministic business logic the LLM cannot bluff |
+| 3 | **Power Automate** | Approval routing, email notifications, renewals, escalations | Removes email ping-pong; every approval is auditable |
+| 4 | **Azure Functions** | Deterministic clause lookup, contract status, and document generation | Testable business logic tied to systems of record |
 | 5 | **Code Interpreter** | Contract summaries, obligation analysis, risk reports, renewal reports | On-the-fly analytics without a BI project |
+
+### Challenge map
+
+- **Agent Capability:** Route user requests to the right tool with confirmation for irreversible actions.
+- **Tool Integration:** Azure AI Search, File Search, Power Automate approval routing, Azure Functions, Code Interpreter.
+- **Azure Services Used:** Microsoft Foundry Agent tools, Azure AI Search, Power Automate, Azure Functions, Dataverse/SQL.
+- **Expected Outcome:** End-to-end tool orchestration in one thread with auditable actions and deterministic state updates.
 
 ## 4. Learning outcome
 
 After Challenge 3 you can:
 
 - Design a small, orthogonal tool set the agent can route to reliably.
-- Register Foundry tools of three shapes: **built-in** (Search, File Search, Code Interpreter), **HTTP** (Logic Apps), and **function** (Azure Functions).
+- Register Foundry tools of three shapes: **built-in** (Search, File Search, Code Interpreter), **HTTP** (Power Automate), and **function** (Azure Functions).
 - Write a TOOL ROUTING block that stops the agent from firing the wrong tool.
 - Confirm irreversible actions with the user before firing them.
 
@@ -39,7 +46,7 @@ After Challenge 3 you can:
 
 - Challenge 2 complete (agent, index, File Search all working).
 - Azure Functions Core Tools installed (`func --version`) &mdash; for the pro-code path.
-- A Microsoft 365 tenant with Office 365 approvals, **or** a mocked HTTP endpoint you can hit for approvals.
+- A Microsoft 365 tenant with Power Automate approvals, **or** a mocked HTTP endpoint you can hit for approvals.
 
 ## 6. Architecture diagram
 
@@ -86,7 +93,7 @@ Attached in Challenge 2. Confirm: agent &rarr; **Tools** &rarr; **FileSearchTool
 - Attach a PDF, then: *"What is the notice period in this contract?"*
 - *"Compare the liability clause in the attached PDF to our approved liability clause."*
 
-## 9. Tool 3 &mdash; Logic Apps (Approval workflow)
+## 9. Tool 3 &mdash; Power Automate (Approval Routing)
 
 ### Purpose
 Route contract drafts to the correct approver for sign-off. Send renewal reminders. Escalate stale approvals.
@@ -96,7 +103,7 @@ Every AI-suggested contract action produces an auditable approval trail.
 
 ### Low-code setup (portal)
 
-Azure portal &rarr; **Create a resource** &rarr; **Logic App (Consumption)** named `la-clm-approval`.
+Power Automate portal &rarr; create a **cloud flow** with trigger **When an HTTP request is received** named `pa-clm-approval`.
 
 1. Trigger: **When an HTTP request is received**. Request body JSON schema:
 
@@ -128,7 +135,7 @@ The Python wrapper is [app/tools.py `route_approval()`](../app/tools.py). It POS
 
 ### Register with the agent
 
-In the portal &rarr; agent &rarr; **Tools** &rarr; **+ Add tool** &rarr; **OpenAPI / Function** &rarr; upload an OpenAPI JSON file for the Logic App HTTP trigger. Give it name `route_approval`.
+In the portal &rarr; agent &rarr; **Tools** &rarr; **+ Add tool** &rarr; **OpenAPI / Function** &rarr; upload an OpenAPI JSON file for the Power Automate HTTP trigger. Give it name `route_approval`.
 
 ### Sample prompt
 - *"Route the Contoso NDA for legal approval."* &rarr; agent should ask for confirmation, then fire `route_approval`.
@@ -136,10 +143,10 @@ In the portal &rarr; agent &rarr; **Tools** &rarr; **+ Add tool** &rarr; **OpenA
 ## 10. Tool 4 &mdash; Azure Functions
 
 ### Purpose
-Deterministic business logic the LLM should not bluff: approved clause lookup, contract status, risk scoring.
+Deterministic business logic the LLM should not bluff: approved clause lookup, contract status transitions, and document generation.
 
 ### Business value
-Uses a system of record instead of the model's opinion. Fully testable.
+Uses a system of record instead of the model's opinion. Fully testable, versioned, and auditable.
 
 ### Functions to deploy
 
@@ -147,7 +154,7 @@ Uses a system of record instead of the model's opinion. Fully testable.
 | --- | --- | --- | --- |
 | `clause_lookup` | `POST /api/clause_lookup` | `{ category: "payment"|"liability"|"termination" }` | `{ clause, version, source }` |
 | `contract_status` | `POST /api/contract_status` | `{ contract_id, new_state? }` | `{ contract_id, state, updated_at }` |
-| `risk_score` | `POST /api/risk_score` | `{ contract_json }` | `{ risk_band: "Low"|"Medium"|"High", reasons: [...] }` |
+| `generate_document` | `POST /api/generate_document` | `{ template, counterparty, effective_date, term, clauses: [{ category, clause_text }] }` | `{ doc_uri, template, generated_at }` |
 
 The Python reference lives in [app/tools.py](../app/tools.py). Deploy skeleton:
 
@@ -163,12 +170,12 @@ Copy `FUNCTION_APP_ENDPOINT` (e.g. `https://func-clm-<your-alias>.azurewebsites.
 
 ### Register with the agent
 
-Portal &rarr; agent &rarr; **Tools** &rarr; **+ Add tool** &rarr; **Function** &rarr; paste the JSON schema for each function. Suggested names: `clause_lookup`, `contract_status`, `risk_score`.
+Portal &rarr; agent &rarr; **Tools** &rarr; **+ Add tool** &rarr; **Function** &rarr; paste the JSON schema for each function. Suggested names: `clause_lookup`, `contract_status`, `generate_document`.
 
 ### Sample prompts
 - *"Look up our approved liability clause."* &rarr; `clause_lookup(category="liability")`.
 - *"What state is contract CON-2024-0417?"* &rarr; `contract_status(contract_id="CON-2024-0417")`.
-- *"Score the risk of this draft."* &rarr; `risk_score(contract_json=...)`.
+- *"Generate the first NDA draft for Contoso using approved clauses."* &rarr; `generate_document(template="NDA", ...)`.
 
 ## 11. Tool 5 &mdash; Code Interpreter
 
@@ -196,7 +203,7 @@ Append this to your agent instructions after DRAFTING RULE:
 - Question about a file attached in this thread -> FileSearchTool.
 - User wants a specific approved clause quoted -> clause_lookup(category).
 - User asks about a contract's lifecycle state, or wants to change it -> contract_status(contract_id, new_state?). Ask before changing state.
-- User wants a numeric risk read -> risk_score(contract_json).
+- User wants a deterministic draft artifact from approved inputs -> generate_document(template, counterparty, effective_date, term, clauses).
 - User asks to route for approval / sign-off / legal review -> route_approval(...).
   Always confirm the payload with the user in one sentence before firing.
 - User wants a summary, obligations table, or a chart -> Code Interpreter.
@@ -214,7 +221,7 @@ from app import tools
 functions = FunctionTool(functions={
     tools.clause_lookup,
     tools.contract_status,
-    tools.route_approval,
+    tools.generate_document,
 })
 code = CodeInterpreterTool()
 
@@ -246,10 +253,10 @@ Verify in App Insights that each turn produced a `gen_ai.tool.call` event with t
 
 | Check | How to verify | Pass criteria |
 | --- | --- | --- |
-| All five tools registered | Portal &rarr; agent &rarr; Tools | Search, File Search, `clause_lookup`, `contract_status`, `route_approval`, Code Interpreter |
+| All five tools registered | Portal &rarr; agent &rarr; Tools | Search, File Search, `route_approval`, `clause_lookup`, `contract_status`, `generate_document`, Code Interpreter |
 | Search tool | *"Find every contract with Contoso"* | Cites real corpus docs |
 | Function tool | *"Look up our approved liability clause."* | `clause_lookup` invoked with `category="liability"` |
-| Logic App tool | *"Route the Contoso NDA for approval."* | Agent confirms, then `route_approval` returns approval id |
+| Power Automate tool | *"Route the Contoso NDA for approval."* | Agent confirms, then `route_approval` returns approval id |
 | Code Interpreter | *"Summarize in 5 bullets."* | Runs Python; returns bullets |
 | Confirmation | *"Mark the Contoso NDA as Signed."* | Agent asks to confirm before firing |
 | SDK parity | `python -m app.sample_run --challenge 3` | Same behavior end-to-end |
@@ -260,8 +267,8 @@ The end-to-end scenario in [section 14](#14-end-to-end-scenario) completes in on
 
 ## 18. Completion checklist
 
-- [ ] Logic App `la-clm-approval` deployed; `LOGIC_APP_APPROVAL_URL` in `.env`.
-- [ ] Function App with `clause_lookup`, `contract_status`, `risk_score` deployed; `FUNCTION_APP_ENDPOINT` in `.env`.
+- [ ] Power Automate flow `pa-clm-approval` deployed; approval URL set in `.env`.
+- [ ] Function App with `clause_lookup`, `contract_status`, `generate_document` deployed; `FUNCTION_APP_ENDPOINT` in `.env`.
 - [ ] Five tools registered on the agent (Search, File Search, `route_approval`, functions x3, Code Interpreter).
 - [ ] TOOL ROUTING block appended to instructions.
 - [ ] End-to-end scenario runs in a single thread.

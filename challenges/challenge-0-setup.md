@@ -20,6 +20,13 @@ Provision the full environment needed to build the Contract Lifecycle Management
 - Sample corpus (templates, clauses, policies) uploaded to Blob and indexed.
 - A green smoke test from the SDK.
 
+### Challenge map
+
+- **Agent Capability:** Establish the baseline environment the agent depends on.
+- **Tool Integration:** Prepare Search and tracing so later tool integrations work reliably.
+- **Azure Services Used:** Microsoft Foundry, Azure OpenAI, Azure AI Search, Azure Blob Storage, Application Insights.
+- **Expected Outcome:** A working project, indexed corpus, and green SDK smoke test.
+
 ## 3. Learning outcome
 
 After Challenge 0 you can:

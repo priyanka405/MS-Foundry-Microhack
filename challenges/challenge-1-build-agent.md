@@ -24,6 +24,13 @@ Create an agent named `contract-intake-drafting-agent` that:
 - Requests missing information, one question at a time.
 - Refuses out-of-scope requests (legal advice, signing, unapproved template, etc.).
 
+### Challenge map
+
+- **Agent Capability:** Intake and drafting behavior with clear refusal boundaries.
+- **Tool Integration:** No external tools yet; this challenge hardens the core agent prompt contract.
+- **Azure Services Used:** Microsoft Foundry Agent Service, Azure OpenAI deployments.
+- **Expected Outcome:** A reliable intake agent that collects required fields and produces structured draft skeletons.
+
 ## 4. Learning outcome
 
 After Challenge 1 you can:

@@ -18,6 +18,13 @@ Every regression before you shipped this assistant was somebody's Monday morning
 - Enforce a gate: **groundedness &ge; 4.0**, **relevance &ge; 4.0**, **task adherence &ge; 4.25**, and **all safety defect rates == 0**.
 - Wire the gate into a GitHub Actions job so a bad change blocks the merge.
 
+### Challenge map
+
+- **Agent Capability:** Measurable quality and safety performance under fixed scenarios.
+- **Tool Integration:** Evaluator checks include correct tool routing and behavior outcomes.
+- **Azure Services Used:** Azure AI Evaluation, Microsoft Foundry evaluators, GitHub Actions.
+- **Expected Outcome:** A repeatable gate that blocks regressions before deployment.
+
 ## 4. Learning outcome
 
 After Challenge 6 you can:

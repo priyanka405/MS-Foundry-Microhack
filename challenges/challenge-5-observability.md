@@ -16,6 +16,13 @@ Legal and Finance will want a per-agent, per-user cost view. Ops will want p95 l
 
 Turn on Foundry's built-in tracing **and** wire OpenTelemetry from the SDK into Application Insights. Then write the KQL that answers the three questions above.
 
+### Challenge map
+
+- **Agent Capability:** Traceable execution across prompts, retrieval, and tool invocations.
+- **Tool Integration:** Telemetry for Search, Power Automate approvals, and Azure Functions calls.
+- **Azure Services Used:** Application Insights, OpenTelemetry, Microsoft Foundry tracing.
+- **Expected Outcome:** Actionable KQL dashboards for quality, latency, and cost governance.
+
 ## 4. Learning outcome
 
 After Challenge 5 you can:
