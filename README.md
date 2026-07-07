@@ -14,7 +14,7 @@
 > **Open the interactive landing page → <https://priyanka405.github.io/MS-Foundry-Microhack/>**
 
 [![Open the Contract Lifecycle Management MicroHack landing page](./assets/images/architecture-overview .svg)](https://priyanka405.github.io/MS-Foundry-Microhack/)
-![Contract Architecture](../assets/images/architecture-overview.svg)
+![Contract Architecture](..assets/images/architecture-overview .svg)
 <p align="center">
   <a href="https://priyanka405.github.io/MS-Foundry-Microhack/">
     <img alt="Open the landing page" src="https://img.shields.io/badge/%E2%86%92%20Open%20the%20landing%20page-0078D4?style=for-the-badge&logo=github&logoColor=white">
