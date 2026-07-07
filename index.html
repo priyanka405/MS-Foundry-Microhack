@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Contract Lifecycle Management &middot; Microsoft Foundry MicroHack</title>
   <meta name="description" content="A 9-challenge Microsoft Foundry MicroHack that walks you from empty Azure subscription to a shipped, evaluated Contract Lifecycle Management assistant." />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%230078D4'/%3E%3Cpath d='M28 26h32l14 14v34a6 6 0 0 1-6 6H28a6 6 0 0 1-6-6V32a6 6 0 0 1 6-6z' fill='white'/%3E%3Cpath d='M60 26v14h14' fill='none' stroke='%230078D4' stroke-width='4'/%3E%3C/svg%3E" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%230078D4'/%3E%3Cpath d='M28 26h32l14 14v32l-14 14H28l-14-14V40z' fill='%23fff' opacity='0.9'/%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600;700&family=Cascadia+Code&display=swap" rel="stylesheet" />
@@ -48,8 +48,8 @@
     </nav>
     <div class="nav-tools">
       <button class="theme-toggle" type="button" aria-label="Toggle color theme" title="Toggle theme">
-        <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
-        <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
       </button>
       <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -114,7 +114,7 @@
       <article class="tile">
         <span class="tile-icon" data-icon="flow"></span>
         <h3>Automate</h3>
-        <p>Route approvals via Logic Apps, generate documents, and track lifecycle state through renewal.</p>
+        <p>Route approvals via Azure Functions, generate documents, and track lifecycle state through renewal.</p>
       </article>
       <article class="tile">
         <span class="tile-icon" data-icon="shield"></span>
@@ -171,7 +171,7 @@
       <li>Stand up a Foundry project with a model, indexed corpus, and enabled tracing.</li>
       <li>Build a grounded agent with a strong persona and refusal behavior.</li>
       <li>Ground the agent with Azure AI Search + File Search &mdash; with citations.</li>
-      <li>Extend the agent with 5 tools (Search, File Search, Logic Apps, Functions, Code Interpreter).</li>
+      <li>Extend the agent with 4 tools (Search, File Search, Azure Functions, Code Interpreter).</li>
       <li>Protect the agent with Prompt Shields, PII detection, and app-layer blocklists.</li>
       <li>Trace every prompt, retrieval, tool call, and response into App Insights.</li>
       <li>Evaluate on a fixed dataset and enforce a deployment gate.</li>
@@ -219,8 +219,8 @@
         <article class="challenge-card">
           <div class="challenge-head"><span class="chip chip-teal">Tools</span>
             <h3><a href="challenges/challenge-3-tools-actions.html">Challenge 3 &middot; Tools &amp; Actions</a></h3></div>
-          <p>Five tools: AI Search, File Search, Logic Apps (approval), Azure Functions (status/risk), Code Interpreter (reports).</p>
-          <ul class="chip-row"><li class="chip">Function calling</li><li class="chip">Logic Apps</li><li class="chip">Functions</li></ul>
+          <p>Four tools: AI Search, File Search, Azure Functions (status/risk), Code Interpreter (reports).</p>
+          <ul class="chip-row"><li class="chip">Function calling</li><li class="chip">Functions</li><li class="chip">Code Interpreter</li></ul>
         </article></li>
 
       <li class="timeline-node"><div class="timeline-dot" data-num="4"></div>
@@ -279,7 +279,6 @@
       <article class="svc-card"><h4>Azure AI Search</h4><p>Vector + semantic hybrid over your contract corpus with citations.</p></article>
       <article class="svc-card"><h4>Azure Blob Storage</h4><p>Source-of-truth corpus feeding the Search index.</p></article>
       <article class="svc-card"><h4>Azure Functions</h4><p>Backing services for clause lookup, status, and risk scoring.</p></article>
-      <article class="svc-card"><h4>Logic Apps</h4><p>Office 365 approval routing for Legal and Procurement.</p></article>
       <article class="svc-card"><h4>Code Interpreter</h4><p>On-the-fly summaries, obligation extraction, renewal reports.</p></article>
       <article class="svc-card"><h4>Content Safety + Prompt Shields</h4><p>Guardrails on inputs and outputs at the project level.</p></article>
       <article class="svc-card"><h4>Application Insights</h4><p>Cost, latency, and grounding telemetry with reusable KQL.</p></article>
@@ -329,7 +328,7 @@
     <div class="grid grid-3">
       <a class="link-card" href="https://ai.azure.com" target="_blank" rel="noopener"><h4>Microsoft Foundry &#8599;</h4><p>The product surface for building, evaluating, and shipping agents.</p></a>
       <a class="link-card" href="https://learn.microsoft.com/azure/ai-foundry/" target="_blank" rel="noopener"><h4>Foundry docs &#8599;</h4><p>Concepts, quickstarts, and REST/SDK references.</p></a>
-      <a class="link-card" href="https://learn.microsoft.com/python/api/overview/azure/ai-agents-readme" target="_blank" rel="noopener"><h4>Agents SDK (Python) &#8599;</h4><p>Reference for <code>azure-ai-agents</code> and <code>azure-ai-projects</code>.</p></a>
+      <a class="link-card" href="https://learn.microsoft.com/python/api/overview/azure/ai-agents-readme" target="_blank" rel="noopener"><h4>Agents SDK (Python) &#8599;</h4><p>Reference for <code>azure-ai-agents</code> and function calling.</p></a>
       <a class="link-card" href="https://learn.microsoft.com/azure/search/" target="_blank" rel="noopener"><h4>Azure AI Search &#8599;</h4><p>Vector + semantic hybrid retrieval used in Challenge 2.</p></a>
       <a class="link-card" href="https://learn.microsoft.com/azure/ai-foundry/how-to/develop/evaluate-sdk" target="_blank" rel="noopener"><h4>Evaluation SDK &#8599;</h4><p>The evaluators used in Challenge 6.</p></a>
       <a class="link-card" href="https://learn.microsoft.com/azure/ai-services/content-safety/" target="_blank" rel="noopener"><h4>Content Safety + Prompt Shields &#8599;</h4><p>Guardrails enabled in Challenge 4.</p></a>
