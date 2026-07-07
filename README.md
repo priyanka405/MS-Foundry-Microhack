@@ -174,11 +174,11 @@ The Contract Lifecycle Agent is designed around five business capabilities:
 | --- | --- | --- | --- | --- |
 | **Contract Search Tool** | Retrieve contract and policy passages with citations | Azure AI Search | Retrieval must run against indexed enterprise content, not model memory | Faster, auditable answers to clause and policy questions |
 | **Clause Analysis Tool** | Summarize and compare approved clauses | Azure AI Foundry Models | LLM reasoning is best for language interpretation and plain-English explanation | Better reviewer understanding with consistent clause summaries |
-| **Contract Repository Tool** | Access source contracts and supporting files | SharePoint | Source files and metadata live in enterprise repositories | Users can trace outputs back to official records |
+| **Contract Repository Tool** | Access source contracts and supporting files | SharePoint / Azure Blob Storage | Source files and metadata live in enterprise repositories | Users can trace outputs back to official records |
 | **Approval Routing Tool** | Route approvals and notifications | Power Automate | Approval steps require human workflow and email/task integration | Reduced approval cycle time with complete audit trail |
 | **Contract Status Tool** | Read/update contract lifecycle state | Dataverse / SQL (via Azure Functions) | State transitions must be deterministic and tied to a system of record | Accurate status tracking and reliable downstream reporting |
 
-Azure Functions keep three deterministic operations out of the model: **`clause_lookup`**, **`contract_status`**, and **`document_generation`**. These endpoints are testable, versioned, and authoritative against systems of record.
+Azure Functions keep three deterministic operations out of the model: **`clause_lookup`**, **`contract_status`**, and **document generation (`generate_document`)**. These endpoints are testable, versioned, and authoritative against systems of record.
 
 ## Challenge roadmap
 

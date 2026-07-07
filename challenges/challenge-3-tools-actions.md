@@ -154,7 +154,7 @@ Uses a system of record instead of the model's opinion. Fully testable, versione
 | --- | --- | --- | --- |
 | `clause_lookup` | `POST /api/clause_lookup` | `{ category: "payment"|"liability"|"termination" }` | `{ clause, version, source }` |
 | `contract_status` | `POST /api/contract_status` | `{ contract_id, new_state? }` | `{ contract_id, state, updated_at }` |
-| `document_generation` | `POST /api/document_generation` | `{ template, counterparty, effective_date, term, clauses[] }` | `{ doc_uri, template, generated_at }` |
+| `generate_document` | `POST /api/generate_document` | `{ template, counterparty, effective_date, term, clauses: [{ category, clause_text }] }` | `{ doc_uri, template, generated_at }` |
 
 The Python reference lives in [app/tools.py](../app/tools.py). Deploy skeleton:
 
@@ -170,12 +170,12 @@ Copy `FUNCTION_APP_ENDPOINT` (e.g. `https://func-clm-<your-alias>.azurewebsites.
 
 ### Register with the agent
 
-Portal &rarr; agent &rarr; **Tools** &rarr; **+ Add tool** &rarr; **Function** &rarr; paste the JSON schema for each function. Suggested names: `clause_lookup`, `contract_status`, `document_generation`.
+Portal &rarr; agent &rarr; **Tools** &rarr; **+ Add tool** &rarr; **Function** &rarr; paste the JSON schema for each function. Suggested names: `clause_lookup`, `contract_status`, `generate_document`.
 
 ### Sample prompts
 - *"Look up our approved liability clause."* &rarr; `clause_lookup(category="liability")`.
 - *"What state is contract CON-2024-0417?"* &rarr; `contract_status(contract_id="CON-2024-0417")`.
-- *"Generate the first NDA draft for Contoso using approved clauses."* &rarr; `document_generation(template="NDA", ...)`.
+- *"Generate the first NDA draft for Contoso using approved clauses."* &rarr; `generate_document(template="NDA", ...)`.
 
 ## 11. Tool 5 &mdash; Code Interpreter
 
@@ -203,7 +203,7 @@ Append this to your agent instructions after DRAFTING RULE:
 - Question about a file attached in this thread -> FileSearchTool.
 - User wants a specific approved clause quoted -> clause_lookup(category).
 - User asks about a contract's lifecycle state, or wants to change it -> contract_status(contract_id, new_state?). Ask before changing state.
-- User wants a deterministic draft artifact from approved inputs -> document_generation(template, counterparty, effective_date, term, clauses).
+- User wants a deterministic draft artifact from approved inputs -> generate_document(template, counterparty, effective_date, term, clauses).
 - User asks to route for approval / sign-off / legal review -> route_approval(...).
   Always confirm the payload with the user in one sentence before firing.
 - User wants a summary, obligations table, or a chart -> Code Interpreter.
@@ -253,7 +253,7 @@ Verify in App Insights that each turn produced a `gen_ai.tool.call` event with t
 
 | Check | How to verify | Pass criteria |
 | --- | --- | --- |
-| All five tools registered | Portal &rarr; agent &rarr; Tools | Search, File Search, `route_approval`, `clause_lookup`, `contract_status`, `document_generation`, Code Interpreter |
+| All five tools registered | Portal &rarr; agent &rarr; Tools | Search, File Search, `route_approval`, `clause_lookup`, `contract_status`, `generate_document`, Code Interpreter |
 | Search tool | *"Find every contract with Contoso"* | Cites real corpus docs |
 | Function tool | *"Look up our approved liability clause."* | `clause_lookup` invoked with `category="liability"` |
 | Power Automate tool | *"Route the Contoso NDA for approval."* | Agent confirms, then `route_approval` returns approval id |
@@ -268,7 +268,7 @@ The end-to-end scenario in [section 14](#14-end-to-end-scenario) completes in on
 ## 18. Completion checklist
 
 - [ ] Power Automate flow `pa-clm-approval` deployed; approval URL set in `.env`.
-- [ ] Function App with `clause_lookup`, `contract_status`, `document_generation` deployed; `FUNCTION_APP_ENDPOINT` in `.env`.
+- [ ] Function App with `clause_lookup`, `contract_status`, `generate_document` deployed; `FUNCTION_APP_ENDPOINT` in `.env`.
 - [ ] Five tools registered on the agent (Search, File Search, `route_approval`, functions x3, Code Interpreter).
 - [ ] TOOL ROUTING block appended to instructions.
 - [ ] End-to-end scenario runs in a single thread.
