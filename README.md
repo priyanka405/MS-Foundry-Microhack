@@ -13,8 +13,8 @@
 
 > **Open the interactive landing page → <https://priyanka405.github.io/MS-Foundry-Microhack/>**
 
-[![Open the Contract Lifecycle Management MicroHack landing page](./assets/images/architecture-overview .svg)](https://priyanka405.github.io/MS-Foundry-Microhack/)
-![Contract Architecture](.assets/images/architecture-overview .svg)
+[![Open the Contract Lifecycle Management MicroHack landing page](./assets/images/architecture-overview.png)](https://priyanka405.github.io/MS-Foundry-Microhack/)
+![Contract Architecture](./assets/images/architecture-overview.png)
 <p align="center">
   <a href="https://priyanka405.github.io/MS-Foundry-Microhack/">
     <img alt="Open the landing page" src="https://img.shields.io/badge/%E2%86%92%20Open%20the%20landing%20page-0078D4?style=for-the-badge&logo=github&logoColor=white">
@@ -31,7 +31,7 @@ Click the image or the button above to launch the full-page site (dark mode, Mer
 
 ## Hero
 
-Build the **Contract Intake & Drafting Agent** — the AI copilot Legal and Procurement wish they already had. Nine hands-on challenges take you from *"I have an Azure subscription"* all the way to a shipped, evaluated, and production-ready assistant.
+Build the **Contract Intake & Drafting Agent** — the AI copilot Legal and Procurement wish they already had. Nine hands-on challenges take you from *"I have an Azure subscription"* all the way to a production-ready CLM assistant grounded on your organization's templates, policies, and contracts.
 
 Every challenge is fully documented for both the **Foundry portal (low-code)** and the **Foundry SDK in Python (pro-code)**, so architects, engineers, and product folks can all follow along.
 
@@ -67,11 +67,11 @@ Organizations process hundreds of contracts every month. Legal and Procurement n
 - Contract tracking, renewals, and expirations
 - Risk identification
 
-You will build a single **Contract Lifecycle Management Assistant** on Microsoft Foundry that owns all of the above — grounded on your organization's own templates, clause library, and policies via **Foundry IQ** (Azure AI Search + SharePoint), enriched with external context via **WebIQ** (Bing Search), and tracked in **Azure SQL**, protected by Prompt Shields and Content Safety, evaluated on a fixed dataset, and deployed to a Web App, Teams, or a plain API endpoint.
+You will build a single **Contract Lifecycle Management Assistant** on Microsoft Foundry that owns all of the above — grounded on your organization's own templates, clause library, and policies. The agent never gives legal advice; it amplifies your legal team's bandwidth and enforces your approval workflows.
 
 ## Business scenario
 
-**Contoso Global** is a multinational with 40,000 employees, 12,000 active contracts, and 400+ new agreements per month. Their current CLM process is scattered across SharePoint, email, and three different contract repositories. Today:
+**Contoso Global** is a multinational with 40,000 employees, 12,000 active contracts, and 400+ new agreements per month. Their current CLM process is scattered across SharePoint, email, and three spreadsheets. The pain points:
 
 - Legal spends **~35%** of its time answering "what does clause X in contract Y say?".
 - Procurement misses **~11%** of auto-renewals every year, costing millions.
@@ -203,9 +203,9 @@ Every tool call is traced end-to-end into Application Insights (Challenge 5) and
 ### Architecture design decisions
 
 - **One agent, three tools.** A single agent owns the CLM domain and orchestrates a small, orthogonal tool set. Fewer tools mean less misrouting and a tighter audit trail.
-- **Foundry IQ for internal knowledge.** One tool wraps both Azure AI Search (contract corpus, hybrid vector + semantic retrieval) and SharePoint (templates, executed contracts, policies). The agent never has to choose which internal source to hit.
+- **Foundry IQ for internal knowledge.** One tool wraps both Azure AI Search (contract corpus, hybrid vector + semantic retrieval) and SharePoint (templates, executed contracts, policies). The agent routes internally-scoped questions here first.
 - **WebIQ for external research.** Bing Search plugs the gap for anything not in the corpus — counterparty background, regulatory updates, benchmarks — with fresh, cited web results.
-- **Azure SQL for structured contract data.** Contract state is structured and queryable, so a direct SQL connector beats hand-rolled APIs. Status, owners, renewal dates, and KPIs all live in one relational store.
+- **Azure SQL for structured contract data.** Contract state is structured and queryable, so a direct SQL connector beats hand-rolled APIs. Status, owners, renewal dates, and KPIs all live in one system of record.
 - **Grounding first, tools second.** Retrieval (Foundry IQ) fires before any status write, so every answer is anchored to real content.
 - **Safety wraps every tool.** Prompt Shields, Content Safety, and PII detection sit between the user and every tool call — there is no "unsafe fast path".
 
@@ -223,7 +223,7 @@ Every tool call is traced end-to-end into Application Insights (Challenge 5) and
 | 7 | [Optimization](./challenges/challenge-7-optimization.md) | Model, prompt, retrieval, cost, latency | Low-code + Pro-code |
 | 8 | [Publish](./challenges/challenge-8-publish.md) | Web App, Teams, API endpoint | Low-code + Pro-code |
 
-Every challenge follows the same anatomy: **Context → Objective → Learning Outcome → Prerequisites → Architecture Diagram → Low-Code Path → Pro-Code Path → Portal Walkthrough & Deployment Checklist**.
+Every challenge follows the same anatomy: **Context → Objective → Learning Outcome → Prerequisites → Architecture Diagram → Low-Code Path → Pro-Code Path → Portal Walkthrough & Deployment**.
 
 ## Prerequisites
 
